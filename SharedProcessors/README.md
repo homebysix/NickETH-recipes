@@ -6,7 +6,7 @@ Recipes for AutoPkg on Windows
 AcrobatGUIDPatcher
 ------------------
 Creates a new GUID for Adobes Acrobat Pro DC and Reader DC.
-This is needed, if this products are patched offline.
+This is needed, if this products are patched offline.  
 Example recipe: AdobeReaderDC-Win.build.recipe
 ```
 Input variables:
@@ -59,7 +59,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the run
 CharToNum
 --------------
 Calculate a number from a given string (a/A=1...z/Z=26) and return the number.
-Useful to convert version portions, that contain letters to numbers.
+Useful to convert version portions, that contain letters to numbers.  
 Example recipe: Fiji-Win64.download.recipe
 ```
 Input variables:
@@ -71,7 +71,7 @@ value of "output_var"
 
 ChromiumSettings
 --------------
-Create a preference string for Chromium based browsers.
+Create a preference string for Chromium based browsers.  
 Example recipe: GoogleChrome-Win64.build.recipe
 ```
 Input variables:
@@ -86,7 +86,7 @@ CreateNextBuild
 ---------------
 Set up a build environment for a given package.
 Create folders, copy needed files from repository and/or previous build.
-Usefull	to create a folder structure for a more complex packaging task.
+Usefull	to create a folder structure for a more complex packaging task.  
 Example recipes: More or less all my build recipes
 ```
 Input variables:
@@ -111,7 +111,7 @@ AS_ver, Description: "Special version string for an Active Setup."
 DateTimeStamps
 --------------
 Returns date and time in variables.
-Usefull to get the actual time in different formats.
+Usefull to get the actual time in different formats.  
 Example recipes: More or less all my build recipes
 ```
 Output variables:
@@ -125,7 +125,7 @@ time, Description: "Actual time."
 ExecuteFile
 -----------
 Run an executable file (with arguments) (in a given directory).
-Usefull to run an arbitrary exe-file. Can run files with elevated rights.
+Usefull to run an arbitrary exe-file. Can run files with elevated rights.  
 Example recipe: MiKTeX-Win64.build.recipe
 ```
 Input variables:
@@ -139,7 +139,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 FileDateVersionSubst
 --------------------
 Load a text file and search for date and version patterns and actualize them.
-Usefull to stamp predefined text files with actual version, time or date information.
+Usefull to stamp predefined text files with actual version, time or date information.  
 Example recipes: More or less all my build recipes
 ```
 Input variables:
@@ -152,7 +152,7 @@ FileMoverFromList
 -----------------
 Moves files from a source dir to a destination dir.
 Filenames must bei provided by a listfile, line by line.
-Usefull to do complex file file moving operations.
+Usefull to do complex file file moving operations.  
 Example recipe: AdoptiumOpenJRE8-Win64.build.recipe
 ```
 Input variables:
@@ -166,7 +166,7 @@ value of "file_list"
 MozillaAddonIntegrator
 ----------------------
 Install Extension(s) per computer and alter settings in the omni.ja in Mozilla products.
-Usefull to do integrate Addons into Mozilla products.
+Usefull to do integrate Addons into Mozilla products.  
 Example recipe: Firefox-Win64.build.recipe
 ```
 Input variables:
@@ -187,7 +187,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the pro
 MSBuildRun
 ----------
 Run MSBuild to build a project.
-Used to run Wix based packaging operations.
+Used to run Wix based packaging operations.  
 Example recipe: Element-Win64.build.recipe
 ```
 Input variables:
@@ -201,7 +201,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 MSIAddFileHash
 --------------
 Get the hash of (a) file(s) and insert it into an MSI.
-Used to run Wix based packaging operations.
+Used to run Wix based packaging operations.  
 Example recipe: Element-Win64.build.recipe
 ```
 Input variables:
@@ -214,7 +214,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 MSIApplySumInfo
 ---------------
 Apply (multiple) summary info changes to MSI-file using msiinfo.exe.
-Used to change the summary information in a MSI file.
+Used to change the summary information in a MSI file.  
 Example recipe: GoogleChrome-Win64.build.recipe
 ```
 Input variables:
@@ -226,7 +226,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 MSIDbWorker
 -----------
 Wrapper around msidb.exe to work with an MSI-file.
-Can be used to perform complex operations on a MSI file.
+Can be used to perform complex operations on a MSI file.  
 Example recipe: VLC-Win64.build.recipe
 ```
 Input variables:
@@ -240,7 +240,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 MSITransformer
 --------------
 Generate or Apply transform(s) to/from (an) MSI-file(s) using msitran.exe.
-Used to work with MSI transforms.
+Used to work with MSI transforms.  
 Example recipe: Element-Win64.build.recipe
 ```
 Input variables
@@ -253,7 +253,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 
 MSIimportMergeModule
 --------------------
-Import a MergeModule into a MSI file.
+Import a MergeModule into a MSI file.  
 Example recipe: Keepass-Win.build.recipe
 ```
 Input variables:
@@ -269,7 +269,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the run
 
 MSIofflinePatcher
 -----------------
-Apply an patch to an MSI file offline and rebuild the package (compression of files on or off). Can also compact an MSI.
+Apply an patch to an MSI file offline and rebuild the package (compression of files on or off). Can also compact an MSI.  
 Example recipe: AdobeReaderDC-Win.build.recipe
 ```
 Input variables:
@@ -289,7 +289,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the run
 
 MSIRunSQL
 ---------
-Run a(n) (array of) SQL-Command(s) against an MSI-file.
+Run a(n) (array of) SQL-Command(s) against an MSI-file.  
 Example recipe: AdobeReaderDC-Win.build.recipe
 ```
 Input variables:
@@ -301,7 +301,7 @@ ignore_errors, (required: False), Description: "Ignore any errors during the ext
 MSIRunSQLget
 ------------
 Run an SQL-Command SELECT against an MSI-file.
-Useful to read out a property or other values from a MSI file.
+Useful to read out a property or other values from a MSI file.  
 Example recipe: AdoptiumIcedTeaWeb-Win64.download.recipe
 ```
 Input variables:
@@ -314,7 +314,7 @@ msi_value, Description: "Value from the SQL run."
 
 NANTrun
 -------
-Run NANT to build a NANT-(WIX-)project or to call a specific NANT-command.
+Run NANT to build a NANT-(WIX-)project or to call a specific NANT-command.  
 Example recipe: Firefox-Win64.build.recipe
 ```
 Input variables:
@@ -341,7 +341,7 @@ version, Description: "Version of exe found."
 
 SevenZipExtractor
 -----------------
-Extracts specific file(s) using the 7z utility.
+Extracts specific file(s) using the 7z utility.  
 Example recipe: MiKTeX-Win64.build.recipe
 ```
 Input variables:
@@ -368,7 +368,7 @@ result_output_var_name, Description: "First matched sub-pattern from input found
 
 WinPEVersionExtractor
 ---------------------
-Extracts version info from Windows PE-executable (.exe/.dll) file.
+Extracts version info from Windows PE-executable (.exe/.dll) file.  
 Example recipe: Citrix-Workspace-Win.build.recipe
 ```
 Input variables:
