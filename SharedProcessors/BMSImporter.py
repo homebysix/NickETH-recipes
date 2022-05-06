@@ -11,7 +11,6 @@
 # Extended with port/CM-entry, ApplicationFile and Dependencies, 20200523, Hm
 # Patch subprocess to take unicode, https://bugs.python.org/issue1759845, https://pypi.org/project/subprocessww/, 20200626, Hm
 # Extended with UseBBT-option and explicit options for uninstall, hardened boolean recipe reading from recipe 20210207, Hm
-# Todo: Generic read function for optional parameter processing with for statement and value types
 # Python v3 changes, 20210517, Hm
 # Extended localfilecopy to all options, 20211028, Hm
 # Extended with writer for JSON app integration file, 20220323, Hm
@@ -305,7 +304,7 @@ class BMSImporter(Processor):
             bms_imp_logfile = self.env.get('bms_imp_logfile')
             cmd.extend(['-bms_imp_logfile', bms_imp_logfile])
 
-        #print("cmdline %s" % cmd)
+        # print("cmdline %s" % cmd)
         try:
             if verbosity > 1:
                 #Output = subprocess.run(cmd, capture_output=True)

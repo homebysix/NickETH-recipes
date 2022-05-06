@@ -1,0 +1,31 @@
+Description: Downloads the latest version of Notepad++ x64 for Windows.
+Identifier: com.github.NickETH.recipes.download.NotepadPlusPlus-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Notepad++
+  SEARCH_URL: https://notepad-plus-plus.org
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: npp.([0-9]+\.)*[0-9]+.Installer.x64.exe
+    github_repo: notepad-plus-plus/notepad-plus-plus
+    include_prereleases: 'false'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%url%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Notepad++", O="Notepad++", L=Saint Cloud, S=Ile-de-France, C=FR
+    input_path: '%pathname%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.zip'
+    url: https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v%version%/npp.%version%.portable.x64.zip
+
+- Processor: EndOfCheckPhase
