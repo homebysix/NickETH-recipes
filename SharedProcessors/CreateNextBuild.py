@@ -3,13 +3,13 @@
 # Copyright 2019 Swiss federal institute of technology (ETHZ).
 #
 # Created by Nick Heim (heim)@ethz.ch) on 2019-04-06.
-# Based on WinInstallerExtractor by Matt Hansen
 #
 # Set up a build environment. 
 # Create folders, copy needed files from repository and/or previous build.
 # Output needs work. Goal would be to return the exitcode/errorlevel.
 # 20190401 Nick Heim: PrevVerFiles is untested!
 # 20210517 Nick Heim: Python v3 changes
+# 20220512 Nick Heim: Make YAML recipes working
 
 import os
 import sys
@@ -133,7 +133,12 @@ class CreateNextBuild(Processor):
                 self.output("cmdline %s" % cmd)
 
         if "recipe_path" in self.env:
-            recipe_path = os.path.splitext(self.env.get('recipe_path'))[0]
+            recipe_path_split = os.path.splitext(self.env.get('recipe_path'))
+            if recipe_path_split[1] == '.yaml':
+                recipe_path = os.path.splitext(recipe_path_split[0])[0]
+            else:
+                recipe_path = recipe_path_split[0]
+
             cmd.extend(['-recipe_path', recipe_path])
 
         if {"recipe_path", "BuildFiles"}.issubset(self.env):

@@ -60,7 +60,7 @@ Process:
   Arguments:
     destination_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%NAME%.msi'
     overwrite: 'true'
-    source_path: '%RECIPE_CACHE_DIR%\downloads\%NAME%.msi'
+    source_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
