@@ -1,0 +1,214 @@
+Description: Imports NessusAgent to ETHZ ID BMS
+Identifier: com.github.NickETH.recipes-bms-prd.BMS.Nessus-Agent-Win64
+ParentRecipe: com.github.NickETH.recipes.build.Nessus-Agent-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: NessusAgent
+  VENDOR: Tenable
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+  NESSUS_SERVER: yourserver.com
+  NESSUS_KEY: yourkey
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+
+Process:
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: |
+      <?xml version="1.0" encoding="ISO-8859-1"?>
+      <baramundiDeployScript Version="2010" LastChange="ddaatteettiimmee">
+      <META>
+      <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>
+      <STATICVARS LoadInstallIni="1">
+      <BMSVars></BMSVars>
+      </STATICVARS>
+      </META>
+      <ACTIONS>
+      <ACTION type="GotoLabel" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <NAME>ERROR</NAME>
+      </DATA>
+      <CONDITION op1="{Group.Nessus.Groups}" op="=" op2="" options="0"/>
+      </ACTION>
+      <ACTION type="Conditional" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      </DATA>
+      <CONDITION op1="{Group.Nessus.Groups}" op="STARTSWITH" op2="srv-" options="0"/>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusServer</VARNAME>
+      <VALUE>%NESSUS_SERVER%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusKey</VARNAME>
+      <VALUE>%NESSUS_KEY%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="Conditional" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      </DATA>
+      <CONDITION op1="{Group.Nessus.Groups}" op="STARTSWITH" op2="clt-" options="0"/>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusServer</VARNAME>
+      <VALUE>%NESSUS_SERVER%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusKey</VARNAME>
+      <VALUE>%NESSUS_KEY%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="Conditional" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      </DATA>
+      <CONDITION op1="{Group.Nessus.Groups}" op="STARTSWITH" op2="test" options="0"/>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusServer</VARNAME>
+      <VALUE>%NESSUS_SERVER%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <VARNAME>NessusKey</VARNAME>
+      <VALUE>%NESSUS_KEY%</VALUE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="LaunchProcess" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <COMMAND>{DIP}\Apl\Nessus_Agent\SSuubbssttiittuuttee</COMMAND>
+      <PARAM>NESSUS_GROUPS=&quot;{Group.Nessus.NessusGroup}&quot; NESSUS_SERVER={NessusServer}:8834 NESSUS_KEY={NessusKey} /qn</PARAM>
+      <RETURNCODES>0</RETURNCODES>
+      <VARNAME></VARNAME>
+      <PIDVARNAME></PIDVARNAME>
+      <OPTIONS>3</OPTIONS>
+      </DATA>
+      </ACTION>
+      <ACTION type="GotoLabel" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <NAME>END_OK</NAME>
+      </DATA>
+      </ACTION>
+      <ACTION type="Label" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <NAME>ERROR</NAME>
+      </DATA>
+      </ACTION>
+      <ACTION type="EndBDS" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <RETURNMESSAGE>Keine Nessus-Gruppe auf OU hinterlegt!</RETURNMESSAGE>
+      <RETURNMODESTR>0</RETURNMODESTR>
+      <RETURNCODESTR></RETURNCODESTR>
+      </DATA>
+      </ACTION>
+      <ACTION type="Label" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <NAME>END_OK</NAME>
+      </DATA>
+      </ACTION>
+      </ACTIONS>
+      </baramundiDeployScript>
+    rename_var: bds_content
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%bds_content%'
+    pattern_replace:
+    - pattern: SSuubbssttiittuuttee
+      repl: '%parsed_string%&#92;ML_x64&#92;%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%parsed_string%'
+    pattern_replace:
+    - pattern: ddaatteettiimmee
+      repl: '%us_date% %time%'
+
+- Processor: FileCreator
+  Comment: Generate the install.bds in the release dir.
+  Arguments:
+    file_content: '%parsed_string%'
+    file_path: '%BUILD_DIR%\%pkg_dir%\release\i_%NAME%%PF_STRING%_%build_ver%.bds'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%build_ver%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML_x64\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    bms_app_installparm: /qn /norestart ALLUSERS=1
+    bms_app_integration:
+    - appname: '%NAME%'
+      bundles:
+      - action: exchange
+        name: nV_NessusAgent
+      - action: add
+        name: aV_NessusAgent Uninstall
+        version: new
+      - action: add
+        name: oV_NessusAgent Uninstall
+        version: previous
+      currentversion:
+        bundle: nV_NessusAgent
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
+        type: bundles
+      platform: (x64)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: msiexec.exe
+    bms_app_uninstparm: /x %msi_value% /qn /norestart
+    bms_app_valid4os: Windows7_x64,Windows8_x64,Windows10_x64,WindowsServer2008R2_x64,WindowsServer2012_x64,WindowsServer2016_x64,WindowsServer2019_x64
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% ML (x64)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\ML_x64'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%NAME%\bms_app_integration.json'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase
