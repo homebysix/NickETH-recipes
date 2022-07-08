@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="ProductLanguage">1033</String>
+	<String Id="ProductName">SqlDeveloper</String>
+	<String Id="ProductHelpLink">https://docs.oracle.com/cd/E12151_01/index.htm</String>
+  <String Id="ProductUrlInfoAbout">https://www.oracle.com/</String>
+  <String Id="ProductUrlUpdateInfo">https://docs.oracle.com/cd/E12151_01/index.htm</String>
+	<String Id="PackageDescription">SqlDeveloper</String>
+	<String Id="FeatureStartMenuShortcut">Start Menu shortcut</String>
+	<String Id="FeatureDesktopShortcut">Desktop shortcut</String>
+	<String Id="NewerVersionInstalled">Newer version of SqlDeveloper is already installed.</String>
+	<String Id="OSVersionRequired">Windows 7 or later is required.</String>
+	<String Id="WixUI_ExitDialogOptionalCheckboxText">Launch SqlDeveloper</String>
+</WixLocalization>

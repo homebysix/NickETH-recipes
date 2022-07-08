@@ -1,0 +1,82 @@
+Description: Download recipe for Oracle SqlDeveloper.
+Identifier: com.github.NickETH.recipes.download.SqlDeveloper-Win
+MinimumVersion: 1.0.5
+
+Input:
+  NAME: SqlDeveloper
+  SEARCH_FIRSTURL: https://www.oracle.com/tools/downloads/sqldev-downloads.html
+  #SEARCH_SECONDURL: https://login.oracle.com
+  SEARCH_SECONDURL: https://www.oracle.com/webapps/redirect/signon?nexturl=https%3A%2F%2Fwww.oracle.com%2Ftools%2Fdownloads%2Fsqldev-downloads.html
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+  ORACLE_USR: Test
+  ORACLE_PWD: Test
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+#    re_pattern: 'Windows 32-bit/64-bit.*no-jre.*SHA1: (7dec3e55f0eeb8b7e4af5b24cb96f36ee05144e0)</li>'
+#    re_pattern: 'Windows 32-bit/64-bit.*no-jre.*SHA1: ([a-z0-9]+)</li>'
+    re_pattern: 'Windows 64-bit with JDK 11 included.*SHA1: ([a-z0-9]+)</li>'
+    re_flags:
+    - DOTALL
+    url: '%SEARCH_FIRSTURL%'
+
+- Processor: com.github.n8felton.shared/SHA1Checksum
+  Arguments:
+    pathname: '%RECIPE_CACHE_DIR%\downloads\%NAME%.zip'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%match% == %sha1checksum%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (//download.oracle.com/otn/java/sqldeveloper/(?P<filenamematch>sqldeveloper-(?P<version>[0-9\.]+)-x64.zip))
+    url: '%SEARCH_FIRSTURL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+  Arguments:
+    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    browser_used: Edge
+    primary_url: '%SEARCH_SECONDURL%'
+    selenium_commands:
+    #   - browser.get("https:%match%")
+     - browser.get("https:%match%")
+     - browser.find_element(By.ID, "sso_username").send_keys('%ORACLE_USR%')
+     - browser.find_element(By.ID, "ssopassword").send_keys('%ORACLE_PWD%')
+     - browser.find_elements_by_class_name("sign-in-button")[0].click()
+     - browser.get("https://www.oracle.com/tools/downloads/sqldev-downloads.html#license-lightbox")
+     - browser.switch_to.frame(browser.find_element_by_xpath("//iframe[starts-with(@id,'pop-frame')]"))
+     - browser.find_elements_by_class_name("call")[0].click()
+     - browser.find_element_by_xpath('//a[@class="license-link icn-download-locked"][normalize-space()="Download"][@data-file="%match%"]').click()
+     - browser.implicitly_wait(2)
+     - browser.find_element_by_xpath('//label[@data-reqtxt="Required"]//input[@value="152021"]').click()
+     - browser.implicitly_wait(2)
+     - browser.find_element_by_xpath('//a[normalize-space()="Download %filenamematch%"]').click()
+     - browser.implicitly_wait(150)
+    selenium_options:
+    - self.options.add_argument("--disable-infobars")
+    #- self.options.add_argument("--headless")
+    - |
+        self.options.add_experimental_option("prefs", {
+             "download.default_directory": "%RECIPE_CACHE_DIR%\\downloads",
+             "download.prompt_for_download": False,
+             "download.directory_upgrade": True,
+             "safebrowsing.enabled": True
+          })
+    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+
+- Processor: Copier
+  Comment: Copy the newly downloaded file to "sqldeveloper-no-jre.zip"
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%\downloads\%NAME%.zip'
+    overwrite: 'true'
+    source_path: '%RECIPE_CACHE_DIR%\downloads\%filenamematch%'
+
+- Processor: PathDeleter
+  Comment: Delete the newly downloaded file.
+  Arguments:
+    path_list:
+    - '%RECIPE_CACHE_DIR%\downloads\%filenamematch%'
+
+- Processor: EndOfCheckPhase

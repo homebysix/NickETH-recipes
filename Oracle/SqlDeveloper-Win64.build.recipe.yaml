@@ -1,0 +1,74 @@
+Description: Packages the current SqlDeveloper x64 release to an MSI-package.
+Identifier: com.github.NickETH.recipes.build.SqlDeveloper-Win64
+ParentRecipe: com.github.NickETH.recipes.download.SqlDeveloper-Win
+MinimumVersion: 1.0.5
+
+Input:
+  NAME: SqlDeveloper
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to build the MSI with Wix
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    create_AS_ver: 'True'
+    folder_list: sourcepkt:release:read:helpers:wixproject:wixproject\SqlDeveloper:wixproject\Includes:wixproject\Resources:wixproject\Lang
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%%LANG_STRING%'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Copy the Element installer file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%.zip'
+    overwrite: 'true'
+    source_path: '%RECIPE_CACHE_DIR%\downloads\%NAME%.zip'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the SqlDeveloper zip archive
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%.zip'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WixDefaults
+  Comment: Set the actual version strings to the version.wxi file
+  Arguments:
+    build_dir: '%BUILD_DIR%\%pkg_dir%'
+    build_ver: '%build_ver%'
+    org_ver: '%build_ver%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSBuildRun
+  Comment: Run the MSBuild script to generate the SqlDeveloper MSI installer
+  Arguments:
+    build_file: '%BUILD_DIR%\%pkg_dir%\wixproject\SqlDeveloper.build'
+    build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
+    build_property: BuildPlatform=%PLATFORM%;BuildName=%NAME%;BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;SourceDir=%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%;version=%build_ver%;Platformstr=%PF_STRING%;LangStr=%LANG_STRING%
+    build_target: WIX

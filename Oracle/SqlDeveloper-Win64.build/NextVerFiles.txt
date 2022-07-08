@@ -1,0 +1,9 @@
+read\create-log-SqlDeveloper_64_VVeerrssiioonn_ML.txt
+read\readme-SqlDeveloper_64_VVeerrssiioonn_ML.txt
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\SqlDeveloper.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*
