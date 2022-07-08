@@ -1,4 +1,4 @@
-Description: Imports ZoomClient to BMS (QSS/PRD)
+Description: Imports ZoomClient to BMS
 Identifier: com.github.NickETH.recipes.BMS.ZoomClient-Win64
 ParentRecipe: com.github.NickETH.recipes.build.ZoomClient-Win64
 MinimumVersion: 1.3.1
@@ -24,14 +24,12 @@ Process:
       repl: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
-  Comment: Import the Application into Baramundi (BMS) QSS
+  Comment: Import the Application into Baramundi (BMS)
   Arguments:
     bms_CM_entry: AutoPKG-BMSImporter
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
-    bms_app_conschecks: |
-      CheckAppRC=0,3010\r
-      Deinstall.CheckAppRC=0,1605,3010"
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
     bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML%PF_STRING%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 ZNoDesktopShortCut="true"
     bms_app_iopt_copylocal: 'true'
