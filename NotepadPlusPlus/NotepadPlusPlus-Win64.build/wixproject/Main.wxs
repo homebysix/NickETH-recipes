@@ -26,7 +26,7 @@
 
     <InstallExecuteSequence>
 			<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
-			<RemoveExistingProducts After="InstallFinalize" />
+			<RemoveExistingProducts Before="InstallInitialize" />
 		</InstallExecuteSequence>
 		<InstallUISequence>
 			<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
