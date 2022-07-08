@@ -1,4 +1,4 @@
-Description: Imports NessusAgent to ETHZ ID BMS
+Description: Imports NessusAgent to BMS
 Identifier: com.github.NickETH.recipes-bms-prd.BMS.Nessus-Agent-Win64
 ParentRecipe: com.github.NickETH.recipes.build.Nessus-Agent-Win64
 MinimumVersion: 1.3.1
@@ -11,6 +11,7 @@ Input:
   LANG_STRING: _ML
   NESSUS_SERVER: yourserver.com
   NESSUS_KEY: yourkey
+  NESSUS_PORT: yourport
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
@@ -18,7 +19,6 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
 
-Process:
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   Arguments:
     input_string: '%version%'
@@ -26,11 +26,12 @@ Process:
     - pattern: \.
       repl: _
 
-- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+- Processor: FileCreator
+  Comment: Generate the install.bds in the release dir.
   Arguments:
-    input_var: |
+    file_content: |
       <?xml version="1.0" encoding="ISO-8859-1"?>
-      <baramundiDeployScript Version="2010" LastChange="ddaatteettiimmee">
+      <baramundiDeployScript Version="2010" LastChange="%us_date% %time%">
       <META>
       <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>
       <STATICVARS LoadInstallIni="1">
@@ -103,8 +104,8 @@ Process:
       </ACTION>
       <ACTION type="LaunchProcess" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
       <DATA>
-      <COMMAND>{DIP}\Apl\Nessus_Agent\SSuubbssttiittuuttee</COMMAND>
-      <PARAM>NESSUS_GROUPS=&quot;{Group.Nessus.NessusGroup}&quot; NESSUS_SERVER={NessusServer}:8834 NESSUS_KEY={NessusKey} /qn</PARAM>
+      <COMMAND>{DIP}\Apl\Nessus_Agent\%parsed_string%&#92;ML_x64&#92;%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi</COMMAND>
+      <PARAM>NESSUS_GROUPS=&quot;{Group.Nessus.Groups}&quot; NESSUS_SERVER={NessusServer}:%NESSUS_PORT% NESSUS_KEY={NessusKey} /qn</PARAM>
       <RETURNCODES>0</RETURNCODES>
       <VARNAME></VARNAME>
       <PIDVARNAME></PIDVARNAME>
@@ -135,26 +136,6 @@ Process:
       </ACTION>
       </ACTIONS>
       </baramundiDeployScript>
-    rename_var: bds_content
-
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
-  Arguments:
-    input_string: '%bds_content%'
-    pattern_replace:
-    - pattern: SSuubbssttiittuuttee
-      repl: '%parsed_string%&#92;ML_x64&#92;%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
-
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
-  Arguments:
-    input_string: '%parsed_string%'
-    pattern_replace:
-    - pattern: ddaatteettiimmee
-      repl: '%us_date% %time%'
-
-- Processor: FileCreator
-  Comment: Generate the install.bds in the release dir.
-  Arguments:
-    file_content: '%parsed_string%'
     file_path: '%BUILD_DIR%\%pkg_dir%\release\i_%NAME%%PF_STRING%_%build_ver%.bds'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
@@ -171,8 +152,11 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML_x64\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
-    bms_app_installparm: /qn /norestart ALLUSERS=1
+    #bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML_x64\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    #bms_app_installparm: /qn /norestart ALLUSERS=1
+    bms_app_installbds: '{DIP}\Apl\Nessus_Agent\%parsed_string%\ML_x64\i_%NAME%%PF_STRING%_%build_ver%.bds'
+    bms_app_localfilecopy:
+    - '{DIP}\Apl\Nessus_Agent\%parsed_string%\ML_x64\~~~FolderWithSubFolders'
     bms_app_integration:
     - appname: '%NAME%'
       bundles:
