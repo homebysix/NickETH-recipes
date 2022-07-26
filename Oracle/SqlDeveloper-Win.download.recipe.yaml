@@ -4,7 +4,8 @@ MinimumVersion: 1.0.5
 
 Input:
   NAME: SqlDeveloper
-  SEARCH_FIRSTURL: https://www.oracle.com/tools/downloads/sqldev-downloads.html
+  #SEARCH_FIRSTURL: https://www.oracle.com/tools/downloads/sqldev-downloads.html
+  SEARCH_FIRSTURL: https://www.oracle.com/database/sqldeveloper/technologies/download/
   #SEARCH_SECONDURL: https://login.oracle.com
   SEARCH_SECONDURL: https://www.oracle.com/webapps/redirect/signon?nexturl=https%3A%2F%2Fwww.oracle.com%2Ftools%2Fdownloads%2Fsqldev-downloads.html
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
@@ -16,7 +17,7 @@ Process:
   Arguments:
 #    re_pattern: 'Windows 32-bit/64-bit.*no-jre.*SHA1: (7dec3e55f0eeb8b7e4af5b24cb96f36ee05144e0)</li>'
 #    re_pattern: 'Windows 32-bit/64-bit.*no-jre.*SHA1: ([a-z0-9]+)</li>'
-    re_pattern: 'Windows 64-bit with JDK 11 included.*SHA1: ([a-z0-9]+)</li>'
+    re_pattern: 'Windows 64-bit with JDK 11 included.*?SHA1:([a-z0-9]+)</li>'
     re_flags:
     - DOTALL
     url: '%SEARCH_FIRSTURL%'

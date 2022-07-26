@@ -14,6 +14,7 @@
 # Python v3 changes, 20210517, Hm
 # Extended localfilecopy to all options, 20211028, Hm
 # Extended with writer for JSON app integration file, 20220323, Hm
+# Changed subprocess.run(cmd), added capture_output=True. Sometimes, it hangs without it. 20220726, Hm
 # Todo: Generic read function for optional parameter processing with for statement and value types
 
 import os
@@ -307,12 +308,13 @@ class BMSImporter(Processor):
         # print("cmdline %s" % cmd)
         try:
             if verbosity > 1:
-                #Output = subprocess.run(cmd, capture_output=True)
-                Output = subprocess.run(cmd)
+                # Somehow, waith for completion does not always work, without capture_output=True....
+                Output = subprocess.run(cmd, capture_output=True)
+                #Output = subprocess.run(cmd)
                 self.output("cmdline Output: %s" % Output)
             else:
-                #Output = subprocess.run(cmd, capture_output=True)
-                Output = subprocess.run(cmd)
+                Output = subprocess.run(cmd, capture_output=True)
+                #Output = subprocess.run(cmd)
 
         except:
             if ignore_errors != 'True':

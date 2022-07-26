@@ -1,0 +1,5 @@
+.
+190920	7-Zip x64
+	No alterations at all.
+	We use the MSI out of the box here.
+

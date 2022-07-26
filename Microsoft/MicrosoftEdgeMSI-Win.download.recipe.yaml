@@ -1,0 +1,24 @@
+Description: Downloads the latest Microsoft Edge Enterprise x64 MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.download.MicrosoftEdgeMSI-Win
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: Microsoft Edge
+  VENDOR: Microsoft
+  SOFTWARETITLE: EdgeEnterprise
+  PLATFORM: x64
+  PRODUCTID: '2093437'
+  DOWNLOADURL: https://go.microsoft.com/fwlink/?linkid=%PRODUCTID%
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%VENDOR%_%SOFTWARETITLE%_%PLATFORM%.msi'
+    url: '%DOWNLOADURL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'

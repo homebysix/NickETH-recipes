@@ -293,3 +293,4 @@ if ($read_file_src_dest) {
 }
 echo ("----------End of BMSimporter -- bms_server: " + $bms_serverurl + " bms_appname: " + $bms_app_name + " --------------")| Out-File $logfile -Append
 
+return
