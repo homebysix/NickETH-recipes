@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/autopkg/python
 #
 # Copyright 2019 Swiss federal institute of technology (ETHZ).
 #
