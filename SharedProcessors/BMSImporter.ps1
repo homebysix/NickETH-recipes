@@ -5,6 +5,7 @@
 # Extended with UseBBT-option and explicit options for uninstall, 20210207, Hm
 # Extended localfilecopy to all options, 20211028, Hm
 # Changed the Credential Manager lookup code. TLS narrowed to Tls11,Tls12, 220131, Hm
+# Extended the dependencies section. 221104, Hm
 
 param(
     [Parameter(mandatory=$true)][string]$bms_serverurl,
@@ -96,6 +97,8 @@ echo "bms_app_iopt_rebootbhv: " + $bms_app_iopt_rebootbhv | Out-File $logfile -A
 # We are searching trough all the applications on this server! Eye on perfomance! Alternative: a parameter array with the OU's to search...
 # $All_Apps_in_OU = Get-bConnectApplication -OrgUnitGuid $bms_app_parentid
 $All_Apps_in_BMS = Get-bConnectApplication
+# Check if we have Access here. This needs error handling and a message that we need at least read-access on the root of Applications OU in BMS.
+
 foreach ($Application in $All_Apps_in_BMS) {
     if ($Application.Name -eq $bms_app_name -and $Application.Version -eq $bms_app_version -and $Application.ParentId -eq $bms_app_parentid){
         Remove-bConnectApplication -ApplicationGuid $Application.Id
@@ -234,10 +237,16 @@ if ($bms_app_dependencies) {
 
         foreach ($Application in $All_Apps_in_BMS) {
             if ($Application.Name -eq $depend_file_opt[0] -and $Application.Version -eq $depend_file_opt[1]){
+				if ($depend_file_opt[2]){
+					$DependencyType = $depend_file_opt[2]
+				}
+				else{
+					$DependencyType = "InstallBeforeIfNotInstalled"
+				}
                 $App_Dep = @{
                     DependencyId      = $Application.Id;
                     DependencyAppName = $Application.Name;
-                    DependencyType    = [PSCustomObject]"InstallBeforeIfNotInstalled";
+                    DependencyType    = [PSCustomObject]$DependencyType;
                     ValidForOS        = [PSCustomObject]$Val4OSary
                 }
     			$Depend_Data = New-bConnectApplicationDependency @App_Dep

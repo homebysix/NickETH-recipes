@@ -15,21 +15,22 @@
 # Extended localfilecopy to all options, 20211028, Hm
 # Extended with writer for JSON app integration file, 20220323, Hm
 # Changed subprocess.run(cmd), added capture_output=True. Sometimes, it hangs without it. 20220726, Hm
+# Extended JSON file with sharepoint and kiosk sections. Added icon copy function. 20221123, Hm
 # Todo: Generic read function for optional parameter processing with for statement and value types
 
 import os
 import sys
 import subprocess
 import json
+import glob
+import shutil
 
 from autopkglib import Processor, ProcessorError
 
-
 __all__ = ["BMSImporter"]
 
-
 class BMSImporter(Processor):
-    description = "Import a new application into BMS."
+    description = "Import a new application into BMS (baramundi management system)."
     input_variables = {
         "bms_serverurl": {
             "required": True,
@@ -155,9 +156,21 @@ class BMSImporter(Processor):
             "required": False,
             "description": "Dict of command(s) to add to the bms_app_integration JSON file.",
         },
+        "bms_app_sharepoint": {
+            "required": False,
+            "description": "Dict of Sharepoint command(s) to add to the bms_app_integration JSON file.",
+        },
+        "bms_job_kiosk": {
+            "required": False,
+            "description": "Dict of Kiosk Job command(s) to add to the bms_app_integration JSON file.",
+        },
         "json_file_dest": {
             "required": False,
             "description": "JSON file absolute path to write to.",
+        },
+        "icon_file_src": {
+            "required": False,
+            "description": "Icon files absolute path to copy to the DIP-Share (wildcards ok).",
         },
         "ignore_errors": {
             "required": False,
@@ -357,6 +370,22 @@ class BMSImporter(Processor):
                             json.dump(JSONData, outfile, indent=4, sort_keys=True)
                 else:
                     with open(json_file_dest, "w") as outfile:
+                        # Sharepoint and kiosk functions are only active when creating a new file!
+                        # read the Sharepoint integration values and add it to the JSON file
+                        if "bms_app_sharepoint" in self.env:
+                            bms_app_integration['Sharepoint4all'] = self.env.get('bms_app_sharepoint')
+                        # read the Kiosk Job integration values and add it to the JSON file
+                        if "bms_job_kiosk" in self.env:
+                            bms_app_integration['bms_job_kiosk'] = self.env.get('bms_job_kiosk')
+                            # get the icon files source
+                            if "icon_file_src" in self.env:
+                                icon_file_src = self.env.get('icon_file_src')
+                                job_icon_path = os.path.join((os.path.split(json_file_dest)[0]), "Icons")
+                                if not os.path.isdir(job_icon_path):
+                                    os.mkdir(job_icon_path)
+                                for icon_file in glob.glob(icon_file_src):
+                                    shutil.copy(icon_file, job_icon_path)
+
                         json.dump(bms_app_integration, outfile, indent=4, sort_keys=True)
             else:
                 self.output("JSON file destination missing in recipe!")

@@ -20,6 +20,7 @@
 # 20190823 Nick Heim: Fixed the patching function.
 # 20210517 Nick Heim: Python v3 changes
 # 20220125 Nick Heim: Added the maxFilesPerCab Option with 'MultiMakeCab.vbs'
+# 20230209 Nick Heim: Added the msi_options Option
 
 import os
 import sys
@@ -88,6 +89,10 @@ class MSIofflinePatcher(Processor):
             "required": True,
             "description": "Path to the MSI-file, relative to pkg_dir, required",
         },
+        "msi_options": {
+            "required": False,
+            "description": "Extra options for the admin installation, divided by '|||'",
+        },
         "msp_path": {
             "required": False,
             "description": "Path to the MSP-file, relative to pkg_dir, omit for cabs in or compress only",
@@ -145,7 +150,6 @@ class MSIofflinePatcher(Processor):
 
         ignore_errors = self.env.get('ignore_errors', True)
         verbosity = self.env.get('verbose', 5)
-        #print >> sys.stdout, "pkg_dir_abs %s" % pkg_dir_abs
         self.output("pkg_dir_abs %s" % pkg_dir_abs)
 
         self.output("Creating: %s" % new_msi_path)
@@ -156,7 +160,15 @@ class MSIofflinePatcher(Processor):
         cscript_exe ="cscript.exe"
 
         # Build the msiexec command to generate an admin install
-        cmd_admin = [msiexec, '/a', msi_file, target_dir, '/qn',]
+        cmd_admin = [msiexec, '/a', msi_file, target_dir,]
+
+        if "msi_options" in self.env:
+            msi_options = self.env.get('msi_options')
+            msi_options_list = msi_options.split('|||')
+            for options_entry in msi_options_list:
+                cmd_admin.extend([options_entry])
+        cmd_admin.extend(['/qn'])
+        
         try:
             Output = subprocess.check_output(cmd_admin)
         except:
@@ -181,7 +193,6 @@ class MSIofflinePatcher(Processor):
                    WIdb.Dispose()
                 except:
                    pass
-                #print >> sys.stdout, "end of export"
                 self.output("end of export")
                 # Create a new MSI-file.
                 tmode = DatabaseOpenMode.CreateDirect
@@ -194,6 +205,7 @@ class MSIofflinePatcher(Processor):
         if {"msp_path"}.issubset(self.env):
             msp_file = os.path.join(pkg_dir_abs, self.env.get('msp_path'))
             cmd_patch = [msiexec, '/p', msp_file, '/a', new_msi_path, target_dir, '/qn',]
+
             try:
                 Output = subprocess.check_output(cmd_patch)
             except:
@@ -205,7 +217,7 @@ class MSIofflinePatcher(Processor):
             if ("cab_dir" in self.env):
                 os.chdir(os.path.join(pkg_dir_abs, self.env.get('cab_dir')))
             cmd_cabin = [cscript_exe, tool_vbs, new_msi_path, cab_file,]
-            # print >> sys.stdout, "embed_cab %s" % type(self.env.get('embed_cab'))
+
             if ("max_files_per_cab" in self.env):
                 max_files_per_cab = self.env.get('max_files_per_cab')
                 cmd_cabin.extend([max_files_per_cab])
@@ -213,11 +225,9 @@ class MSIofflinePatcher(Processor):
             self.output("cmdline: %s" % cmd_cabin)
             if "embed_cab" in self.env:
                 embed_cab = self.env.get('embed_cab')
-                #print >> sys.stdout, "embed_cab %s" % embed_cab
                 self.output("embed_cab %s" % embed_cab)
                 if checkbool(embed_cab):
                     cmd_cabin.extend(['/E'])
-                    #print >> sys.stdout, "cmdline %s" % cmd_cabin
                     self.output("cmdline: %s" % cmd_cabin)
             try:
                 Output = subprocess.check_output(cmd_cabin)
@@ -229,12 +239,10 @@ class MSIofflinePatcher(Processor):
 		    # See URLDownloader L317
             if checkbool(embed_cab):
                 wcount = msi_suminfo_get(new_msi_path, msilib.PID_WORDCOUNT, 'int')
-                #print >> sys.stdout, "wcount %s" % wcount
                 if not get_bit(wcount, 1):
                     wcount = set_bit(wcount, 1)
                 if get_bit(wcount, 2):
                     wcount = clear_bit(wcount, 2)
-                #print >> sys.stdout, "wcount %s" % wcount
                 self.output("wcount %s" % wcount)
                 try:
                     msi_suminfo_set(new_msi_path, msilib.PID_WORDCOUNT, wcount)
@@ -246,7 +254,6 @@ class MSIofflinePatcher(Processor):
             new_packcode = self.env.get('new_packcode')
             if checkbool(new_packcode):
                 new_package_GUID = "{" + msilib.UuidCreate().upper() + "}"
-                #print >> sys.stdout, "new_package_GUID %s" % new_package_GUID
                 self.output("new_package_GUID %s" % new_package_GUID)
                 try:
                     msi_suminfo_set(new_msi_path, msilib.PID_REVNUMBER, new_package_GUID)

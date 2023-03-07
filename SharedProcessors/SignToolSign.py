@@ -14,7 +14,7 @@
 # Quick and dirty first steps... 220702, Nick Heim
 # Based on SignToolVerifier
 
-"""See docstring for SignToolVerifier class"""
+"""See docstring for SignToolSign class"""
 
 import os
 import os.path
@@ -24,7 +24,7 @@ from typing import Any, Dict, List, Optional
 
 from autopkglib import Processor, ProcessorError
 
-__all__ = ["SignToolVerifier"]
+__all__ = ["SignToolSign"]
 
 
 def signtool_default_path() -> Optional[str]:
@@ -48,8 +48,7 @@ def signtool_default_path() -> Optional[str]:
 
 
 class SignToolSign(Processor):
-    """Verifies an authenticode signed installer using the Microsoft SDK
-    signtool executable."""
+    """Signs a file by using the Microsoft SDK signtool executable."""
 
     EXTENSIONS: List[str] = [".exe", ".msi"]
 
@@ -137,14 +136,13 @@ class SignToolSign(Processor):
         additional_arguments: Optional[List[str]] = None,
     ) -> bool:
         """
-        Runs 'signtool.exe /pa <path>'. Returns True if signtool exited with 0
+        Runs 'signtool.exe sign'. Returns True if signtool exited with 0
         and False otherwise.
         """
         if not additional_arguments:
             additional_arguments = []
 
-        # Call signtool with "/v" to produce information about the signer when run,
-        # and "/pa" to use the "Default Authenticode" Verification Policy.
+        # Create the signtool commandline.
         process = [signtool_path, "sign", "/tr", TS_server, "/td", TS_digest_algo, "/fd", file_digest_algo, "/sha1", cert_thumbprint] + additional_arguments
 
         # Makes the path absolute and normalizes it into standard Windows form.
@@ -165,31 +163,6 @@ class SignToolSign(Processor):
             if ignore_errors != 'True':
                 raise
         
-        # Run signtool with stderr redirected to stdout to ensure that all output
-        # is always captured from the tool.
-        # proc = subprocess.Popen(
-            # process,
-            # stdin=None,
-            # stdout=subprocess.PIPE,
-            # stderr=subprocess.STDOUT,
-            # text=True,
-        # )
-        # (output, _) = proc.communicate()
-
-        # for line in output.replace("\n\n", "\n").replace("\n\n\n", "\n\n").splitlines():
-            # self.output(line)
-
-        # if proc.returncode == 1:
-            # raise ProcessorError(
-                # "Authenticode verification failed. Note that all "
-                # "verification can be disabled by setting the variable "
-                # "DISABLE_CODE_SIGNATURE_VERIFICATION to a non-empty value."
-            # )
-        # elif proc.returncode == 2:
-            # self.output("WARNING: Verification had warnings. Check output above.")
-
-        # return proc.returncode == 0
-
     def main(self):
         if self.env.get("DISABLE_CODE_SIGNATURE_SIGN"):
             self.output("Codesigning disabled for this recipe run.")
