@@ -1,12 +1,12 @@
 # Affinity Designer/Photo/Publisher (x64) AutoPkg recipes
 **download** (get the actual installer)  
 **build** (patch the MSI to the actual rlease)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-Installs per machine.
-Auto updater is disabled. 
-License info can be set via override. 
+Installs per machine.  
+Auto updater is disabled.  
+License info can be set via override.  
 
 To use the baramundi import recipe,<br>
 the following varibles need to be specified in the AutoPkg config.json file:<br>

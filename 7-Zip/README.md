@@ -1,13 +1,12 @@
-# Videolan Client x64 AutoPkg recipes
+# 7-Zip (x64) AutoPkg recipes
 **download** (get the actual installer)  
-**build** (create an MSI with all the features)  
+**build** (extract the MSI package)  
 **BMS** (import the package into baramundi server)  
 
 **Features:**  
-VLC main progam  
+Installs per machine.  
 Auto updater is disabled.  
 Desktop shortcut is disabled by default.  
-
 
 To use the baramundi import recipe,<br>
 the following varibles need to be specified in the AutoPkg config.json file:<br>
@@ -15,4 +14,4 @@ the following varibles need to be specified in the AutoPkg config.json file:<br>
   "BMS_IMPORT_PATH_TST": "\\\\domain\\path",
   "BMS_SERVER1": "server.domain.tld",
   "BMS_SERVER_PORT": "443",
-  "BMS_USERNAME": "user",
+  "BMS_USERNAME": "domain\user",

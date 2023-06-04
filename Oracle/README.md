@@ -1,10 +1,10 @@
 # SqlDeveloper AutoPkg recipes
 **download** (get the actual installer)  
 **build** (create an MSI with all the features)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-SqlDeveloper main progam<br>
+SqlDeveloper main progam  
 Auto updater will not be installed and is disabled.  
 Desktop shortcut is disabled by default.  
 
@@ -12,10 +12,10 @@ Desktop shortcut is disabled by default.
 # Oracle Instant Client AutoPkg recipes
 **download** (get the actual installer)  
 **build** (create an MSI with all the features)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-ODBC<br>
+ODBC.  
 SQL-Plus.  
 Tools.  
 

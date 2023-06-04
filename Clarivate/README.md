@@ -1,10 +1,10 @@
 # Endnote (x86) AutoPkg recipes
 **download** (get the actual installer)  
 **build** (patch the MSI to the actual rlease)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-Installs per machine.
+Installs per machine.  
 Auto updater is disabled.  
 
 To use the baramundi import recipe,<br>

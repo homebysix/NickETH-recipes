@@ -1,10 +1,10 @@
 # Nessus-Agent AutoPkg recipes
 **download** (get the actual installer)  
 **build** (create an MSI with all the features)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-Nessus-Agent main progam<br>
+Nessus-Agent main progam  
 Auto updater will not be installed and is disabled.  
 Desktop shortcut is disabled by default.  
 See the BDS-Script for options.  

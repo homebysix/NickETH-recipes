@@ -1,7 +1,7 @@
 # NoMachine Enterprise Client (x64) AutoPkg recipes
 **download** (get the actual installer)  
 **build** (create an MSI with all the features)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
 Auto updater is disabled.  

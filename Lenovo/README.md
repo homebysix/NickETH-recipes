@@ -1,12 +1,12 @@
 # Thinkpad System Update AutoPkg recipes
 **download** (get the actual installer)  
 **build** (bring the installer into position)  
-**BMS** (import the package into baramundi server)
+**BMS** (import the package into baramundi server)  
 
 **Features:**  
-Installs per machine.
+Installs per machine.  
 Auto updater is disabled.  
-Desktop shortcut is disabled by default.
+Desktop shortcut is disabled by default.  
 
 To use the baramundi import recipe,<br>
 the following varibles need to be specified in the AutoPkg config.json file:<br>
