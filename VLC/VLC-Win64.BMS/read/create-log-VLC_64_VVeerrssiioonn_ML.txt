@@ -1,0 +1,20 @@
+
+200113	Create VLC x64 for Windows MSI package.
+	We enhance the package with the following things:
+	- The MSI is built on a Linux machine an therefore not 100% compatible.
+		Biggest problem, it does not accept transforms!
+		See: https://packageology.com/msi/fixing-vlcs-msi-package/
+		To solve this issue, we repack the MSI with MSIofflinePatcher
+		That means unpack to an admin-install and pack it again.
+	- Disabling the auto-update is not possible in a per machine setting.
+		So, we do it on the user-level with an Active Setup entry.
+		To do this the fastest possible way, we introduce a new feature "User" 
+		See the transform for details.
+	- Firewall settings are missing.
+		We do this with a merge-module, which contains the additions to use the Wix-Firewall-Extension.
+		The actual settings are put in with the transform.
+	- We remove the desktop shortcut.
+		This is also part of the transform.
+
+200113	Version 1.0.0.0, by AutoPkg
+

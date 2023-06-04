@@ -1,0 +1,90 @@
+Description: Package the current Endnote release to an MSI-package.
+Identifier: com.github.NickETH.recipes.build.Endnote-Win
+ParentRecipe: com.github.NickETH.recipes.download.Endnote-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Endnote
+  VENDOR: 'Clarivate Analytics'
+  MAJOR_VERSION: '20'
+  PLATFORM: x86
+  PF_STRING: ''
+  LANG_STRING: _ML
+  DIP_NAME: Endnote
+  DIP_SUBDIR: ML
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Comment: Get the ProductCode into the  msi_value variable for the BMS uninstall string
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'
+    msi_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to package the MSI
+  Arguments:
+    version: '%msi_value%'
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    create_AS_ver: 'True'
+    folder_list: adm:sourceunzipped:release:read:helpers
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Copy the Endnote installer file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: Copier
+  Comment: Copy the Endnote License file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\License.dat'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\helpers\License.dat'
+ 
+# - Processor: Copier
+  # Comment: Copy the Endnote installer file to the build dir
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%NAME%-%MAJOR_VERSION%.msp'
+    # overwrite: 'true'
+    # source_path: '%pathname%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/MSIofflinePatcher
+  # Arguments:
+    # adm_msi_path: adm\EN20Inst.msi
+    # cab_dir: adm
+    # cab_file: 'Cabs.w1'
+    # compact_msi: 'True'
+    # embed_cab: 'True'
+    # msi_path: 'sourceunzipped\%NAME%-%MAJOR_VERSION%.msi'
+    # msi_options: 'PIDKEY=GGANB-7PXSR-KECVH-QEF5V-J3XWN|||RSISADMININSTALL=1'
+    # msp_path: 'sourceunzipped\%NAME%-%MAJOR_VERSION%.msp'
+    # new_msi_path: adm\%NAME%%PF_STRING%_%build_ver%_ML.msi
+    # new_packcode: 'True'
+    # pkg_dir_abs: '%BUILD_DIR%\%pkg_dir%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+

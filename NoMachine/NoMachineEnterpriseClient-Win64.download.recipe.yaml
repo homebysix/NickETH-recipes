@@ -1,0 +1,43 @@
+Description: Downloads latest NoMachine Enterprise Client Install-file for Windows.
+Identifier: com.github.NickETH.recipes.download.NoMachineEnterpriseClient-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: NoMachineEnterpriseClient
+  VENDOR: NoMachine
+  DOWNLOAD_URL: 'https://downloads.nomachine.com/download/?id=18'
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: 'www.nomachine.com'
+    url: 'https://www.nomachine.com'
+    curl_opts:
+    - -c
+    - '%RECIPE_CACHE_DIR%\cookie.txt'
+
+- Processor: URLTextSearcher
+  Arguments:
+    # https://download.nomachine.com/download/8.2/Windows/nomachine-enterprise-client_8.2.3_4_x64.exe"
+    re_pattern: (?P<match>https://download.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*)_x64\.exe)
+    url: '%DOWNLOAD_URL%'
+    curl_opts:
+    - L
+    - -b
+    - '%RECIPE_CACHE_DIR%\cookie.txt'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    url: '%match%'
+    curl_opts:
+    - -b
+    - '%RECIPE_CACHE_DIR%\cookie.txt'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False

@@ -1,0 +1,136 @@
+Description: Imports Visual Studio Code to BMS
+Identifier: com.github.NickETH.recipes.BMS.VisualStudioCode-Win64
+ParentRecipe: com.github.NickETH.recipes.build.VisualStudioCode-Win64
+MinimumVersion: 1.3.1
+
+
+Input:
+  NAME: VisualStudioCode
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%build_ver%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: FileCreator
+  Comment: Generate the VSCode_SetDisableUpdate.bds in the release dir.
+  Arguments:
+    file_content: |
+      <?xml version="1.0" encoding="ISO-8859-1"?>
+      <baramundiDeployScript Version="2220" LastChange="%us_date% %time%">
+      <META>
+      <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>
+      <STATICVARS LoadInstallIni="1">
+      <BMSVars></BMSVars>
+      </STATICVARS>
+      </META>
+      <ACTIONS>
+      <ACTION type="SetX64Mode" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <MODE>1</MODE>
+      </DATA>
+      </ACTION>
+      <ACTION type="SetRegValue" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <REGISTRY>2147483650</REGISTRY>
+      <REGKEY>Software\Policies\Microsoft\VSCode</REGKEY>
+      <REGVALUENAME>UpdateMode</REGVALUENAME>
+      <VALUE>none</VALUE>
+      <REGVALUETYPE>1</REGVALUETYPE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      </ACTIONS>
+      </baramundiDeployScript>
+    file_path: '%BUILD_DIR%\%pkg_dir%\release\VSCode_SetDisableUpdate.bds'
+
+- Processor: FileCreator
+  Comment: Generate the VSCode_UnsetDisableUpdate.bds in the release dir.
+  Arguments:
+    file_content: |
+      <?xml version="1.0" encoding="ISO-8859-1"?>
+      <baramundiDeployScript Version="2220" LastChange="%us_date% %time%">
+      <META>
+      <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>
+      <STATICVARS LoadInstallIni="1">
+      <BMSVars></BMSVars>
+      </STATICVARS>
+      </META>
+      <ACTIONS>
+      <ACTION type="SetX64Mode" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <MODE>1</MODE>
+      </DATA>
+      </ACTION>
+      <ACTION type="SetRegValue" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <DATA>
+      <REGISTRY>2147483650</REGISTRY>
+      <REGKEY>Software\Policies\Microsoft\VSCode</REGKEY>
+      <REGVALUENAME>UpdateMode</REGVALUENAME>
+      <VALUE>none</VALUE>
+      <REGVALUETYPE>1</REGVALUETYPE>
+      <OPTIONS>1</OPTIONS>
+      </DATA>
+      </ACTION>
+      </ACTIONS>
+      </baramundiDeployScript>
+    file_path: '%BUILD_DIR%\%pkg_dir%\release\VSCode_UnsetDisableUpdate.bds'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\VSCode\%parsed_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.exe'
+    bms_app_installparm: /VERYSILENT /LOG /MERGETASKS=!runcode,addtopath,addcontextmenufiles
+    bms_app_installbds: '{DIP}\Apl\VSCode\%parsed_string%\ML\VSCode_SetDisableUpdate.bds'
+    bms_app_integration:
+    - appname: 'Visual Studio Code'
+      bundles:
+      - action: exchange
+        name: nV_Visual Studio Code
+      - action: add
+        name: aV_Visual Studio Code Uninstall
+        version: new
+      - action: add
+        name: oV_Visual Studio Code Uninstall
+        version: previous
+      currentversion:
+        bundle: nV_Visual Studio Code
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
+        type: bundles
+      platform: (x64)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+    bms_app_localfilecopy:
+    - '{DIP}\Apl\VSCode\%parsed_string%\ML\~~~FolderWithSubFolders'
+    bms_app_iopt_copylocal: 'false'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'true'
+    bms_app_iopt_usebbt: true
+    bms_app_name: Visual Studio Code
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: '"C:\Program Files\Microsoft VS Code\unins000.exe"'
+    bms_app_uninstparm: /VERYSILENT
+    bms_app_uninstbds: '{DIP}\Apl\VSCode\%parsed_string%\ML\VSCode_UnsetDisableUpdate.bds'
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% ML (x64)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*|%BMS_IMPORT_PATH_TST%\VSCode\%parsed_string%\ML'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\VSCode\%parsed_string%\DEV'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\VSCode\bms_app_integration.json'
+
+- Processor: EndOfCheckPhase

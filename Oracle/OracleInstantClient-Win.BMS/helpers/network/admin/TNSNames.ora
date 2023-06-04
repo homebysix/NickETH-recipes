@@ -1,0 +1,332 @@
+# TNSNAMES.ORA Network Configuration File
+# Revision by A. Sohm: 17.08.2009
+# Revision by P. Jesenak: 18.08.2009
+# Revision by R. Schwitter: 13.08.2009
+# Edited by D. Rogalski: 18.08.2009
+# Edited by A. Meier: 18.02.2010
+# Revision by P. Jesenak: 25.06.2012
+# Revision by A. Sohm 20.07.2012
+# Revision by A. Sohm 11.10.2012
+# Revision by J. Novak 07.12.2012
+# Revision by J. Novak 12.02.2013
+# Revision by A. Trenz 26.06.2015
+# Revision by A. Trenz 08.02.2018
+# Revision by A. Trenz 23.04.2020
+# Revision by A. Trenz 25.11.2020
+# Revision by A. Trenz 26.11.2020
+# Revision by A. Trenz 20.05.2021
+# Revision by A. Trenz 15.06.2021
+# Revision by A. Trenz 11.11.2021
+
+#-------------------------------------------------------------------------------
+# TNSNAMES ALUMNI:
+#-------------------------------------------------------------------------------
+
+ALUMNIDB.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = NDB.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SID = HDB)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES REKTORAT:
+#-------------------------------------------------------------------------------
+
+OIS_DB-STAT.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB4.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = STAT12)
+    )
+  )
+
+OIS_DB-REKT.ETHZ.CH =
+  (DESCRIPTION =
+    (FAILOVER = ON)
+    (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB5.ETHZ.CH)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB6.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = REKT_RW)
+    )
+  )
+
+OIS_DB_PRD-REKT.ETHZ.CH =
+  (DESCRIPTION =
+    (FAILOVER = ON)
+    (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB5.ETHZ.CH)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB6.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = REKT_RW)
+    )
+  )
+
+ENTW10.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-DB2.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SID = ENTW10)
+    )
+  )
+
+ENTW11.ETHZ.CH =
+ (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-RDB2.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ENTW11)
+    )
+ )
+
+USER10.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-DB2.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SID = USER10)
+    )
+  )
+
+USER11.ETHZ.CH =
+ (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-RDB2.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = USER11)
+    )
+ )
+
+QSS10.ETHZ.CH =
+  (DESCRIPTION =
+        (FAILOVER = ON)
+        (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-DB2.ETHZ.CH)(PORT = 1521))
+        (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-DB3.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+        (SERVICE_NAME = QSS10_RW)
+    )
+  )
+
+QSS11.ETHZ.CH =
+  (DESCRIPTION =
+    (FAILOVER = ON)
+    (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-RDB1.ETHZ.CH)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-RDB2.ETHZ.CH)(PORT = 1521))
+    )        
+    (CONNECT_DATA =
+      (SERVICE_NAME = QSS11_RW)
+    )        
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES CONTROLLING:
+#-------------------------------------------------------------------------------
+
+HISP.ETHZ.CH =
+  (DESCRIPTION =
+   (ADDRESS = (PROTOCOL = TCP)(HOST = ois-prd-rdb2.ethz.ch)(PORT = 1521))
+   (CONNECT_DATA =
+     (SERVICE_NAME = HISP)
+   )
+ )
+ 
+HISP12.ETHZ.CH =
+	(DESCRIPTION =
+	(ADDRESS = (PROTOCOL = TCP)(HOST = ois-prd-rdb7.ethz.ch)(PORT = 1521))
+	(CONNECT_DATA =
+	  (SERVER = DEDICATED)
+	  (SERVICE_NAME = HISP12)
+   )
+ )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES HIST12:
+#-------------------------------------------------------------------------------
+
+HIST12.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ois-dev-rdb3.ethz.ch)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = HIST12)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES GMIS (BETRIEB, PFM, DIENSTE, SICHERHEIT, BAUTEN, STAB VPPL):
+#-------------------------------------------------------------------------------
+  
+GMISP12.ETHZ.CH =
+  (DESCRIPTION =
+    (Failover = ON)
+    (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ois-prd-rdb7.ethz.ch)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ois-prd-rdb6.ethz.ch)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = GMISP12_RW)
+    )
+  )
+ 
+GMISS.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-RDB2.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = GMISS)
+    )
+  )
+
+GMIST122.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = ois-stg-rdb3.ethz.ch)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = GMIST122)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES IVY:
+#-------------------------------------------------------------------------------
+  
+IVYT.ETHZ.CH =
+  (DESCRIPTION =
+   (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = TRI-IVY-T.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = IVYT.ETHZ.CH)
+      (INSTANCE_NAME = IVYT)
+    )
+  )
+  
+IVYP.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = TRI-IVY-P.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = IVYP.ETHZ.CH)
+      (INSTANCE_NAME = IVYP)
+    )
+  )
+  
+#-------------------------------------------------------------------------------
+# TNSNAMES EXP:
+#-------------------------------------------------------------------------------
+
+EXP.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ZO-TRI-EXP.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = EXP.ETHZ.CH)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES BAU - Argus:
+#-------------------------------------------------------------------------------
+
+ETHT.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ois-dev-rdb2.ethz.ch)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ETHT)
+    )
+  )
+ 
+ETHP.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = ois-prd-rdb2.ethz.ch)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ETHP)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# Oracle 12:
+#-------------------------------------------------------------------------------
+
+ENTW12.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-RDB3.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ENTW12)
+    )
+  )
+
+USER12.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-DEV-RDB3.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = USER12)
+    )
+  )
+
+QSS12.ETHZ.CH =
+  (DESCRIPTION =
+    (FAILOVER = ON)
+    (LOAD_BALANCE = OFF)
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-RDB3)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-RDB4)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = QSS12_RW)
+    )
+  )
+
+#-------------------------------------------------------------------------------
+# TNSNAMES SHOP:
+#-------------------------------------------------------------------------------
+  
+SHOPT.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-STG-RDB1.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA = (SID = SHOPT11))
+  )
+
+SHOPS.ETHZ.CH =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = OIS-PRD-RDB1.ETHZ.CH)(PORT = 1521))
+    )
+    (CONNECT_DATA = (SID = SHOPS))
+  )

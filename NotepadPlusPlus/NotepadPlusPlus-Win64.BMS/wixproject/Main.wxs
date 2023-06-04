@@ -11,9 +11,11 @@
     <Property Id="ARPURLUPDATEINFO" Value="!(loc.ProductUrlUpdateInfo)" />
     <Property Id="ALLUSERS" Value="1" />
 	<Property Id="DESKTOP_SC" Value="0" />
-    <Property Id="ARPPRODUCTICON" Value="notepadpp.ico" />
+    <!-- <Property Id="ARPPRODUCTICON" Value="notepadpp.ico" /> -->
+	<Property Id="ARPPRODUCTICON" Value="MainIcon.exe" />
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
-    <Icon Id="notepadpp.ico" SourceFile="$(var.SetupResourcesDir)\notepadpp.ico" />
+    <!-- <Icon Id="notepadpp.ico" SourceFile="$(var.SetupResourcesDir)\notepadpp.ico" /> -->
+	<Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
 
     <!-- Windows 7 and later is required. -->
     <Condition Message="!(loc.OSVersionRequired)"><![CDATA[Installed OR VersionNT >= 601]]></Condition>
@@ -35,7 +37,9 @@
     <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="$(var.ProgramFilesFolder)">
-        <Directory Id="APPLICATIONFOLDER" Name="$(var.AppFolder)" />
+        <Directory Id="APPLICATIONFOLDER" Name="$(var.AppFolder)" >
+		  <!-- <Directory Id="contextMenu" Name="contextMenu" /> -->
+        </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder" />
       <Directory Id="DesktopFolder" />
@@ -57,6 +61,16 @@
         <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER" />
       </Component>
     </DirectoryRef>
+<!--     <DirectoryRef Id="contextMenu">
+	  <Component Id="contextMenuDLL" Guid="{302DCB68-544E-4645-9D4B-221F457C9063}" Win64="yes" KeyPath="yes">
+		<File Id="NppShell.dll"
+			Name="NppShell.dll"
+			Vital="yes"
+			SelfReg="true"
+			Source="!(wix.APSourceDir)\contextMenu\NppShell.dll">
+		</File>
+	  </Component>
+    </DirectoryRef> -->
     <DirectoryRef Id="ProgramMenuFolder">
       <Component Id="StartMenuShortcut" Guid="*">
         <Shortcut Id="AppStartMenuShortcut" Advertise="no" Name="$(var.AppName)" Target="[APPLICATIONFOLDER]notepad++.exe" WorkingDirectory="APPLICATIONFOLDER" />

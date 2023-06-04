@@ -1,0 +1,44 @@
+Description: |
+  Downloads the current release version of Eclipse.
+  
+  Use the ARCHITECTURE input variable to specify whether you want to download the
+  Intel ("x86_64") or Apple Silicon ("aarch64") version of Eclipse.
+  
+  Use the ECLIPSE_CODE input variable to specify the IDE version.
+  Eclipse IDE for C/C++ Developers: cpp
+  Eclipse IDE for Embedded C/C++ Developers: embedcpp
+  Eclipse IDE for Eclipse Committers: committers
+  Eclipse IDE for Java Developers: java
+  Eclipse IDE for Enterprise Java and Web Developers: jee
+  Eclipse IDE for Java and DSL Developers: dsl
+  Eclipse Modeling Tools: modeling
+  Eclipse IDE for PHP Developers: php
+  Eclipse IDE for RCP and RAP Developers: rcp
+  Eclipse IDE for Scientific Computing: parallel
+  Eclipse IDE for Scout Developers: scout"
+Identifier: com.github.NickETH.recipes.download.Eclipse-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Eclipse
+  ARCHITECTURE: x86_64
+  ECLIPSE_CODE: java
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: \/downloads\/download\.php\?file=([/\w-]+eclipse-%ECLIPSE_CODE%[\w-]+win32-%ARCHITECTURE%\.zip)
+    # https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2022-12/R/eclipse-java-2022-12-R-win32-x86_64.zip&mirror_id=1190
+    # We need to point the download to a specific mirror. Otherwise the check with ETAG will not work. 1190 points to University of Erlangen-Nuremberg
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    result_output_var_name: match
+    url: https://eclipse.org/downloads/eclipse-packages/
+
+- Processor: URLDownloader
+  Arguments:
+    url: https://eclipse.org/downloads/download.php?r=1&file=%match%&mirror_id=1190
+    filename: '%NAME%.zip'
+
+- Processor: EndOfCheckPhase

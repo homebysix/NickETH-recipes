@@ -1,0 +1,54 @@
+<Project DefaultTargets="WIX" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
+    <PropertyGroup>
+		<InstallerPlatform>$(BuildPlatform)</InstallerPlatform>
+		<Platform>$(InstallerPlatform)</Platform>
+		<PlatformString>$(Platformstr)</PlatformString>
+		<!-- <PlatformDigit>$(PlatformString.Substring(1,2))</PlatformDigit> -->
+		<PRODUCT_SKU>$(BuildName)</PRODUCT_SKU>
+		<CULTURE>en-us</CULTURE>
+		<!-- <CULTURE2>de-de</CULTURE2> -->
+		<!-- <LANGIDS>1031,1033</LANGIDS> -->
+		<LANGIDS>1033</LANGIDS>
+		<LangString>$(LangStr)</LangString>
+        <BuildDirectory>$(BuildDir)</BuildDirectory>
+		<SourceDirectory>$(SourceDir)</SourceDirectory>
+		<CandleVar>-dPlatform=$(InstallerPlatform) -dSetupResourcesDir=$(BuildDir)\Resources</CandleVar>
+		<LightSrcDir>-dAPSourceDir=$(SourceDirectory)</LightSrcDir>
+		<MsiOut>$(BuildName)$(PlatformString)_$(version).msm</MsiOut>
+		<!-- <MsiOut>..\sourceunzipped\Company_Resources.msm</MsiOut> -->
+    </PropertyGroup>
+	<!-- The list of WIX input files -->
+	<ItemGroup>
+		<WixCode Include="Main.wxs" />
+		<WixCode Include="PackageFiles1.wxs" />
+		
+		<!-- <WixCode Include=".\Fragments\regFrag.wxs" /> -->
+	</ItemGroup>
+
+	<ItemGroup>
+		<WixObject Include="Main.wixobj" />
+		<WixObject Include="PackageFiles1.wixobj" />
+		<!-- <WixObject Include="regFrag.wixobj" /> -->
+	</ItemGroup>
+	<Target Name="Harvest" >
+		<Exec
+            Command='"$(WIX)bin\heat" dir $(SourceDirectory) -dr JFXFolder -v -sw5150 -sreg -srd -suid -svb6 -sfrag -cg JFXFiles1 -var wix.APSourceDir -gg -out PackageFiles1.wxs -t Comp-x64.xslt'
+            ContinueOnError="false"
+            WorkingDirectory="." />
+    </Target>
+	<Target Name="WIX"
+		DependsOnTargets="Harvest">
+        <Exec
+            Command='"$(WiX)bin\candle" -arch $(InstallerPlatform) -ext WixUIExtension $(CandleVar) -v -sw0204 -sw1044 @(WixCode, &apos; &apos;)'
+            ContinueOnError="true"
+            WorkingDirectory="$(BuildDirectory)" />
+        <Exec
+            Command='"$(WiX)bin\light" -ext WixUIExtension $(LightSrcDir) -v -sice:ICE57 -sice:ICE43 -sice:ICE103 -sw1076 -sw0204 -sw0217 -loc "Lang\$(PRODUCT_SKU).$(CULTURE).wxl" -cultures:$(CULTURE) -out $(MsiOut) @(WixObject, &apos; &apos;)'
+            ContinueOnError="true"
+            WorkingDirectory="." />
+		<Delete Files="$(MsiOut.Replace('.msm', '.wixpdb'))" />
+
+  <!-- A message at the end -->
+		<Message Text="Install package has been created." />
+	</Target>
+</Project>

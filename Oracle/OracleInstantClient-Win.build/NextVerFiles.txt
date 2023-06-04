@@ -1,0 +1,10 @@
+read\create-log-OracleInstantClient_VVeerrssiioonn_ML.txt
+read\readme-OracleInstantClient_VVeerrssiioonn_ML.txt
+helpers\*.zip
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\OracleInstantClient.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*

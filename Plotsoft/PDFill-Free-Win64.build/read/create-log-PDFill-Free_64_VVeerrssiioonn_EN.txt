@@ -1,0 +1,9 @@
+
+200113	Create PDFill Free x64 for Windows
+	Download the Windows MSI installer
+	There seems to be no difference between the x86 and x64 version.
+	We disable several shortcuts.
+	Some settings are set via an Active Setup Feature.
+	
+200113	Version 1.0.0, by AutoPkg
+	

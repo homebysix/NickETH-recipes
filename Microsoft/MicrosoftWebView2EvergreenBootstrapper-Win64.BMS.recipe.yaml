@@ -1,0 +1,105 @@
+Description: Imports Microsoft WebView2 Evergreen Bootstrapper x64 to BMS (QSS/PRD)
+Identifier: ch.ethz.id-cd-win.recipes.BMS.EQP.WebView2EvergreenBootstrapper-Win64
+ParentRecipe: com.github.NickETH.recipes.build.WebView2EvergreenBootstrapper-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: WebView2EvergreenBootstrapper
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PF_STRING: _64
+  PRODUCTID: '2124703'
+  DOWNLOADURL: https://go.microsoft.com/fwlink/?linkid=%PRODUCTID%
+
+Process:
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS) QSS
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\MSEdgeWebView2\%parsed_string%\ML_x64\%VENDOR%_%NAME%%PF_STRING%_%version%_ML.exe'
+    bms_app_installparm: /silent /install
+    bms_app_iopt_copylocal: true
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: false
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: cmd.exe
+    bms_app_uninstparm: /c exit 0
+    bms_app_uopt_rebootbhv: NoReboot
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%version% ML (x64)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%VENDOR%_%NAME%%PF_STRING%_%version%_ML.exe|%BMS_IMPORT_PATH_TST%\MSEdgeWebView2\%parsed_string%\ML_x64'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%VENDOR%_%NAME%%PF_STRING%_%version%_ML.txt|%BMS_IMPORT_PATH_TST%\MSEdgeWebView2\%parsed_string%\DEV'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\MSEdgeWebView2\bms_app_integration.json'
+    bms_app_integration:
+    - appname: '%NAME%'
+      bundles:
+      - action: exchange
+        name: nV_MSWebview2_Evergreen
+      currentversion:
+        bundle: nV_MSWebview2_Evergreen
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
+        type: bundles
+      platform: (x64)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS) PRD
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\MSEdgeWebView2\%parsed_string%\ML_x64\%VENDOR%_%NAME%%PF_STRING%_%version%_ML.exe'
+    bms_app_installparm: /silent /install
+    bms_app_iopt_copylocal: true
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: false
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: cmd.exe
+    bms_app_uninstparm: /c exit 0
+    bms_app_uopt_rebootbhv: NoReboot
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%version% ML (x64)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER2%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%VENDOR%_%NAME%%PF_STRING%_%version%_ML.exe|%BMS_IMPORT_PATH_PRD%\MSEdgeWebView2\%parsed_string%\ML_x64'
+    json_file_dest: '%BMS_IMPORT_PATH_PRD%\MSEdgeWebView2\bms_app_integration.json'
+    bms_app_integration:
+    - appname: '%NAME%'
+      bundles:
+      - action: exchange
+        name: nV_MSWebview2_Evergreen
+      currentversion:
+        bundle: nV_MSWebview2_Evergreen
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
+        type: bundles
+      platform: (x64)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+
+- Processor: EndOfCheckPhase

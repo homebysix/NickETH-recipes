@@ -1,0 +1,36 @@
+Description: Download recipe for Lenovo Thinkpad-SystemUpdate.
+Identifier: com.github.NickETH.recipes.download.ThinkpadSystemUpdate-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: ThinkpadSystemUpdate
+  SEARCH_URL: <SourcePath>UTS/(?P<dl_exe>systemupdate.*.exe)</SourcePath>
+  SEARCH_VER: <Version>(?P<major_minor>[0-9]+\.[0-9]+).*</Version>
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL%'
+    url: https://download.lenovo.com/ibmdl/pub/pc/pccbbs/agent/SSClientCommon/UTS/executables.xml
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_VER%'
+    url: https://download.lenovo.com/ibmdl/pub/pc/pccbbs/agent/SSClientCommon/UTS/executables.xml
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: false
+    filename: '%NAME%.exe'
+    url: https://download.lenovo.com/ibmdl/pub/pc/pccbbs/agent/SSClientCommon/UTS/%dl_exe%
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Lenovo, OU=G08, O=Lenovo, L=Morrisville, S=North Carolina, C=US
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

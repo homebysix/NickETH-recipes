@@ -1,0 +1,14 @@
+
+190813	Affinity Publisher x64
+	We extract the msi with Resource Hacker.
+	Changes:
+	Disable desktop shortcut: INSTALL_DESKTOP_SHORTCUT_PROPERTY=0
+	Disable updates: NO_UPDATE_CHECK_PROPERTY=#1
+	Disable EULA popup: NO_EULA_PROPERTY=#1
+	Disable registration dialog: NO_REGISTRATION_PROPERTY=#1
+
+	To set the product key, use the following properties:
+	PRODUCT_KEY_PROP (PRODUCT_KEY_PROPERTY)
+	EMAIL_PROP (EMAIL_PROPERTY)
+
+190813	By AutoPkg

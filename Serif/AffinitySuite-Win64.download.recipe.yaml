@@ -1,0 +1,35 @@
+Comment: Created by Nick Heim, ETHZ ID-CD
+Description: Downloads the latest version of a program from the Affinity Suite
+Identifier: com.github.NickETH.recipes.download.AffinitySuite-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: AffinitySuite
+  AppKey: designer
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    # https://d1gl0nrskhax8d.cloudfront.net/windows/designer2/2.0.4/affinity-designer-msi-2.0.4.exe?Expires=1676920699&Signature=XLPNUVzDoiIInLiOtPylYXnGmW-S8g2No4Oy7praFL96mXsMVWya6MNWXErjs4IArYL3bZzPa~rDUyAvwjUyWB40Gpi3I5ObJMz4ZlzQNnfPJh6YNE~leKXKlMOPBFOphD32kUNKswyUr8DPv-yjuYsJsevta9EYEBDkjMiKNLjxGC3LNcx34c~GwDEhNIyjA-9SzhbDq3i8GAhwPk1dlyTTOwwskpWwTOKgb4FwQkvR0~fr00VeB0gd60YDFpjNLo4Z4IyyYfsjhsMQ3PI~oyhJ8yrr~LnqfXcGJbdSqimwdiXZ9Oh~EaPO~DNQPD2AN1oTPdqwS6uO6t-fqk0hpQ__&Key-Pair-Id=APKAIMMPYSI7GSVTEAAQ
+    #re_pattern: ((?P<url>https://d1gl0nrskhax8d\.cloudfront\.net/windows/%AppKey%/\d+(\.\d*){2,}/(?P<filename>affinity-%AppKey%-(?P<upgradeversion>\d+(\.\d*){2,})\.exe))\?Expires=(?P<expires>\d+)&amp;Signature=(?P<signature>[\w\~\-]+)&amp;Key-Pair-Id=(?P<key>[\w]+))
+    re_pattern: ((?P<url>https://d1gl0nrskhax8d\.cloudfront\.net/windows/%AppKey%2/\d+(\.\d*){2,}/(?P<filename>affinity-%AppKey%-msi-(?P<upgradeversion>\d+(\.\d*){2,})\.exe))\?Expires=(?P<expires>\d+)&amp;Signature=(?P<signature>[\w\~\-]+)&amp;Key-Pair-Id=(?P<key>[\w]+))
+
+    result_output_var_name: url
+    #https://store.serif.com/de/update/windows/designer/2/
+    url: https://store.serif.com/en-us/update/windows/%AppKey%/2/
+
+- Processor: URLDownloader
+  Arguments:
+    filename: affinity-%AppKey%.exe
+    url: '%url%?Expires=%expires%&Signature=%signature%&Key-Pair-Id=%key%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Serif (Europe) Ltd, O=Serif (Europe) Ltd, L=Nottingham, S=Nottinghamshire, C=GB
+    input_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  Arguments:
+    exe_path: '%pathname%'

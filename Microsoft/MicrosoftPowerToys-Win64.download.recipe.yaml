@@ -1,0 +1,25 @@
+Description: Downloads latest Microsoft PowerToys Install-file for Windows.
+Identifier: com.github.NickETH.recipes.download.MicrosoftPowerToys-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: PowerToys
+  GITHUB_REPO: microsoft/PowerToys
+  PLATFORM: x64
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: PowerToysSetup-(?P<versionextra>([0-9]+\.)*[0-9]+)-x64\.exe
+    github_repo: '%GITHUB_REPO%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

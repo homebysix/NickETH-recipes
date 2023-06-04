@@ -21,8 +21,8 @@ Version 1.0, 20210201, Nick Heim, ETHZ, ID-CD
 	</xsl:template>
 
 	<!-- Filter out the exe file -->
-	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'texstudio.exe')]" use="@Id" />
+<!-- 	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'NppShell.dll')]" use="@Id" />
 	<xsl:template match="wix:Component[key('exe-search', @Id)]" />
-	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" />
+	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" /> -->
 
 </xsl:stylesheet>

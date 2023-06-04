@@ -8,3 +8,4 @@ wixproject\Includes\*.*
 wixproject\Resources\*.*
 wixproject\Lang\*.*
 wixproject\Fragments\*.*
+helpers\Icon-Stub-1.exe

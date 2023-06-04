@@ -1,0 +1,10 @@
+read\create-log-Eclipse-Java_64_VVeerrssiioonn_ML.txt
+read\readme-Eclipse-Java_64_VVeerrssiioonn_ML.txt
+helpers\Icon-Stub-1.exe
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\Eclipse-Java.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*

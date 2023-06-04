@@ -1,0 +1,4 @@
+helpers\VLC64-ETHZ-cfg.mst
+helpers\WixFirewallCA-merge.msi
+read\create-log-VLC_64_VVeerrssiioonn_ML.txt
+read\readme-VLC_64_VVeerrssiioonn_ML.txt

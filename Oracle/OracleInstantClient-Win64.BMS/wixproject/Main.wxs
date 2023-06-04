@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?include version.wxi?>
+  <?include $(sys.CURRENTDIR)Includes\MainVariables.wxi ?>
+
+  <Product Id="$(var.Productcode)" Name="$(var.ProductNameWithVersion)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.ProductManufacturerLong)" UpgradeCode="$(var.ProductUpgradeCode)">
+    <Package Description="!(loc.PackageDescription)" Manufacturer="$(var.ProductManufacturerLong)" InstallerVersion="500" Compressed="yes" />
+    <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
+	<CustomAction Id="Install_ODBC_deferred" Directory="APPLICATIONFOLDER" ExeCommand="[#odbc_install.exe]" Execute="deferred" Return="check" Impersonate="no"/>
+	<CustomAction Id="Uninstall_ODBC_deferred" Directory="APPLICATIONFOLDER" ExeCommand="[#odbc_uninstall.exe]" Execute="deferred" Return="check" Impersonate="no"/>
+    <Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
+	
+	<Property Id="DEFAULTSERVER" Value="0" />
+	<PropertyRef Id="WIX_DIR_PROFILE" />
+    <Property Id="ARPHELPLINK" Value="!(loc.ProductHelpLink)" />
+    <Property Id="ARPURLINFOABOUT" Value="!(loc.ProductUrlInfoAbout)" />
+    <Property Id="ARPURLUPDATEINFO" Value="!(loc.ProductUrlUpdateInfo)" />
+    <Property Id="ALLUSERS" Value="1" />
+	<Property Id="DESKTOP_SC" Value="0" />
+    <Property Id="ARPPRODUCTICON" Value="MainIcon.exe" />
+    <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
+
+    <!-- Windows 7 and later is required. -->
+    <Condition Message="!(loc.OSVersionRequired)"><![CDATA[Installed OR VersionNT >= 601]]></Condition>
+
+    <Upgrade Id="$(var.ProductUpgradeCode)">
+      <UpgradeVersion OnlyDetect="yes" Minimum="$(var.ProductVersion)" Property="NEWPRODUCTFOUND" IncludeMinimum="no" />
+      <UpgradeVersion Minimum="$(var.RTMProductVersion)" IncludeMinimum="yes" Maximum="$(var.ProductVersion)" Property="UPGRADEFOUND" IncludeMaximum="no" MigrateFeatures="yes" />
+    </Upgrade>
+    <CustomAction Id="PreventDowngrading" Error="!(loc.NewerVersionInstalled)" />
+
+    <InstallExecuteSequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+		<RemoveExistingProducts Before="InstallInitialize" />
+		<!-- <Custom Action="SetDefaultServer" After="InstallFiles"><![CDATA[NOT DEFAULTSERVER="0"]]></Custom> -->
+		<Custom Action="Install_ODBC_deferred" After="InstallFiles">NOT Installed</Custom>
+	    <Custom Action="Uninstall_ODBC_deferred" Before="RemoveFiles">Installed</Custom>
+	</InstallExecuteSequence>
+	<InstallUISequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+	</InstallUISequence>
+
+    <!-- Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+	<!-- See defines for the var. This is decisive to get automatically 64bit from Heat! -->
+	<!-- See: https://stackoverflow.com/questions/5479790/wix-how-to-override-c-program-files-x86-on-x64-machine-in-wixui-advanced-s -->
+	<!-- Otherwise, we need to set the Win64 attribute via an XSL transform -->
+      <Directory Id="$(var.ProgramFilesFolder)">
+        <Directory Id="ORAFOLDER" Name="Oracle">
+		  <Directory Id="APPLICATIONFOLDER" Name="!(wix.APInstallFolder)" />
+		</Directory>
+	  </Directory>
+      <Directory Id="ProgramMenuFolder" />
+      <Directory Id="DesktopFolder" />
+	  <Directory Id="AppDataFolder" />
+	</Directory>
+    <!--
+      RemoveFolderEx requires that we "remember" the path for uninstall.
+      This workaround is only required for the uninstall.
+    -->
+    <Property Id="APPLICATIONFOLDER">
+      <RegistrySearch Id="APPLICATIONFOLDER_REGSEARCH" Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="raw" Win64="$(var.Win64)" />
+    </Property>
+
+    <!-- Add the shortcuts to your installer package -->
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id="CleanupMainApplicationFolder" Guid="*">
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="string" Value="[APPLICATIONFOLDER]" KeyPath="yes" />
+        <!-- We need to use APPLICATIONFOLDER variable here or RemoveFolderEx will not remove on "install". -->
+        <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER" />
+		<Environment Action="set" Name="Path" Part="last" System="yes" Id="Oracle_Path" Value="[APPLICATIONFOLDER]" Permanent="no" />
+      </Component>
+    </DirectoryRef>
+    <!-- List of features to install -->
+    <Feature Id="UserSettings" InstallDefault="local" Description="Delivers user settings automatically to each profile." Display="expand" Level="1" Title="User Settings">
+      <!-- <ComponentRef Id="UserSettingsRepair" /> -->
+	  <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="yes" InstallDefault="local">
+
+		<ComponentRef Id="CleanupMainApplicationFolder" />
+        <ComponentGroupRef Id="AppFiles" />
+      </Feature>
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.SetupResourcesDir)\SideImage.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.SetupResourcesDir)\TopImage.bmp" />
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <!-- Skip license dialog. -->
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="5">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="5">1</Publish>
+    </UI>
+  </Product>
+</Wix>

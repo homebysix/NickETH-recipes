@@ -1,0 +1,91 @@
+Description: Alters latest Affinity Designer x64 for Windows.
+Identifier: com.github.NickETH.recipes.build.AffinityDesigner-Win64
+ParentRecipe: com.github.NickETH.recipes.download.AffinitySuite-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: AffinityDesigner
+  AppKey: designer
+  PLATFORM_STR: x64
+
+Process:
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: sourcepkt:sourceunzipped:release:read:helpers
+    org_ver: '%version%'
+    pkg_dir: '%NAME%_64_::VVeerrssiioonn::_ML'
+    recipe_cache_dir: '%RECIPE_CACHE_DIR%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%_64_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\affinity-%AppKey%.exe'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceExtractor
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\affinity-%AppKey%.exe'
+    extract_cmd: BIN,135,
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    extract_file: affinity-%AppKey%.msi
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceExtractor
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\affinity-%AppKey%.exe'
+    extract_cmd: ICONGROUP,107,
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    extract_file: affinity-%AppKey%.ico
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%pkg_dir%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%pkg_dir%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\affinity-%AppKey%.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQL
+  # Comment: Inserts config changees into the property table
+  # Arguments:
+    # SQL_command:
+    # - INSERT INTO `Property` (`Property`.`Property`,`Property`.`Value`) VALUES ('INSTALL_DESKTOP_SHORTCUT_PROPERTY','#0')
+    # - UPDATE `Property` SET `Property`.`Value`='#1' WHERE `Property`.`Property`='NO_UPDATE_CHECK_PROPERTY'
+    # - UPDATE `Property` SET `Property`.`Value`='#1' WHERE `Property`.`Property`='NO_EULA_PROPERTY'
+    # msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/MSIApplySumInfo
+  # Arguments:
+    # cmnds_sinfo:
+      # /j: '%NAME% x64 %version% ML'
+      # /o: Version %version% for ETHZ ID. %us_date% by AutoPkg
+      # /p: x64;1033
+      # /t: '%NAME% x64 %version% ML'
+    # msi_path: '%BUILD_DIR%\%pkg_dir%\release\%pkg_dir%.msi'
+
+- Processor: EndOfCheckPhase

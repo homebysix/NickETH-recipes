@@ -1,0 +1,85 @@
+Description: Imports Oracle Instant Client x64 to BMS
+Identifier: com.github.NickETH.recipes.BMS.OracleInstantClient-Win64
+ParentRecipe: com.github.NickETH.recipes.build.OracleInstantClient-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: OracleInstantClient
+  NAME_SHORT: InstantClient
+  APPFOLDER: InstantClient
+  MAJOR_VERSION: '19'
+  DOWNLOAD_URL: "https:%match%"
+  SEARCH_URL: https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html
+  SEARCH_PATTERN: '(//download.oracle.com/otn_software/nt/instantclient/[0-9]+/instantclient-basic-windows.x64-(?P<version>%MAJOR_VERSION%\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+\.)*[0-9]+)dbru.zip)'
+  VENDOR: 'Oracle'
+  PLATFORM: x64
+  PF_STRING: '_64'
+  LANG_STRING: _ML
+  DIPNAME: OracleInstantClient
+  DIP_SUBDIR: ML_x64
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%build_ver%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    bms_app_installparm: /qn /norestart ALLUSERS=1
+    bms_app_integration:
+    - appname: '%NAME%'
+      currentversion:
+        job: '@_nV_%NAME% %MAJOR_VERSION% (%PLATFORM%) - Update (DYN)'
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
+        type: job
+      jobs:
+      - action: add
+        name: '@_nV_%NAME% %MAJOR_VERSION% (%PLATFORM%) - Update (DYN)'
+        version: new
+      - action: changetype
+        name: '@_nV_%NAME% %MAJOR_VERSION% (%PLATFORM%) - Update (DYN)'
+        version: previous
+      platform: (%PLATFORM%)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAME_SHORT%'
+      versionplatformtag: '%build_ver% ML (%PLATFORM%)'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: msiexec.exe
+    bms_app_uninstparm: /x %msi_value% /qn
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% ML (%PLATFORM%)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIPNAME%\bms_app_integration.json'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase

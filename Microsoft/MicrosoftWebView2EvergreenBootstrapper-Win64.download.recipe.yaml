@@ -1,0 +1,28 @@
+Description: Downloads the latest Microsoft WebView2 Evergreen Bootstrapper Install-file for Windows.
+Identifier: com.github.NickETH.recipes.download.WebView2EvergreenBootstrapper-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: WebView2EvergreenBootstrapper
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PF_STRING: _64
+  PRODUCTID: '2124703'
+  DOWNLOADURL: https://go.microsoft.com/fwlink/?linkid=%PRODUCTID%
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%VENDOR%_%NAME%_%PLATFORM%.exe'
+    url: '%DOWNLOADURL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'

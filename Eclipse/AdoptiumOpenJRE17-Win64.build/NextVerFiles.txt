@@ -1,0 +1,7 @@
+read\create-log-Adoptium_JRE_64_VVeerrssiioonn_ML.txt
+read\readme-Adoptium_JRE_64_VVeerrssiioonn_ML.txt
+helpers\Zulu-JFX-JRE_17-x64.txt
+wixproject\Comp-x64.xslt
+wixproject\JavaFX_64.build
+wixproject\Main.wxs
+wixproject\Lang\*.*

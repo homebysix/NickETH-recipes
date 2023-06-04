@@ -1,0 +1,10 @@
+
+200113	Create Eclipse-Java x64 for Windows
+	Download the Windows zip-package.
+	Extract the zip file.
+	Build it to an MSI.
+	Extract the icon and build an icon-resource-exe.
+
+	
+200113	Version 1.0.0, by AutoPkg
+	

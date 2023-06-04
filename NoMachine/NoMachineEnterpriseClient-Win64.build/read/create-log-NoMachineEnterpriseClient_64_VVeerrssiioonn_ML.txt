@@ -1,0 +1,7 @@
+
+200113	Packaging NoMachine Enterprise Client x64
+	We deploy the installer as is.
+	Inno-Setup package
+	For the download links, see the recipe.
+
+200113	Version 1.0.0, by AutoPkg

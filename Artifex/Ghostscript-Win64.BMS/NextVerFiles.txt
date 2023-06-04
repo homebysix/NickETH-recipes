@@ -1,0 +1,2 @@
+read\readme-Ghostscript_64_VVeerrssiioonn_ML.txt
+read\create-log-Ghostscript_64_VVeerrssiioonn_ML.txt

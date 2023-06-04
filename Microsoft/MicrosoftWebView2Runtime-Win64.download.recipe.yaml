@@ -1,0 +1,23 @@
+Description: Downloads the latest Microsoft WebView2Runtime Install-file for Windows.
+Identifier: com.github.NickETH.recipes.download.WebView2Runtime-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: WebView2Runtime
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PRODUCTID: '2124701'
+  DOWNLOADURL: https://go.microsoft.com/fwlink/?linkid=%PRODUCTID%
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%VENDOR%_%NAME%_%PLATFORM%.exe'
+    url: '%DOWNLOADURL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'

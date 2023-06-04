@@ -1,0 +1,7 @@
+
+200113	Packaging MobaXterm
+	We download the MSI as is.
+	For the download links, see the recipe.
+	We add the necessary firewall-settings with a merge-module and a transform.
+
+200113	Version 1.0.0, by AutoPkg

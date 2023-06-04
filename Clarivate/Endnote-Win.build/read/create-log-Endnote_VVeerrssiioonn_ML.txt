@@ -1,0 +1,9 @@
+
+200113	Create Endnote for Windows
+	Download the Windows MSI installer
+	Download the patch file (MSP)
+	Offline patching and recreation of an MSI with embedded CAB.
+	Attach a new signature.
+	
+200113	Version 1.0.0, by AutoPkg
+	

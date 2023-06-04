@@ -4,7 +4,7 @@ ParentRecipe: com.github.NickETH.recipes.build.MicrosoftEdge-Win64
 MinimumVersion: 1.3.1
 
 Input:
-  NAME: MicrosoftEdgeX64
+  NAME: MicrosoftEdge
   VENDOR: Microsoft
   PLATFORM: x64
   PF_STRING: _64
@@ -14,7 +14,7 @@ Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Arguments:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
-    msi_path: '%BUILD_DIR%\%pkg_dir%\release\MicrosoftEdge%PF_STRING%_%version%_ML.msi'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.msi'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   Arguments:
@@ -30,7 +30,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\EdgeChromium\%parsed_string%\ML_x64\MicrosoftEdge%PF_STRING%_%version%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\EdgeChromium\%parsed_string%\ML_x64\%NAME%%PF_STRING%_%version%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1
     bms_app_integration:
     - appname: EdgeChromium
@@ -50,7 +50,8 @@ Process:
       platform: (x64)
       subspec: ''
       vendor: '%VENDOR%'
-      version: '%build_ver% ML'                              
+      version: '%build_ver% ML'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\EdgeChromium\bms_app_integration.json'
     bms_app_iopt_copylocal: true
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: false
@@ -67,7 +68,7 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\MicrosoftEdge%PF_STRING%_%version%_ML.msi|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\ML_x64'
-    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-MicrosoftEdge%PF_STRING%_%version%_ML.txt|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\DEV'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.msi|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\ML_x64'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%version%_ML.txt|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\DEV'
 
 - Processor: EndOfCheckPhase

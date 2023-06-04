@@ -57,10 +57,17 @@ Process:
   Comment: Extract the Notepad++ installer
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%.exe'
-    extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
-    extract_file: NppShell_06.dll
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\contextMenu'
+    extract_file: '*\NppShell.*'
     ignore_pattern: ''
-    preserve_paths: 'True'
+    preserve_paths: 'False'
+
+- Processor: PathDeleter
+  Comment: Delete the updater files from the build dir
+  Arguments:
+    path_list:
+    #- '%BUILD_DIR%\%pkg_dir%\wixproject\updater\*.*'
+    - '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\updater'
 
 - Processor: URLTextSearcher
   Arguments:
@@ -142,6 +149,40 @@ Process:
     extract_file: '*'
     ignore_pattern: ''
     preserve_paths: 'False'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\%NAME%.exe'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Extract the Notepad++ res file
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\%NAME%.exe'
+    output_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    reswork_action: 'extract'
+    reswork_cmd: 'ICONGROUP,100,'
+    # ignore_errors: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Generate a new Icon.exe file for Notepad++
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\helpers\Icon-Stub-1.exe'
+    input_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    output_file: '%BUILD_DIR%\%pkg_dir%\wixproject\Resources\Main-Icon.exe'
+    reswork_action: 'add'
+    reswork_cmd: 'ICONGROUP,100,'
+    # ignore_errors: 'True'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:

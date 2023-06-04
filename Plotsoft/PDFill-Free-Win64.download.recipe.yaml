@@ -1,0 +1,50 @@
+Description: Downloads the latest PDFill Free for Windows.
+Identifier: com.github.NickETH.recipes.download.PDFill-Free-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'PDFill-Free'
+  #DOWNLOAD_URL: https://www.plotsoft.com/download/PDFill_FREE_PDF_Editor_Basic.msi
+  DOWNLOAD_URL: https://www.plotsoft.com/download/PDFill_X64.msi
+  VENDOR: 'PlotSoft LLC'
+  PLATFORM: x64
+  PF_STRING: '_64'
+  LANG_STRING: _ML
+  DIP_NAME: PDFill
+  DIP_SUBDIR: ML
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-%PLATFORM%.msi'
+    url: '%DOWNLOAD_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # msi_path: '%pathname%'
+  # # <updateTo>20.5.0.16860</updateTo>
+    # re_pattern: '<updateTo>(?P<version>([0-9]+\.)*[0-9]+)</updateTo>'
+    # url: '%SEARCH_UPDATE_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+  # # <url>http://download.endnote.com/updates/20.0/EN205Update.msp</url>
+    # # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9\.]Update.msp)</url>'
+    # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9]+Update.msp)</url>'
+    # url: '%SEARCH_UPDATE_URL%'
+
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: '%NAME%.msp'
+    # url: '%match%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: 'CN=PlotSoft LLC, O=PlotSoft LLC, STREET=1910 Spring Breeze Ln, L=Chesterfield, S=Missouri, PostalCode=63017, C=US'
+    input_path: '%pathname%'

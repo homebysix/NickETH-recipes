@@ -1,0 +1,8 @@
+
+200113	Create Dell Command Update x64 for Windows
+	Download the Windows Unversal installer
+	Extract the EXE and the MSI-file and copy it to the release dir.
+	We use the installer as is.
+	
+200113	Version 1.0.0, by AutoPkg
+	

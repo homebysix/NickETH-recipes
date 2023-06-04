@@ -1,0 +1,51 @@
+Description: Downloads the latest Endnote for Windows.
+Identifier: com.github.NickETH.recipes.download.Endnote-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Endnote
+  MAJOR_VERSION: '20'
+  DOWNLOAD_URL: https://download.endnote.com/downloads/%MAJOR_VERSION%/EN%MAJOR_VERSION%Inst.msi
+  SEARCH_UPDATE_URL: https://download.endnote.com/updates/%MAJOR_VERSION%.0/EN%MAJOR_VERSION%WinUpdates.xml
+  VENDOR: 'Clarivate Analytics'
+  PLATFORM: x86
+  PF_STRING: ''
+  LANG_STRING: _ML
+  DIP_NAME: Endnote
+  DIP_SUBDIR: ML
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-%MAJOR_VERSION%.msi'
+    url: '%DOWNLOAD_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # msi_path: '%pathname%'
+  # # <updateTo>20.5.0.16860</updateTo>
+    # re_pattern: '<updateTo>(?P<version>([0-9]+\.)*[0-9]+)</updateTo>'
+    # url: '%SEARCH_UPDATE_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+  # # <url>http://download.endnote.com/updates/20.0/EN205Update.msp</url>
+    # # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9\.]Update.msp)</url>'
+    # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9]+Update.msp)</url>'
+    # url: '%SEARCH_UPDATE_URL%'
+
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: '%NAME%.msp'
+    # url: '%match%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Clarivate Analytics (US) LLC, OU=Scientific and Academic Research, O=Clarivate Analytics (US) LLC, L=Philadelphia, S=Pennsylvania, C=US
+    input_path: '%pathname%'

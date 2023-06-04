@@ -1,0 +1,75 @@
+Description: Package the current Dell Command Update x64 release to an MSI-package.
+Identifier: com.github.NickETH.recipes.build.CommandUpdate-Win64
+ParentRecipe: com.github.NickETH.recipes.download.CommandUpdate-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: DellCommandUpdate
+  NAMESHORT: Command_Update
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to package the MSI
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    create_AS_ver: 'True'
+    folder_list: sourcepkt:sourceunzipped:release:read:helpers
+    org_ver: '%version%'
+    pkg_dir: '%NAMESHORT%%PF_STRING%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAMESHORT%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Copy the CommandUpdate installer file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%.exe'
+    overwrite: 'true'
+    source_path: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the exe-installer from the Universal package
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%.exe'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'False'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: Extract the MSI-installer from the EXE package
+  Arguments:
+    exe_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\DellCommandUpdateApp_Setup.exe'
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    cmdline_args: '/s /x /b"%BUILD_DIR%\%pkg_dir%\sourceunzipped" /v"/qn"'
+    run_elevated: 'True'
+
+- Processor: Copier
+  Comment: Copy the CommandUpdate installer file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\DellCommandUpdateApp.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAMESHORT%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAMESHORT%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'

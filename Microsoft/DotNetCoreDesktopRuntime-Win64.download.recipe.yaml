@@ -1,0 +1,40 @@
+Description: Downloads the latest version of Microsoft's NET Core Desktop Runtime.
+Identifier: com.github.NickETH.recipes.download.DotNetCoreDesktopRuntime-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: DotNetCoreDesktopRuntime
+  RELEASE: '3.1'
+  LANGUAGE_CODE: en-us
+
+Process:
+- Processor: DotNetURLProvider
+  Arguments:
+    dotnet_core: 'true'
+    language_code: '%LANGUAGE_CODE%'
+    release: '%RELEASE%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: href="(?P<intermediate_url>/%LANGUAGE_CODE%/download/dotnet/thank-you/runtime-desktop-[0-9\.]+-(?:[a-z0-9\.]+-)?windows-x64-installer)"
+    url: '%release_url%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: href="(?P<url>https://download.visualstudio.microsoft.com/download/pr/[0-9A-Fa-f\-/]+/windowsdesktop-runtime-(?P<version>[0-9\.]+)-(?:[a-z0-9\.]+-)?win-x64\.exe)"
+    url: https://dotnet.microsoft.com%intermediate_url%
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+# - Processor: WindowsSignatureVerifier
+  # Arguments:
+    # expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    # input_path: '%pathname%'

@@ -5,6 +5,23 @@
     <Fragment>
         <ComponentGroup Id="nppRegistryGroup">
             <Component Id="cmpF971ED006DF427344D364C4667E1ACB6" Directory="TARGETDIR" Guid="{B1451F7A-82F6-460F-AE2D-BD84D7CC957F}" KeyPath="yes">
+			    <RegistryKey Key="*\shell\ANotepad++64" Root="HKCR">
+                    <RegistryValue Name="ExplorerCommandHandler" Value="{B298D29A-A6ED-11DE-BA8C-A68E55D89593}" Type="string" />
+                    <RegistryValue Value="Notepad++ Context menu" Type="string" />
+                    <RegistryValue Name="NeverDefault" Value="" Type="string" />
+                </RegistryKey>
+                <RegistryKey Key="CLSID\{B298D29A-A6ED-11DE-BA8C-A68E55D89593}" Root="HKCR">
+                    <RegistryValue Value="notepad++" Type="string" />
+                </RegistryKey>
+                <RegistryKey Key="CLSID\{B298D29A-A6ED-11DE-BA8C-A68E55D89593}\InProcServer32" Root="HKCR">
+                    <RegistryValue Value="[APPLICATIONFOLDER]\contextMenu\NppShell.dll" Type="string" />
+                    <RegistryValue Name="ThreadingModel" Value="Apartment" Type="string" />
+                </RegistryKey>
+				<RegistryKey Key="Software\Microsoft\Windows\CurrentVersion\App Paths\notepad++.exe" Root="HKLM">
+                    <RegistryValue Value="[APPLICATIONFOLDER]notepad++.exe" Type="string" />
+                </RegistryKey>
+				
+<!--
                 <RegistryKey Key="*\shellex\ContextMenuHandlers\ANotepad++64" Root="HKCR">
                     <RegistryValue Value="{B298D29A-A6ED-11DE-BA8C-A68E55D89593}" Type="string" />
 				</RegistryKey>
@@ -15,7 +32,7 @@
                     <RegistryValue Value="[APPLICATIONFOLDER]NppShell_06.dll" Type="string" />
                     <RegistryValue Name="ThreadingModel" Value="Apartment" Type="string" />
                 </RegistryKey>
-				<RegistryKey Key="CLSID\{B298D29A-A6ED-11DE-BA8C-A68E55D89593}\Settings" Root="HKCR">
+ 				<RegistryKey Key="CLSID\{B298D29A-A6ED-11DE-BA8C-A68E55D89593}\Settings" Root="HKCR">
                     <RegistryValue Name="Custom" Value="" Type="string" />
                     <RegistryValue Name="Dynamic" Value="1" Type="integer" />
                     <RegistryValue Name="Maxtext" Value="25" Type="integer" />
@@ -23,9 +40,7 @@
                     <RegistryValue Name="ShowIcon" Value="1" Type="integer" />
                     <RegistryValue Name="Title" Value="Edit with &amp;Notepad++" Type="string" />
                 </RegistryKey>
-				<RegistryKey Key="Software\Microsoft\Windows\CurrentVersion\App Paths\notepad++.exe" Root="HKLM">
-                    <RegistryValue Value="[APPLICATIONFOLDER]notepad++.exe" Type="string" />
-                </RegistryKey>
+
 				<RegistryKey Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\$(var.Productcode)" Root="HKLM">
                     <RegistryValue Name="MajorVersion" Value="$(var.ProductMajorVersion)" Type="string" />
 					<RegistryValue Name="MinorVersion" Value="$(var.ProductMinorVersion)$(var.ProductMaintenanceVersion)" Type="string" />
@@ -169,7 +184,7 @@
                     <RegistryValue Name="MementoSection_Zenburn" Value="1" Type="integer" />
                     <RegistryValue Name="MementoSection_zulu" Value="0" Type="integer" />
                     <RegistryValue Name="MementoSectionUsed" Value="" Type="string" />
-                </RegistryKey>
+                </RegistryKey> -->
             </Component>
                                     
         </ComponentGroup>
