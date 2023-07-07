@@ -12,7 +12,10 @@ Input:
   LANG_STRING: _ML
   DIP_NAME: Endnote
   DIP_SUBDIR: ML
-
+  CONN_URL: https://download.endnote.com/downloads/contents/connections.zip
+  SWICOV_URL: https://ethz.ch/content/dam/ethz/associates/ethlibrary-dam/documents/Aktuell/Kurse/EndNote-Literaturverwaltung/Swisscovery.enz
+  CF_NAME: EndnoteConnectionFiles
+  
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Comment: Get the ProductCode into the  msi_value variable for the BMS uninstall string
@@ -39,6 +42,41 @@ Process:
     input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
     rename_var: pkg_dir
 
+- Processor: URLDownloader
+  Arguments:
+    filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip'
+    url: '%CONN_URL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the connection files
+  Arguments:
+    exe_path: ''%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip''
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'False'
+
+- Processor: URLDownloader
+  Comment: Get the connection file for the Swiss Universities
+  Arguments:
+    filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\Swisscovery.enz'
+    url: '%SWICOV_URL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: Compress the ConnectionFiles folder with 7zip to a self extracting archive
+  Arguments:
+    cmdline_args:
+    - a
+    - -r
+    - -sfx
+    - -t7z
+    # - -v1900m
+    - -mx9
+    - '%BUILD_DIR%\%pkg_dir%\release\%CF_NAME%.exe'
+    - '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\*.*'
+    exe_file: '%SZIP_PATH%'
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+
 - Processor: Copier
   Comment: Copy the Endnote installer file to the release dir
   Arguments:
@@ -46,12 +84,12 @@ Process:
     overwrite: 'true'
     source_path: '%pathname%'
 
-- Processor: Copier
-  Comment: Copy the Endnote License file to the release dir
-  Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\License.dat'
-    overwrite: 'true'
-    source_path: '%BUILD_DIR%\%pkg_dir%\helpers\License.dat'
+# - Processor: Copier
+  # Comment: Copy the Endnote License file to the release dir
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\release\License.dat'
+    # overwrite: 'true'
+    # source_path: '%BUILD_DIR%\%pkg_dir%\helpers\License.dat'
  
 # - Processor: Copier
   # Comment: Copy the Endnote installer file to the build dir
