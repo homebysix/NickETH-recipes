@@ -15,7 +15,6 @@ Input:
   CONN_URL: https://download.endnote.com/downloads/contents/connections.zip
   SWICOV_URL: https://ethz.ch/content/dam/ethz/associates/ethlibrary-dam/documents/Aktuell/Kurse/EndNote-Literaturverwaltung/Swisscovery.enz
   CF_NAME: EndnoteConnectionFiles
-  
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Comment: Get the ProductCode into the  msi_value variable for the BMS uninstall string
@@ -30,7 +29,7 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     create_AS_ver: 'True'
-    folder_list: adm:sourceunzipped:release:read:helpers
+    folder_list: adm:sourceunzipped:release:read
     org_ver: '%version%'
     pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
     recipe_dir: '%RECIPE_DIR%'
@@ -42,15 +41,24 @@ Process:
     input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
     rename_var: pkg_dir
 
+- Processor: Copier
+  Comment: Copy the Endnote installer file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
 - Processor: URLDownloader
   Arguments:
-    filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip'
+    #filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip'
+    filename: '%CF_NAME%-%MAJOR_VERSION%.zip'
     url: '%CONN_URL%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the connection files
   Arguments:
-    exe_path: ''%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip''
+    #exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%-%MAJOR_VERSION%.zip'
+    exe_path: '%pathname%'
     extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%'
     extract_file: '*'
     ignore_pattern: ''
@@ -59,8 +67,16 @@ Process:
 - Processor: URLDownloader
   Comment: Get the connection file for the Swiss Universities
   Arguments:
-    filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\Swisscovery.enz'
+    #filename: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\Swisscovery.enz'
+    filename: 'Swisscovery.enz'
     url: '%SWICOV_URL%'
+
+- Processor: Copier
+  Comment: Copy the Swisscovery connection file for the to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\Swisscovery.enz'
+    overwrite: 'true'
+    source_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: Compress the ConnectionFiles folder with 7zip to a self extracting archive
@@ -76,13 +92,6 @@ Process:
     - '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%CF_NAME%\*.*'
     exe_file: '%SZIP_PATH%'
     exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
-
-- Processor: Copier
-  Comment: Copy the Endnote installer file to the release dir
-  Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
-    overwrite: 'true'
-    source_path: '%pathname%'
 
 # - Processor: Copier
   # Comment: Copy the Endnote License file to the release dir

@@ -21,7 +21,8 @@ Process:
 - Processor: URLTextSearcher
   Arguments:
     # https://download.nomachine.com/download/8.2/Windows/nomachine-enterprise-client_8.2.3_4_x64.exe"
-    re_pattern: (?P<match>https://download.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*)_x64\.exe)
+    # re_pattern: (?P<match>https://download.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*)_x64\.exe)
+    re_pattern: (?P<match>https://download.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*))_x86\.exe
     url: '%DOWNLOAD_URL%'
     curl_opts:
     - L
@@ -31,7 +32,7 @@ Process:
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%_%PLATFORM%.exe'
-    url: '%match%'
+    url: '%match%_x64.exe'
     curl_opts:
     - -b
     - '%RECIPE_CACHE_DIR%\cookie.txt'
@@ -41,3 +42,8 @@ Process:
 - Processor: StopProcessingIf
   Arguments:
     predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=NoMachine S.a.r.l., O=NoMachine S.a.r.l., L=Luxembourg City, C=LU, SERIALNUMBER=B171704, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.3=LU
+    input_path: '%pathname%'

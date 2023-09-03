@@ -1,0 +1,2 @@
+read\create-log-SQLServerTools2019_64_VVeerrssiioonn_EN.txt
+read\readme-SQLServerTools2019_64_VVeerrssiioonn_EN.txt

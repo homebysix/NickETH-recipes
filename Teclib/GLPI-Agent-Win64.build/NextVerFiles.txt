@@ -1,0 +1,2 @@
+read\create-log-GLPI-Agent_64_VVeerrssiioonn_ML.txt
+read\readme-GLPI-Agent_64_VVeerrssiioonn_ML.txt

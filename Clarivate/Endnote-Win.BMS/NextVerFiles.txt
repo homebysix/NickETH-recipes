@@ -1,3 +1,0 @@
-read\create-log-Endnote_VVeerrssiioonn_ML.txt
-read\readme-Endnote_VVeerrssiioonn_ML.txt
-helpers\License.dat

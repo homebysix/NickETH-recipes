@@ -1,9 +1,12 @@
 
 200113	Create Endnote for Windows
 	Download the Windows MSI installer
-	Download the patch file (MSP)
-	Offline patching and recreation of an MSI with embedded CAB.
-	Attach a new signature.
-	
+	The file @ https://download.endnote.com/downloads/21/EN21Inst.msi
+	has always the latest MSI version!
+	No need for patching anymore.
+	The license.dat file can be silently generated with this command:
+	msiexec /a <PathTo>\EN21.msi TARGETDIR=<YourChoice> USERNAME="Your Company" PIDKEY=YourKey VLAccept=1 /qb
+	All the connection Files are downloaded and installed too.
+
 200113	Version 1.0.0, by AutoPkg
 	

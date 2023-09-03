@@ -1,0 +1,181 @@
+Description: Package the current MiKTeX release to an MSI-package.
+Identifier: com.github.NickETH.recipes.build.MiKTeX-Win64
+ParentRecipe: com.github.NickETH.recipes.download.MiKTeX-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: MiKTeX
+
+Process:
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Comment: Extract the MiKTeX setup zip archive
+  # Arguments:
+    # exe_path: '%RECIPE_CACHE_DIR%\downloads\miktexsetup.zip'
+    # extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    # extract_file: '*'
+    # ignore_pattern: ''
+    # preserve_paths: 'False'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to build the MSI with Wix
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: sourcepkt:sourceunzipped:release:read:helpers:wixproject\miktex
+    org_ver: '%version%'
+    pkg_dir: MiKTeX_64_%version%_EN
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '2'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the MiKTeX setup zip archive
+  Arguments:
+    exe_path: '%RECIPE_CACHE_DIR%\downloads\miktexsetup.zip'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'False'
+
+# - Processor: FileMover
+  # Comment: Move the miktexsetup_standalone.exe file to the build dir
+  # Arguments:
+    # overwrite: 'true'
+    # source: '%RECIPE_CACHE_DIR%\downloads\miktexsetup_standalone.exe'
+    # target: '%BUILD_DIR%\%pkg_dir%\sourcepkt\miktexsetup_standalone.exe'
+
+# - Processor: Copier
+  # Comment: Move the miktexsetup_standalone.exe file to the build dir
+  # Arguments:
+    # overwrite: 'true'
+    # source_path: '%RECIPE_CACHE_DIR%\downloads\miktexsetup_standalone.exe'
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\miktexsetup_standalone.exe'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: run the MiKTeX setup and download the repository to the build dir
+  Arguments:
+    cmdline_args:
+    - --verbose
+    - --local-package-repository=%BUILD_DIR%\%pkg_dir%\sourceunzipped\miktex
+    - --package-set=complete
+    - download
+    exe_file: '%BUILD_DIR%\%pkg_dir%\sourcepkt\miktexsetup_standalone.exe'
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+
+- Processor: Copier
+  Comment: Copy the MiKTeX install zip file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
+    overwrite: 'true'
+    source_path: '%RECIPE_CACHE_DIR%\downloads\%filename%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: run the MiKTeX setup and install it to C:\APPS
+  Arguments:
+    cmdline_args:
+    - --local-package-repository=%BUILD_DIR%\%pkg_dir%\sourceunzipped\miktex
+    - --package-set=complete
+    - --shared=yes
+    - --common-install=C:\APPS\MiKTeX\%version%
+    - --common-config=C:\APPS\MiKTeX\config
+    - --common-data=C:\APPS\MiKTeX\data
+    - --user-install=C:\APPS\MiKTeX\%version%
+    - install
+    exe_file: '%BUILD_DIR%\%pkg_dir%\sourcepkt\miktexsetup_standalone.exe'
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+    run_elevated: 'true'
+
+- Processor: Copier
+  Comment: Copy the miktex-texworks.exe file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\miktex\miktex-texworks.exe'
+    overwrite: 'true'
+    source_path: C:\APPS\MiKTeX\%version%\miktex\bin\x64\miktex-texworks.exe
+
+- Processor: Copier
+  Comment: Copy the miktex-console.exe file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\miktex\miktex-console.exe'
+    overwrite: 'true'
+    source_path: C:\APPS\MiKTeX\%version%\miktex\bin\x64\miktex-console.exe
+
+- Processor: Copier
+  Comment: Copy the miktex-console.exe file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\miktex\mpm.exe'
+    overwrite: 'true'
+    source_path: C:\APPS\MiKTeX\%version%\miktex\bin\x64\mpm.exe
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: Compress the MiKTeX folder with 7zip to a self extracting archive
+  Arguments:
+    cmdline_args:
+    - a
+    - -r
+    - -sfx
+    - -t7z
+    - -v1900m
+    - -mx9
+    - '%BUILD_DIR%\%pkg_dir%\release\miktex29.exe'
+    - c:\APPS\MiKTeX\*.*
+    exe_file: '%SZIP_PATH%'
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-MiKTeX_64_%build_ver%_EN.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-MiKTeX_64_%build_ver%_EN.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WixDefaults
+  Comment: Set the actual version strings to the version.wxi file
+  Arguments:
+    build_dir: '%BUILD_DIR%\%pkg_dir%'
+    build_ver: '%build_ver%'
+    org_ver: '%build_ver%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSBuildRun
+  Comment: Run the MSBuild script to generate the MiKTeX MSI installer
+  Arguments:
+    build_file: '%BUILD_DIR%\%pkg_dir%\wixproject\MiKTeX.build'
+    build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
+    build_property: BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;MiKTeXDir=%BUILD_DIR%\%pkg_dir%\wixproject\MiKTeX;version=%version%
+    build_target: WIX
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: run the MiKTeX setup and uninstall from C:\APPS
+  Arguments:
+    cmdline_args:
+    - --local-package-repository=%BUILD_DIR%\%pkg_dir%\sourceunzipped\miktex
+    - --package-set=complete
+    - --shared=yes
+    - --common-install=C:\APPS\MiKTeX\%version%
+    - --common-config=C:\APPS\MiKTeX\config
+    - --common-data=C:\APPS\MiKTeX\data
+    - --user-install=C:\APPS\MiKTeX\%version%
+    - uninstall
+    exe_file: C:\APPS\MiKTeX\%version%\miktex\bin\x64\miktexsetup.exe
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+    run_elevated: 'true'
+
+# - Processor: PathDeleter
+  # Comment: Delete the leftovers, which the uninstaller did not flush.
+  # Arguments:
+    # path_list: 'C:\APPS\MiKTeX\'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: Delete the leftovers, which the uninstaller did not flush.
+  Arguments:
+    cmdline_args:
+    - /S
+    - /Q
+    - C:\APPS\MiKTeX\%version%
+    exe_file: rmdir.exe
+    exe_folder: 'C:\APPS\MiKTeX'
+    run_elevated: 'true'

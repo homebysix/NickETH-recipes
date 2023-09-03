@@ -1,0 +1,7 @@
+
+200113	Create GLPI-Agent x64 for Windows
+	Download the Windows MSI installer
+	We use the MSI installer as is.
+
+200113	Version 1.0.0, by AutoPkg
+	

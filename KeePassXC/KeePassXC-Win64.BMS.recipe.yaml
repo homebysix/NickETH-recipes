@@ -23,7 +23,7 @@ Process:
       repl: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
-  Comment: Import the Application into Baramundi (BMS) QSS
+  Comment: Import the Application into Baramundi (BMS)
   Arguments:
     bms_CM_entry: AutoPKG-BMSImporter
     bms_app_category: baramundi Application

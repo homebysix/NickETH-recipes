@@ -1,0 +1,75 @@
+Description: Download recipe for MiKTex.
+Identifier: com.github.NickETH.recipes.download.MiKTeX-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: MiKTeX
+  #SEARCH_URL: (?P<dl_link>http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P<setup_file>miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))(?!.*(http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))
+  #SEARCH_URL: miktexsetup\-([0-9]+\.)*[0-9]+[\+a-f0-9]*(?!.*(miktexsetup\-([0-9]+\.)*[0-9]+[\+a-f0-9]*))
+  #SEARCH_URL: (?s:.*)(miktexsetup.*?\.zip)
+  #SEARCH_URL: (?s:.*)(?P<dl_link>http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P<setup_file>miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))
+  SEARCH_URL: (?s:.*)(?P<dl_link>miktex/setup/windows-x64/(?P<setup_file>miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))
+  #                           https://mirror.init7.net/ctan/systems/win32/miktex/setup/windows-x64/miktexsetup-5.5.0+1763023-x64.zip
+  SEARCH_URL_MIR: (?P<dl_link_mir>htt.*/miktex/setup/windows-x64/miktexsetup.*-x64.zip)
+  #VERSION_URL: (?P<dl_link_check>http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P<setup_file_check>basic-miktex-(?P<version>([0-9]+\.)*[0-9]+)-x64.exe))
+  #VERSION_URL: (?P<dl_link_check>http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P<setup_file_check>basic-miktex-(?P<version>([0-9]+\.)*[0-9]+)-x64.exe))(?!.*(http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/basic-miktex-([0-9]+\.)*[0-9]+-x64.exe))
+  VERSION_URL: (?P<dl_link_check>miktex\/setup\/windows-x64\/(?P<setup_file_check>basic-miktex-(?P<version>([0-9]+\.)*[0-9]+)-x64.exe))(?!.*(miktex\/setup\/windows-x64\/basic-miktex-([0-9]+\.)*[0-9]+-x64.exe))
+
+  #VERSION_URL_MIR: (?P<dl_link_check>http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P<setup_file_check>basic-miktex-(?P<version>([0-9]+\.)*[0-9]+)-x64.exe))
+       # <key>SEARCH_URL</key>
+# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;setup-(?P&lt;version&gt;[0-9]+\.[0-9]+\.[0-9]+)-x64.exe))</string> -->
+# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-(?P&lt;version&gt;[0-9]+\.[0-9]+\.[0-9]+)-x64.zip))</string> -->
+# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*[0-9]+-x64.zip))</string> -->
+# <!-- https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x64/basic-miktex-22.3-x64.exe -->
+# <!-- <string>(?s)(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))(?!.*(http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))</string> -->
+# <!-- <string>(?P&lt;dl_link&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))(?!.*(http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))</string> -->
+# <!-- <string>http:\/\/mirrors\.ctan\.org\/systems\/win32\/miktex\/setup\/windows-x64\/miktexsetup-([0-9]+?\.)*?[0-9]+?.*?-x64\.zip(?!.*(?P&lt;dl_link&gt;http:\/\/mirrors\.ctan\.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+?\.)*?[0-9]+?.*?-x64\.zip)))</string> -->
+# <string>(miktexsetup-([0-9]+\.)*?[0-9]+?.*?x64.zip)(?!.*(miktexsetup-([0-9]+\.)*?[0-9]+?.*?x64.zip))</string>
+# <!-- <string>(?P&lt;dl_link&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))</string> -->
+# <key>VERSION_URL</key>
+# <!-- <string>(?P&lt;dl_link_check&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file_check&gt;basic-miktex-(?P&lt;version&gt;([0-9]+\.)*[0-9]+)-x64.exe))</string> -->
+# <string>(?P&lt;dl_link_check&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file_check&gt;basic-miktex-(?P&lt;version&gt;([0-9]+\.)*[0-9]+)-x64.exe))(?!.*(http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/basic-miktex-([0-9]+\.)*[0-9]+-x64.exe))</string>
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%VERSION_URL%'
+    url: https://ctan.org/texarchive/systems/win32/miktex/setup/windows-x64
+    re_flags:
+    - S
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL%'
+    url: https://ctan.org/texarchive/systems/win32/miktex/setup/windows-x64
+    re_flags:
+    - M
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_URL_MIR%'
+    # url: '%dl_link%'
+    # re_flags:
+    # - S
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: true
+    filename: basic-miktex-x64.exe
+    #url: '%dl_link_check%'
+    url: 'https://mirror.metanet.ch/tex-archive/systems/win32/%dl_link_check%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: URLDownloader
+  Arguments:
+    filename: miktexsetup.zip
+    #url: '%dl_link_mir%'
+    #url: 'https://mirror.init7.net/ctan/systems/win32/%dl_link%'
+    url: 'https://mirror.metanet.ch/tex-archive/systems/win32/%dl_link%'
+    #curl_opts:
+    # - L
+
+- Processor: EndOfCheckPhase

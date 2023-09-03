@@ -1,0 +1,10 @@
+
+200113	Packaging Prusa Slicer Standalone for Windows x64
+	We download and distribute the package as is.
+	For the download links, see the recipe.
+	Command line: /exenoui /exenoupdates /qn /quiet
+
+	Uninstall: msiexec.exe /x {GUID} /qn
+
+
+200113	Version 1.0.0, by AutoPkg

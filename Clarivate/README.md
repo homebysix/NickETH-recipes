@@ -6,6 +6,7 @@
 **Features:**  
 Installs per machine.  
 Auto updater is disabled.  
+Run with: -k MAJOR_VERSION=21 -k LIC_KEY=YourLicenseKey -k LIC_USR=YourLicenseUsername
 
 To use the baramundi import recipe,<br>
 the following varibles need to be specified in the AutoPkg config.json file:<br>

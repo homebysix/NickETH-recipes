@@ -12,6 +12,8 @@ Input:
   LANG_STRING: _ML
   DIP_NAME: Endnote
   DIP_SUBDIR: ML
+  LIC_KEY: 12345-ABCDE-FGHIK-67890-LMNOP
+  LIC_USR: ''
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
@@ -26,6 +28,26 @@ Process:
     - pattern: \.
       repl: _
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: run MSI in admin mode to generate the license.dat
+  Arguments:
+    cmdline_args:
+    - /a
+    - '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    - TARGETDIR=%BUILD_DIR%\%pkg_dir%\adm  
+    - USERNAME="%LIC_USR%"
+    - PIDKEY=%LIC_KEY%
+    - VLAccept=1
+    - /qn
+    exe_file: msiexec.exe
+    exe_folder: '%BUILD_DIR%\%pkg_dir%\adm'
+
+- Processor: Copier
+  Comment: Copy the Endnote License file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\License.dat'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\adm\License.dat'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
