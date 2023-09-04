@@ -48,6 +48,10 @@ Process:
       subspec: ''
       vendor: '%VENDOR%'
       version: '%build_ver% ML'
+    bms_job_kiosk:
+    - jobname: '@_nV_KeePassXC - Update (DYN)'
+      substring: 'Taskkill'
+      jobdescription: 'Zum lokalen Verwalten von Passwörter. Kann ausserdem als alternative bzw. Backup-Authentisierungsmöglichkeit einer Multifaktor-Authentisierung anstelle eines Mobiltelefons verwendet werden.'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
@@ -66,5 +70,6 @@ Process:
     inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.ms?|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\ML'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%NAME%\bms_app_integration.json'
     read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\DEV'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
 
 - Processor: EndOfCheckPhase
