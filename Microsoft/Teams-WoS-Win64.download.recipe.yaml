@@ -1,0 +1,26 @@
+Description: Downloads the latest Teams Work or School installer for Windows.
+Identifier: com.github.NickETH.recipes.download.Teams-WoS-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'Teams WoS'
+  NAMESHORT: 'Teams2'
+  VENDOR: Microsoft
+  USER_AGENT: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAMESHORT%-%PLATFORM%.msix'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: https://statics.teams.cdn.office.net/production-windows-x64/enterprise/webview2/lkg/MSTeams-x64.msix
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

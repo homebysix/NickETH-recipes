@@ -1,0 +1,2 @@
+read\create-log-Vmware-Workstation_64_VVeerrssiioonn_EN.txt
+read\readme-Vmware-Workstation_64_VVeerrssiioonn_EN.txt

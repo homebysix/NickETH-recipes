@@ -1,0 +1,19 @@
+
+200113	Packaging Filemaker Pro x64
+	We download the EXE and expand it to release.
+	We alter the 1031.mst with the following properties:
+	 	AI_LICENSE_ACCEPTED=1
+		AI_DESKTOPSHORTCUT 0
+		AI_QUICKLAUNCH 0
+		AI_DISABLEUPDATENOTIFY 1
+		AI_DISABLEVERSIONNOTIFY	1
+		AI_LANGUAGE	English German French Italian
+		AI_TRIALORLICENSEKEYORCERTIFICATE  LicenseCertificate
+		AI_SHORTCUTS	0
+		AI_SKIPDIALOG	1
+		AI_USERNAME	Informatikdienste ETH Zürich
+
+	And we generate bds-scripts to install/uninstall the firewall settings.
+	Finally, we copy the license file to the release folder.
+
+200113	Version 1.0.0, by AutoPkg

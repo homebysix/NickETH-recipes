@@ -1,0 +1,91 @@
+Description: Alters latest VMware VM Remote Console installer for Windows.
+Identifier: com.github.autopkg-win.build.VMwareVMRC-Win
+ParentRecipe: com.github.autopkg-win.download.VMwareVMRC-Win
+MinimumVersion: 1.0.5
+
+Input:
+  NAME: VMwareVMRC
+  PLATFORM: x86
+
+Process:
+- Processor: StopProcessingIf
+  Comment: Uses the Python eval function, looking at download_changed
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: com.github.autopkg-win.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: release:read:helpers:sourceunzipped:sourcepkt
+    org_ver: '%version%'
+    pkg_dir: '%NAME%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: com.github.autopkg-win.SharedProcessors/SevenZipExtractor
+  Comment: Extract the MSI file from exe
+  Arguments:
+    exe_path: '%pathname%'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourcepkt'
+    extract_file: VMware-VMRC-*.exe
+    preserve_paths: 'False'
+    recursive: 'True'
+
+- Processor: FileFinder
+  Comment: Get the full path to the downloaded installer
+  Arguments:
+    pattern: '%BUILD_DIR%\%pkg_dir%\sourcepkt\VMware-VMRC-*.exe'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: E=noreply@vmware.com, CN="VMware, Inc.", O="VMware, Inc.", L=Palo Alto, S=California, C=US
+    input_path: '%found_filename%'
+
+- Processor: com.github.autopkg-win.SharedProcessors/SevenZipExtractor
+  Comment: Extract the MSI file from exe
+  Arguments:
+    archive_type: '#'
+    exe_path: '%found_filename%'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    extract_file: '*.msi'
+    preserve_paths: 'False'
+
+- Processor: Copier
+  Comment: Copy the VMRC msi file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%_%build_ver%_ML.msi'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.msi'
+
+- Processor: com.github.autopkg-win.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.autopkg-win.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.autopkg-win.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.autopkg-win.SharedProcessors/MSIApplySumInfo
+  Comment: Set the language and the description
+  Arguments:
+    cmnds_sinfo:
+      /j: '%NAME% %version% ML'
+      /o: Version %version% for ETHZ ID. %us_date% by AutoPkg
+      /p: Intel;1033
+      /t: '%NAME% %version% ML'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%_%build_ver%_ML.msi'
+
+- Processor: EndOfCheckPhase

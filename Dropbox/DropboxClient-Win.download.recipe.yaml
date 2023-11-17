@@ -1,0 +1,21 @@
+Description: Downloads latest Dropbox Offline Installer for Windows.
+Identifier: com.github.NickETH.recipes.download.DropboxClient-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: DropboxClient
+  PLATFORM: x86
+  DOWNLOAD_URL: https://www.dropbox.com/download?full=1&plat=win&type=full&arch=%PLATFORM%
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%DOWNLOAD_URL%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Dropbox, Inc", O="Dropbox, Inc", L=San Francisco, S=California, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

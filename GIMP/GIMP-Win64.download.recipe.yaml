@@ -1,0 +1,42 @@
+Description: Downloads the latest GIMP x64 installer package for Windows.
+Identifier: com.github.NickETH.recipes.download.GIMP-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: GIMP
+  URL: https://www.gimp.org/gimp_versions.json
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Determine the latest install exe file from the download site.
+  Arguments:
+    re_pattern: (?P<filetosearch>gimp-(?P<version>(?P<versionminor>[0-9]+\.[0-9]+)\.[0-9]+)-setup(?P<versionbuild>[-0-9]*)\.exe)
+    url: '%URL%'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Comment: If we have a build string, exchange the dash with a period
+  Arguments:
+    input_string: '%versionbuild%'
+    pattern_replace:
+    - pattern: '-'
+      repl: '.'
+
+- Processor: URLDownloader
+  Comment: rewrite the version variable with the build string, download the installer file.
+  Arguments:
+    version: '%version%%parsed_string%'
+    filename: '%NAME%%PLATFORM%.exe'
+    url: https://download.gimp.org/pub/gimp/v%versionminor%/windows/%filetosearch%
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Jernej Simoncic, O=Jernej Simoncic, STREET=Herbersteinova 29, L=Ljubljana, C=SI
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

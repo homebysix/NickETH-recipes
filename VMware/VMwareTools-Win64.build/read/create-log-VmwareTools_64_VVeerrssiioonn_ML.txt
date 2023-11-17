@@ -1,0 +1,7 @@
+
+200113	Package Vmware Tools x64
+
+	No alterations at all.
+	We use the MSI out of the box here.
+
+200113	Version 1.0.0.0, by AutoPkg

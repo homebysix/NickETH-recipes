@@ -1,0 +1,28 @@
+Description: Download recipe for VMware Tools
+Identifier: com.github.NickETH.recipes.download.VMwareTools-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: VmwareTools
+  PLATFORM: x64
+  SEARCH_PATTERN_DMG: (VMware-tools-(?P<version>([0-9]+\.)*[0-9]+)[\d+\.\-]+-x86_64\.exe)
+  SEARCH_URL: https://packages.vmware.com/tools/releases/latest/windows/x64/
+  DL_URL: https://packages.vmware.com/tools/releases/latest/windows/x64/
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN_DMG%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  filename: '%NAME%_%PLATFORM%.exe'
+  Arguments:
+    url: '%DL_URL%/%match%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="VMware, Inc.", O="VMware, Inc.", L=Palo Alto, S=California, C=US, SERIALNUMBER=2853894, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

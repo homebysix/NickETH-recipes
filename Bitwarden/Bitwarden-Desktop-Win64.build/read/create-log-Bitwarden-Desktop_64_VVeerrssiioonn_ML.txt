@@ -1,0 +1,7 @@
+
+200113	Packaging Bitwarden-Desktop
+	We download the NSIS update package from Github.
+	Because this package has no config possibilities at all, we need to repackage it.
+	We build a MSI and make the Desktop shortcut and setting the Server optional.
+
+200113	Version 1.0.0, by AutoPkg

@@ -1,0 +1,10 @@
+read\create-log-Telegraf_64_VVeerrssiioonn_ML.txt
+read\readme-Telegraf_64_VVeerrssiioonn_ML.txt
+helpers\*.*
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\Telegraf.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*

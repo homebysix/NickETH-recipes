@@ -1,0 +1,41 @@
+Description: Install the latest Microsoft Microsoft's Edge Webdriver for Windows.
+Identifier: com.github.NickETH.recipes.install.MicrosoftEdgeWebDriver-Win64
+ParentRecipe: com.github.NickETH.recipes.build.MicrosoftEdgeWebDriver-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: EdgeWebDriver
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: Copier
+  Comment: Install the Edge Webdriver exe file to the Tools dir
+  Arguments:
+    destination_path: 'C:\Tools\MSITools\msedgedriver.exe'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\release\msedgedriver.exe'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: stop the MS Edge browser
+  # Arguments:
+    # cmdline_args:
+    # - /F
+    # - /IM
+    # - msedge.exe
+    # exe_file: 'taskkill.exe'
+    # exe_folder: 'C:\Tools\MSITools'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: start the MS Edge browser
+  # Arguments:
+    # cmdline_args:
+    # - /C
+    # - start
+    # - msedge
+    # - -restore-last-session
+    # exe_file: 'cmd.exe'
+    # exe_folder: 'C:\Tools\MSITools'
+
+- Processor: EndOfCheckPhase

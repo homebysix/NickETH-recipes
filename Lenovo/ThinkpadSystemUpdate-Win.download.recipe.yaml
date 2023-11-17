@@ -4,7 +4,7 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: ThinkpadSystemUpdate
-  SEARCH_URL: <SourcePath>UTS/(?P<dl_exe>systemupdate.*.exe)</SourcePath>
+  SEARCH_URL: <SourcePath>UTS/(?P<dl_exe>SystemUpdate.*.exe)</SourcePath>
   SEARCH_VER: <Version>(?P<major_minor>[0-9]+\.[0-9]+).*</Version>
 
 Process:

@@ -1,0 +1,43 @@
+Description: Download recipe for the Arduino IDE.
+Identifier: com.github.NickETH.recipes.download.ArduinoIDE-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: ArduinoIDE
+  VENDOR: arduino.cc
+  PLATFORM: x64
+  PF_STRING: _64
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    # https://github.com/arduino/arduino-ide/releases/download/2.0.3/arduino-ide_2.0.3_Windows_64bit.msi
+    asset_regex: arduino-ide_(?P<finalversion>([0-9]+\.)*[0-9]+)_Windows_64bit\.msi
+    github_repo: arduino/arduino-ide
+    include_prereleases: false
+
+# - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  # Arguments:
+    # input_string: '%version%'
+    # pattern_replace:
+    # - pattern: ersion_
+      # repl: ''
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.msi'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%url%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Arduino SA, O=Arduino SA, S=Ticino, C=CH
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

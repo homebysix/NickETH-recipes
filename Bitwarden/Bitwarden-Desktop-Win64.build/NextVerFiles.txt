@@ -1,0 +1,10 @@
+helpers\Icon-Stub-1.exe
+read\readme-Bitwarden-Desktop_64_VVeerrssiioonn_ML.txt
+read\create-log-Bitwarden-Desktop_64_VVeerrssiioonn_ML.txt
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\Bitwarden.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*

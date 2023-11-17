@@ -1,0 +1,17 @@
+Description: Download recipe for VMware VMRC
+Identifier: com.github.autopkg-win.download.VMwareVMRC-Win
+MinimumVersion: 1.4.1
+
+Input:
+  NAME: com.vmware.VMRC
+
+Process:
+- Processor: VMwareVMRCURLProvider
+  Arguments:
+    product_name: vmrc-windows.xml
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.zip.tar'
+
+- Processor: EndOfCheckPhase

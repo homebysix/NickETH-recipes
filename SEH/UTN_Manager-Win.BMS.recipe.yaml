@@ -1,0 +1,56 @@
+Description: Imports SEH UTN Manager to BMS
+Identifier: com.github.NickETH.recipes.BMS.UTN_Manager-Win
+ParentRecipe: com.github.NickETH.recipes.build.UTN_Manager-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: UTN_Manager
+  NAMELONG: ''
+  VENDOR: 'SEH Computertechnik GmbH'
+  PLATFORM: x86
+  PF_STRING: ''
+  LANG_STRING: _ML
+  DIP_NAME: SEH_UTN_Manager
+  DIP_SUBDIR: ML
+  
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS) QSS
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
+    bms_app_installparm: '/S /A /K /G /V2'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: 'C:\Program Files\SEH Computertechnik GmbH\SEH UTN Manager\Uninstall.exe'
+    bms_app_uninstparm: '/S _?=C:\Program Files\SEH Computertechnik GmbH\SEH UTN Manager'
+    bms_app_uopt_rebootbhv: Reboot
+    bms_app_valid4os: '%BMS_OS4X86%,%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%version%'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    # icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    #json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase
