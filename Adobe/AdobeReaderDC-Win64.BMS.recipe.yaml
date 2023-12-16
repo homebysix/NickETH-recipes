@@ -1,0 +1,89 @@
+Description: Imports Bitwarden-Desktop x64 release to BMS
+Identifier: com.github.NickETH.recipes.BMS.AdobeReaderDC-Win64
+ParentRecipe: com.github.NickETH.recipes.build.AdobeReaderDC-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'AdobeReaderDC'
+  NAMESHORT: 'AdobeReader'
+  NAMELONG: 'Adobe Reader DC'
+  VENDOR: Adobe
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _deu
+  LANG_VERSION: DE-EN
+  DIP_NAME: Adobe_Reader_DC
+  DIP_SUBDIR: ML_x64
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    bms_app_installparm: /qn /norestart ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 INSTALLUWPAPP=NO
+    bms_app_integration:
+    - appname: '%NAMELONG%'
+      bundles:
+      - action: exchange
+        name: nV_%NAMELONG%
+      - action: add
+        name: aV_%NAMELONG% Uninstall
+        version: new
+      - action: add
+        name: oV_%NAMELONG% Uninstall
+        version: previous
+      copyfolders: 1
+      currentversion:
+        bundle: nV_%NAMELONG%
+        search: '[d]+\.[d]+\.[d]+\.[d]+ %LANG_VERSION% (%PLATFORM%)'
+        type: bundles
+      platform: (%PLATFORM%)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% %LANG_VERSION%'
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAMELONG%'
+      versionplatformtag: '%build_ver% DE-EN (x64/x86)'
+    bms_job_kiosk:
+    - jobname: '%NAMELONG%'
+      substring: 'Taskkill'
+      jobdescription: 'Adobe Acrobat Reader DC ist ein Programm von Adobe zum Anzeigen von PDF-Dokumenten, also ein Dateibetrachter. Es ist Teil der Adobe-Acrobat-Produktfamilie.'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAMELONG%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: msiexec.exe
+    bms_app_uninstparm: /x %msi_value% /qn
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% %LANG_VERSION% (%PLATFORM%)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase

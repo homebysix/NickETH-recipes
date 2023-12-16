@@ -1,0 +1,71 @@
+Description: Imports Teams Work or School MSIX to BMS
+Identifier: com.github.NickETH.recipes.BMS.Teams-WoS-Win64
+ParentRecipe: com.github.NickETH.recipes.build.Teams-WoS-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'Teams WoS'
+  NAMESHORT: 'Teams2'
+  NAMELONG: 'Teams Work or School'
+  VENDOR: Microsoft
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+  DIP_NAME: MS_Teams
+  DIP_SUBDIR: ML
+
+Process:
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%build_ver%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+    bms_app_installparm: '-noprofile -ExecutionPolicy Bypass -command ""& Add-AppProvisionedPackage -online -packagepath "{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.msix" -skiplicense""'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAME%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+    bms_app_uninstparm: '-noprofile -command "& get-appxpackage -allusers MSTeams | Remove-AppPackage -AllUsers"'
+    bms_app_uopt_rebootbhv: Reboot
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% ML (%PLATFORM%)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME%'
+    bms_app_integration:
+    - appname: '%NAME%'
+      bundles:
+      - action: exchange
+        name: 'nV_%NAMESHORT% (per User)'
+      currentversion:
+        bundle: 'nV_%NAMESHORT% (per User)'
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
+        type: bundles
+      platform: (%PLATFORM%)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAME%'
+      versionplatformtag: '%build_ver% ML (%PLATFORM%)'   
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    # icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase

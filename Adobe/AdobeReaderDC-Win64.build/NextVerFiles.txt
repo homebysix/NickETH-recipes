@@ -1,0 +1,3 @@
+helpers\*.mst
+read\create-log-AdobeReaderDC_64_VVeerrssiioonn_deu.txt
+read\readme-AdobeReaderDC_64_VVeerrssiioonn_deu.txt
