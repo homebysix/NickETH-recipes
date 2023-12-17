@@ -1,0 +1,51 @@
+190207	
+	Check new version:
+	https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Windows&num=1
+
+	Download GoogleChromeStandaloneEnterprise.msi
+	http://dl.google.com/tag/s/dl/chrome/install/googlechromestandaloneenterprise.msi
+
+	Analyse des Packets, ergibt folgende Probleme:
+	Analysis of the package shows the following thing, which we need to change:
+	1. User settings are installed by Active Setup. How does this really work?
+	2. We need a way, to install our own preferences.
+	3. Possibilty to disable Autoupdate.
+	4. ARP Icon is missing.
+	5. Version in MSI is nonsense. We insert the real version here.
+	6. Uninstall is crashing, if some Registry Keys are missing (aborted installation will not continue).
+
+	Title: Google Chrome 72.0.3626.96 ML
+	Comments: Altered and hardened version for corporate use. 20190207 by AutoPkg
+
+
+	P2: We need to set Preferences during installation:
+	In Custom Action change this line:
+	BuildInstallCommand	51	InstallComm....E530F96}&installerdata=[MASTER_PREFERENCES]	
+	Insert the following lines into the Property Table:
+	MASTER_PREFERENCES	%7B%22homepage....
+	See: http://serverfault.com/questions/635202/how-can-i-customize-the-default-settings-when-deploying-google-chrome-for-busine
+
+	P3: Disable Autoupdate
+	Insert the following lines into the Registry Table:
+	HKLM2	2	SOFTWARE\Policies\Google\Update	InstallDefault	#0	ProductClientState
+	HKLM1	2	SOFTWARE\Policies\Google\Update	AutoUpdateCheckPeriodMinutes	#0	ProductClientState
+
+	See: http://support.google.com/installer/bin/answer.py?hl=de&answer=146164#Registry_Settings
+		http://www.itninja.com/question/deploying-google-chrome-disabling-update-services-and-task-schedule
+
+	P4: Point ARP Icon to chrome.exe.
+	Insert the following line into the Registry Table:
+	regARP1	-1	Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]	DisplayIcon	[ProgramFilesFolder]Google\Chrome\Application\chrome.exe,0	ProductClientState
+
+	P5: Alter MSI Version.
+	In Property Table change this line:
+	ProductVersion	72.0.3626.96
+
+	P6: Uninstall Command anpassen:
+	In InstallExecuteSequence Table change this line:
+	CallUninstaller --> in Condition AND UNINSTALLCMDLINE AND UNINSTALLCMDARGS hinzufügen.
+
+	All changes are set in: GChrome_Enterprise_byAutoPkg.mst
+
+
+190207	Release V72.0.3626.96

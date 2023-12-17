@@ -1,0 +1,34 @@
+Description: Downloads latest Google Chrome x86/x64 MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.download.GoogleChromeMSI-Win
+MinimumVersion: 1.3.1
+
+Input:
+  #SEARCH_URL: http://omahaproxy.appspot.com/win
+  SEARCH_URL: 'https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Windows&num=1'
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '"version":"(?P<version>(?P<ver_major>[0-9]+)\.(?P<ver_majorminor>[0-9]+)\.(?P<ver_minor>[0-9]+)\.(?P<build>[0-9]+))"'
+    url: '%SEARCH_URL%'
+
+- Processor: FileCreator
+  Arguments:
+    file_content: '%match%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%ver_major%.%ver_minor%.%build%'
+    rename_var: msiversion
+
+- Processor: URLDownloader
+  Arguments:
+    filename: GoogleChromeEnterprise-%PLATFORM%.msi
+    url: '%DOWNLOAD_URL%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

@@ -1,0 +1,150 @@
+Description: Alters latest Google Chrome x64 MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.build.GoogleChrome-Win64
+ParentRecipe: com.github.NickETH.recipes.download.GoogleChromeMSI-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: GoogleChrome
+  NAMELONG: GoogleChromeX64
+  # SEARCH_URL: http://omahaproxy.appspot.com/win
+  SEARCH_URL: https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Windows&num=1
+  DOWNLOAD_URL: https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi
+  # PLATFORM: Win64
+  VENDOR: Google
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: sourceunzipped:release:read:helpers
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\GoogleChromeEnterprise-%PLATFORM%.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
+  Comment: Applies the Settings-Transform to the GoogleChrome.msi in the release folder
+  Arguments:
+    mode: -a
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    mst_paths: '%BUILD_DIR%\%pkg_dir%\helpers\GChrome64_Enterprise_byAutoPkg.mst'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Comment: get the ProductCode GUID from the MSI
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ChromiumSettings
+  Comment: Generate the settings JSON and encode it
+  Arguments:
+    new_settings:
+      bookmark_bar:
+        show_on_all_tabs: true
+      browser:
+        check_default_browser: false
+        show_home_button: true
+      distribution:
+        allow_downgrade: '[AllowDowngradeSubstitution]'
+        create_all_shortcuts: false
+        do_not_create_desktop_shortcut: true
+        do_not_create_quick_launch_shortcut: true
+        do_not_create_taskbar_shortcut: true
+        do_not_launch_chrome: true
+        do_not_register_for_update_launch: true
+        import_bookmarks: false
+        import_history: false
+        import_home_page: false
+        import_search_engine: false
+        make_chrome_default: false
+        make_chrome_default_for_user: false
+        msi: true
+        require_eula: false
+        show_welcome_page: false
+        skip_first_run_ui: true
+        suppress_first_run_bubble: true
+        suppress_first_run_default_browser_prompt: true
+        system_level: true
+        verbose_logging: true
+      first_run_tabs:
+      - chrome://newtab
+      homepage: http://www.ethz.ch
+      homepage_is_newtabpage: false
+      session.restore_on_startup: 1
+      sync_promo:
+        show_on_first_run_allowed: false
+    product_GUID: '%msi_value%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQL
+  Comment: Set the correct version / Harden the uninstall command / set the install options
+  Arguments:
+    SQL_command:
+    - UPDATE `Property` SET `Property`.`Value`='%msiversion%' WHERE `Property`.`Property`='ProductVersion'
+    - UPDATE `Property` SET `Property`.`Value`='%chrm_settings_url%' WHERE `Property`.`Property`='MASTER_PREFERENCES'
+    - UPDATE `InstallExecuteSequence` SET `InstallExecuteSequence`.`Condition`='((?ProductClientState=3) AND ($ProductClientState=2) AND NOT UPGRADINGPRODUCTCODE) AND UNINSTALLCMDLINE AND UNINSTALLCMDARGS' WHERE `InstallExecuteSequence`.`Action`='CallUninstaller'
+    - DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='UPGRADEFOUND'
+    - DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='NEWPRODUCTFOUND'
+    - INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','0.0.0','%msiversion%',768,'UPGRADEFOUND')
+    - INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','%msiversion%','',0,'NEWPRODUCTFOUND')
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    #source_app: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
+    source_app: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%version%%LANG_STRING%.txt'
+    new_ver: '%version%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%version%%LANG_STRING%.txt'
+    new_ver: '%version%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIApplySumInfo
+  Arguments:
+    cmnds_sinfo:
+      /j: Google Chrome x64 %build_ver% ML
+      /o: Altered and hardened version for corporate use. %us_date% by AutoPkg
+      /t: Google Chrome x64 %build_ver% ML
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+
+- Processor: EndOfCheckPhase
