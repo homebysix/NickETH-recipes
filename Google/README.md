@@ -1,11 +1,11 @@
-# Adobe Reader (x64) AutoPkg recipes
+# Google Chrome (x86/x64) AutoPkg recipes
 **download** (get the actual installer)  
-**build** (create an MSI with all the features)  
+**build** (alter the MSI with all the changes)  
 **BMS** (import the package into baramundi server)
 
 **Features:**  
 Auto updater is disabled.  
-Desktop shortcut is disabled by default.  
+Desktop shortcut is disabled by default.
 
 To use the baramundi import recipe,<br>
 the following varibles need to be specified in the AutoPkg config.json file:<br>

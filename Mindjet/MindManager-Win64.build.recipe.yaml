@@ -1,0 +1,50 @@
+Description: Alters latest Mindmanager x64 MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.build.MindManager-Win64
+ParentRecipe: com.github.NickETH.recipes.download.MindManager-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: MindManager
+  SEARCH_URL: https://www.mindmanager.com/en/support/download-library/
+  PLATFORM: Win64
+  PF_DIGIT: '64'
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: release:read
+    org_ver: '%version%'
+    pkg_dir: '%NAME%_%PF_DIGIT%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%_%PF_DIGIT%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Save a copy of the downloaded MSI to the build dir.
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%_%PF_DIGIT%_%build_ver%_ML.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%_%PF_DIGIT%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%_%PF_DIGIT%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: EndOfCheckPhase

@@ -1,0 +1,19 @@
+.
+190207	Get the installer stub from: https://www.mindmanager.com/mm-win-exe
+	From there, we need to extract installparams.js, which contains the path to
+	the actual installerlistMMDxxx.js on cloudfront.net.
+	In there finally lies the real download path to the MSI files we need to get.
+	See the download recipe for more information.
+	The MSI files are full installers.
+	The installed software is multi-language
+	However, to install with a certain default language, we can use the property:
+	RESOURCELANGUAGE="English" or "German" and a few others too.
+
+	There is also an administrative download, but the MSI in it is just the same as well.
+
+	Command line switches:
+	/qn /norestart ALLUSERS=1 RESOURCELANGUAGE="English" LAUNCHPROGRAM=0 SHORTCUTDESKTOP=0 SHORTCUTQUICKLAUNCH=0 EULA_REGION=5 LAUNCHREGISTRATION=0 
+	ADDLOCAL=ALL REMOVE="Box,GoogleDrive,DropBox,MindManagerSnap"
+	Features removed: Box,GoogleDrive,DropBox,MindManagerSnap
+
+190207	Release V1.0.0

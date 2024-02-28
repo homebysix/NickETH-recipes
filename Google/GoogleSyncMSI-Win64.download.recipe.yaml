@@ -1,0 +1,31 @@
+Description: Downloads the latest Google Backup and Sync Client for Windows x64.
+Identifier: com.github.NickETH.recipes.download.GoogleSyncMSI-Win64
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: GoogleSync
+  DOWNLOAD_URL: https://dl.google.com/drive/gsync_enterprise64.msi
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: GoogleSync.msi
+    url: '%DOWNLOAD_URL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Google LLC, O=Google LLC, L=Mountain View, S=ca, C=US
+    input_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Comment: Get the version from AppleMobileDeviceSupport64.msi into msi_value
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'
+    msi_path: '%pathname%'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%msi_value%'
+    rename_var: version

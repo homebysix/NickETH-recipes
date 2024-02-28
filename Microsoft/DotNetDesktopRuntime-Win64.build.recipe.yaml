@@ -1,12 +1,12 @@
 Description: Alters latest Microsoft DotNet Desktop Runtime Install-file for Windows.
 Identifier: com.github.NickETH.recipes.build.DotNetDesktopRuntime-Win64
-ParentRecipe: com.github.NickETH.recipes.download.DotNetDesktopRuntime-Win64
+ParentRecipe: com.github.NickETH.recipes.download.DotNetDesktopRuntime-Win
 MinimumVersion: 1.3.1
 
 Input:
   NAME: DotNetDesktopRuntime
   VENDOR: Microsoft
-  RELEASE: LTS
+  RELEASE: '6.0'
   LANGUAGE_CODE: en-us
   PLATFORM: x64
   PF_STRING: _64

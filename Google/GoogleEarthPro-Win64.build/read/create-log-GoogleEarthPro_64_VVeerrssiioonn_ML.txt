@@ -1,0 +1,9 @@
+
+180625	Download Google Earth Pro x64: https://dl.google.com/dl/earth/client/advanced/current/googleearthprowin-x64.exe
+	
+	Extract the MSI with Reshacker:
+	ResourceHacker.exe -open googleearthprowin-x64.exe -action extract -mask  BINARY,ID_MSI, -save googleearthprowin-x64.msi
+
+	Use the MSI without any alterations.
+
+200113	Version 1.0.0.0, by AutoPkg

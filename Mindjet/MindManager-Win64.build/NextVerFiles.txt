@@ -1,0 +1,2 @@
+read\create-log-MindManager_64_VVeerrssiioonn_ML.txt
+read\readme-MindManager_64_VVeerrssiioonn_ML.txt

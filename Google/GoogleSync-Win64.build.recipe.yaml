@@ -1,0 +1,67 @@
+Description: Alters latest GoogleSync MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.build.GoogleSync-Win64
+ParentRecipe: com.github.NickETH.recipes.download.GoogleSyncMSI-Win64
+MinimumVersion: 1.0.5
+
+Input:
+  NAME: GoogleSync
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create the build environment
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: sourceunzipped:release:read
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Save a copy of the downloaded MSI to the release dir.
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQL
+  Comment: Change a few settings in the iTunes MSI-file
+  Arguments:
+    SQL_command:
+    - DELETE FROM `Binary` WHERE `Binary`.`Name` = 'GoogleUpdateSetup'
+    - DELETE FROM `CustomAction` WHERE `CustomAction`.`Action` = 'RunGoogleUpdateSetup'
+    - DELETE FROM `InstallExecuteSequence` WHERE `InstallExecuteSequence`.`Action` = 'RunGoogleUpdateSetup'
+    - DELETE FROM `Registry` WHERE `Registry`.`Registry` = 'regC630DDCE73AB93333FC40024328151D2'
+    - UPDATE `Component` SET `Component`.`Condition`='GOOGLESHEETSDESKTOPSHORTCUT' WHERE `Component`.`Component`='GoogleSheetsDesktopShortcutComponent'
+    - UPDATE `Component` SET `Component`.`Condition`='GOOGLESLIDESDESKTOPSHORTCUT' WHERE `Component`.`Component`='GoogleSlidesDesktopShortcutComponent'
+    - UPDATE `Component` SET `Component`.`Condition`='GOOGLEDOCSDESKTOPSHORTCUT' WHERE `Component`.`Component`='GoogleDocsDesktopShortcutComponent'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: EndOfCheckPhase

@@ -1,0 +1,55 @@
+Description: Package the current Git release.
+Identifier: com.github.NickETH.recipes.build.Git-Win64
+ParentRecipe: com.github.NickETH.recipes.download.Git-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Git
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  Arguments:
+    exe_path: '%pathname%'
+    product_version: 'True'
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: ' '
+      repl: ''
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to store the package
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: release:read
+    org_ver: '%parsed_string%'
+    pkg_dir: '%NAME%%PF_STRING%_%parsed_string%_EN'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: Copier
+  Comment: Copy the Git install exe file to the release dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_EN.exe'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_EN.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_EN.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'

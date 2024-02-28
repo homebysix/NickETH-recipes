@@ -7,7 +7,7 @@ Input:
   MAJOR_VERSION: '19'
   DOWNLOAD_URL: 'https:%match%'
   SEARCH_URL: https://www.oracle.com/database/technologies/instant-client/microsoft-windows-32-downloads.html
-  SEARCH_PATTERN: '(//download.oracle.com/otn_software/nt/instantclient/[0-9]+/instantclient-basic-nt-(?P<version>%MAJOR_VERSION%\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+\.)*[0-9]+)dbru.zip)'
+  SEARCH_PATTERN: '(//download.oracle.com/otn_software/nt/instantclient/[0-9]+/([\s]*?)instantclient-basic-nt-(?P<version>%MAJOR_VERSION%\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+\.)*[0-9]+)dbru.zip)'
   VENDOR: 'Oracle'
   PLATFORM: x86
   PF_STRING: ''
@@ -19,10 +19,17 @@ Process:
     re_pattern: '%SEARCH_PATTERN%'
     url: '%SEARCH_URL%'
 
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%match%'
+    pattern_replace:
+    - pattern: '\n'
+      repl: ''
+
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.zip'
-    url: 'https:%match%'
+    url: 'https:%parsed_string%'
 
 - Processor: EndOfCheckPhase
 

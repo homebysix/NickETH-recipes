@@ -1,4 +1,4 @@
-# MobaXterm Home (x86) AutoPkg recipes
+# Bitwarden Desktop Client (x64) AutoPkg recipes
 **download** (get the actual installer)  
 **build** (create an MSI with all the features)  
 **BMS** (import the package into baramundi server)

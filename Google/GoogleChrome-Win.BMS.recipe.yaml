@@ -13,6 +13,7 @@ Input:
   LANG_STRING: _ML
   DIP_NAME: Chrome
   DIP_SUBDIR: ML_x86
+  HOMEPAGE: 'https://your.homepage.com'
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
@@ -37,7 +38,7 @@ Process:
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
     bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
-    bms_app_installparm: /qn /norestart ALLUSERS=1
+    bms_app_installparm: /qn /norestart ALLUSERS=1 ALLOWDOWNGRADE=1
     bms_app_integration:
     - appname: '%NAMESHORT%'
       bundles:

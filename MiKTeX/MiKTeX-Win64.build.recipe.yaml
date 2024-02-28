@@ -173,9 +173,11 @@ Process:
   Comment: Delete the leftovers, which the uninstaller did not flush.
   Arguments:
     cmdline_args:
+    - /C
+    - rmdir
     - /S
     - /Q
-    - C:\APPS\MiKTeX\%version%
-    exe_file: rmdir.exe
-    exe_folder: 'C:\APPS\MiKTeX'
+    - C:\APPS\MiKTeX
+    exe_file: cmd.exe
+    exe_folder: 'C:\APPS'
     run_elevated: 'true'

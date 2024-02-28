@@ -1,6 +1,6 @@
 # Adobe Reader (x64) AutoPkg recipes
 **download** (get the actual installer)  
-**build** (create an MSI with all the features)  
+**build** (patch the MSI with the actual MSP, set prefs)  
 **BMS** (import the package into baramundi server)
 
 **Features:**  

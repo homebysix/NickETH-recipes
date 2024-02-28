@@ -9,13 +9,25 @@ Input:
   #SEARCH_URL: http://omahaproxy.appspot.com/win
   SEARCH_URL: https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Windows&num=1
   DOWNLOAD_URL: https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise.msi
-  #PLATFORM: Win
+  HOMEPAGE: 'https://your.homepage.com'
   VENDOR: Google
   PLATFORM: x86
   PF_STRING: ''
   LANG_STRING: _ML
 
 Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSISumInfo
+  Comment: get the summary info from the MSI
+  Arguments:
+    msi_path: '%pathname%'
+
+- Processor: com.github.jazzace.processors/TextSearcher
+  Comment: extract the version string from the summary info.
+  Arguments:
+    text_in: '%SumInfo_Dump%'
+    re_pattern: '\[/o\]\s[A-Za-z]+ = ([0-9]+\.[0-9\.]+)'
+    result_output_var_name: 'version'
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Arguments:
     BuildFiles: NextVerFiles.txt
@@ -91,7 +103,7 @@ Process:
         verbose_logging: true
       first_run_tabs:
       - chrome://newtab
-      homepage: http://www.ethz.ch
+      homepage: '%HOMEPAGE%'
       homepage_is_newtabpage: false
       session.restore_on_startup: 1
       sync_promo:
@@ -102,13 +114,13 @@ Process:
   Comment: Set the correct version / Harden the uninstall command / set the install options
   Arguments:
     SQL_command:
-    - UPDATE `Property` SET `Property`.`Value`='%msiversion%' WHERE `Property`.`Property`='ProductVersion'
-    - UPDATE `Property` SET `Property`.`Value`='%chrm_settings_url%' WHERE `Property`.`Property`='MASTER_PREFERENCES'
+    #- UPDATE `Property` SET `Property`.`Value`='%msiversion%' WHERE `Property`.`Property`='ProductVersion'
+    #- UPDATE `Property` SET `Property`.`Value`='%chrm_settings_url%' WHERE `Property`.`Property`='MASTER_PREFERENCES'
     - UPDATE `InstallExecuteSequence` SET `InstallExecuteSequence`.`Condition`='((?ProductClientState=3) AND ($ProductClientState=2) AND NOT UPGRADINGPRODUCTCODE) AND UNINSTALLCMDLINE AND UNINSTALLCMDARGS' WHERE `InstallExecuteSequence`.`Action`='CallUninstaller'
-    - DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='UPGRADEFOUND'
-    - DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='NEWPRODUCTFOUND'
-    - INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','0.0.0','%msiversion%',768,'UPGRADEFOUND')
-    - INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','%msiversion%','',0,'NEWPRODUCTFOUND')
+    #- DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='UPGRADEFOUND'
+    #- DELETE FROM `Upgrade` WHERE `Upgrade`.`ActionProperty`='NEWPRODUCTFOUND'
+    #- INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','0.0.0','%msiversion%',768,'UPGRADEFOUND')
+    #- INSERT INTO `Upgrade` (`Upgrade`.`UpgradeCode`,`Upgrade`.`VersionMin`,`Upgrade`.`VersionMax`,`Upgrade`.`Attributes`, `Upgrade`.`ActionProperty`) VALUES ('{C1DFDF69-5945-32F2-A35E-EE94C99C7CF4}','%msiversion%','',0,'NEWPRODUCTFOUND')
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
 
 - Processor: com.github.haircut.processors/AppIconExtractor
