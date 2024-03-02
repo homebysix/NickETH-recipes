@@ -1,0 +1,15 @@
+{
+  "sessions": [],
+  "recentSessions": [],
+  "recentRemoteURLs": [],
+  "discoveredPythonEnvs": [],
+  "userSetPythonEnvs": [
+    {
+      "name": "conda: Server",
+      "path": "C:\\APPS\\JupyterLab-Desktop\\Server\\python.exe",
+      "type": "path",
+      "versions": {}
+    }
+  ],
+  "newsList": []
+}

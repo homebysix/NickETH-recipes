@@ -1,0 +1,145 @@
+Description: Packages the current JupyterLab-Desktop release.
+Identifier: com.github.NickETH.recipes.build.JupyterLab-Desktop-Win64
+ParentRecipe: com.github.NickETH.recipes.download.JupyterLab-Desktop-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'JupyterLab-Desktop'
+  NAMESHORT: 'JupyterLab'
+  VENDOR: JupyterLab
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to store the package
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    #folder_list: sourceunzipped:release:read
+    folder_list: sourcepkt:sourceunzipped:release:read:helpers:wixproject:wixproject\Includes:wixproject\Resources:wixproject\Lang
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_%version%_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+    create_AS_ver: 'true'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%version%_ML'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  #Comment: Copy the Element installer file to the build dir
+  Comment: Copy the JupyterLab-Desktop installer file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
+    overwrite: 'true'
+    #source_path: '%RECIPE_CACHE_DIR%\downloads\%filename%'
+    source_path: '%pathname%'
+
+# - Processor: Copier
+  # Comment: Copy the JupyterLab-Desktop installer file to the release dir
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.exe'
+    # overwrite: 'true'
+    # source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the JupyterLab-Desktop NSIS installer to the sourceunzipped dir
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the JupyterLab-Desktop NSIS installer to the sourceunzipped dir
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\$PLUGINSDIR\app-64.7z'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAMESHORT%\'
+    extract_file: '*'
+    ignore_pattern: ''
+    preserve_paths: 'True'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAMESHORT%\%NAMESHORT%.exe'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Extract the Eclipse res file
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAMESHORT%\%NAMESHORT%.exe'
+    output_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    reswork_action: 'extract'
+    reswork_cmd: 'ICONGROUP,,'
+    # ignore_errors: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Generate a new Icon.exe file for Eclipse-Java
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\helpers\Icon-Stub-1.exe'
+    input_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    output_file: '%BUILD_DIR%\%pkg_dir%\wixproject\Resources\Main-Icon.exe'
+    reswork_action: 'add'
+    reswork_cmd: 'ICONGROUP,,'
+    # ignore_errors: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WixSettings
+  Comment: Define variables for the WIX build process to the version.wxi file
+  Arguments:
+    preproc_file: '%BUILD_DIR%\%pkg_dir%\wixproject\version.wxi'
+    # template_file: None
+    new_settings:
+    - define: 'version="%build_ver%"'
+    - define: 'ProductVersion="%build_ver%"'
+    - define: 'Packagecode="{NNEEWWGGUUIIDD}"'
+    - define: 'Productcode="{NNEEWWGGUUIIDD}"'
+    - define: 'ProductName="!(loc.ProductName)"'
+    - define: 'ProductNameWithVersion="!(loc.ProductName) $(var.version) $(var.Arch)"'
+    - define: 'ProductLanguage="!(loc.ProductLanguage)"'
+    - define: 'AppName="%NAME%"'
+    - define: 'AppFolder="$(var.APInstallFolder)"'
+    - define: 'AppVendor="%VENDOR%"'
+    - define: 'ProductManufacturerShort="%VENDOR%"'
+    - define: 'ProductUpgradeCode="{9D3FB298-735C-410F-9770-3B392A9EF0C3}"'
+    - define: 'ProductManufacturerLong="%VENDOR%"'
+    - define: 'RTMProductVersion="0.0.1"'
+  
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSBuildRun
+  Comment: Run the MSBuild script to generate the Eclipse MSI installer
+  Arguments:
+    build_file: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAMESHORT%.build'
+    build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
+    build_property: BuildPlatform=%PLATFORM%;BuildName=%NAMESHORT%;BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;SourceDir=%BUILD_DIR%\%pkg_dir%\wixproject\%NAMESHORT%;version=%build_ver%;Platformstr=%PF_STRING%;LangStr=%LANG_STRING%
+    #;"ASVersion=%AS_ver%"
+    build_target: WIX

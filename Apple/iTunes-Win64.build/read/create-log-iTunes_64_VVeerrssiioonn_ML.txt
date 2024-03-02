@@ -1,0 +1,24 @@
+
+190924	Direct-Download Links: https://discussions.apple.com/docs/DOC-6562#more
+
+	Analyzing the package, we need to alter this issues:
+	1. There are things in iTunesSetup.exe we don't need/want, like Bonjour and AppleSoftwareUpdate.
+	   We extract AppleApplicationSupport.msi, AppleMobileDeviceSupport.msi and iTunes.msi
+	   As of Sept 2020, AppleApplicationSupport.msi is not part of the package anymore!
+	2. User settings are not making it to different users on a machine. We need to provide a run once for those settings.
+	   Active Setup is the way to go.
+	3. Auto update has to be disabled. We need the AdminFlags Regkey. See: https://support.apple.com/en-us/HT201677
+		AdminFlags to 16777473 (kParentlFlags_DisableFirstRunWelcomeWindow, kParentalFlags_Locked, kParentalFlags_DisableCheckForUpdates)
+	4. We need a mechanism to disable the Tray Icon. We move the Regkey, which enables it to its own component.
+	5. We don't want the APS deamon installed by AppleApplicationSupport.msi. It is used for wireless sync.
+	   We set conditions on those components in the Component table.
+	6. To disable th EULA, we need quite some detective work. See:
+		https://www.applepie.se/apple-itunes-12-7-and-software-license-agreement-registry-key
+		To get the license.rtf file out of the package, we would need the following sequences:
+		search for the filetable key: cscript ..\..\MSIScripts\WiRunSQL.vbs iTunes.work.msi "SELECT `File`.`File` FROM `File`, `Component`, `Directory` WHERE `File`.`Component_` = `Component`.`Component` AND `Directory`.`Directory` = `Component`.`Directory_` AND `DefaultDir`='tajvqtga|de.lproj' AND `FileName`='License.rtf'"
+		msidb /d .\iTunes64.msi -x iTunes.cab
+		7z.exe" e .\iTunes.cab -o.\. "filetable key"
+	7. Disable the per default Caching.
+	8. We need to rewrite the german (1031) language transform.
+	9. From v12.12 Bonjour seems to be mandatory! We install it but disable the service by default
+

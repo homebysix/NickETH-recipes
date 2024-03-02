@@ -1,0 +1,35 @@
+Description: |
+  Downloads the latest LibreOffice x64. Set RELEASE to either "fresh" or "still".
+  
+  LibreOffice Still is the stable version that has undergone more testing (over a longer time). It is usually recommended for more conservative use.
+  LibreOffice Fresh is the stable version with the most recent features. Users interested in taking advantage of our most innovative features should download and use our fresh version."
+  Unfortunately the fresh/still releases are indistinguishable right now.
+Identifier: com.github.NickETH.recipes.download.LibreOffice-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: LibreOffice
+  RELEASE: fresh
+  # RELEASE: still
+  DL_PLATFORM: _64
+  #DL_PLATFORM: ''
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (?P<DOWNLOAD_URL>download.documentfoundation.org/libreoffice/stable/[\d\.]+/win/x86%DL_PLATFORM%/LibreOffice_(?P<version>[\d\.]+)_Win_x[-864]+\.msi)
+    request_headers:
+      User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+    url: https://www.libreoffice.org/download/libreoffice-%RELEASE%/?type=win-x86_64
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.msi'
+    url: https://%DOWNLOAD_URL%
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: E=info@documentfoundation.org, CN=The Document Foundation, O=The Document Foundation, OU=LibreOffice Build Team, L=Berlin, S=Berlin, C=DE
+    input_path: '%pathname%'

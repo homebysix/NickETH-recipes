@@ -1,4 +1,4 @@
-#!/usr/local/autopkg/python
+#!/usr/bin/python
 #
 # Copyright 2019 Swiss federal institute of technology (ETHZ).
 #
@@ -367,7 +367,8 @@ class BMSImporter(Processor):
                             for arrobj in bms_app_integration['bms_app_integration']:
                                 JSONData['bms_app_integration'].append(arrobj)
                             outfile.seek(0)
-                            json.dump(JSONData, outfile, indent=4, sort_keys=True)
+                            #json.dump(JSONData, outfile, indent=4, sort_keys=True)
+                            json.dump(JSONData, outfile, indent=4, sort_keys=True, ensure_ascii=False)
                 else:
                     with open(json_file_dest, "w") as outfile:
                         # Sharepoint and kiosk functions are only active when creating a new file!
@@ -386,7 +387,8 @@ class BMSImporter(Processor):
                                 for icon_file in glob.glob(icon_file_src):
                                     shutil.copy(icon_file, job_icon_path)
 
-                        json.dump(bms_app_integration, outfile, indent=4, sort_keys=True)
+                        #json.dump(bms_app_integration, outfile, indent=4, sort_keys=True)
+                        json.dump(bms_app_integration, outfile, indent=4, sort_keys=True, ensure_ascii=False)
             else:
                 self.output("JSON file destination missing in recipe!")
 

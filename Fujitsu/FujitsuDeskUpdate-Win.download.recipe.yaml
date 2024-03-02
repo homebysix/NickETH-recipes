@@ -1,0 +1,33 @@
+Description: Download recipe for Fujitsu DeskUpdate.
+Identifier: com.github.NickETH.recipes.download.FujitsuDeskUpdate-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: FujitsuDeskUpdate
+  SOFTWARE_GUID: '"updateSetupPackage":{"id":[\w]*,"softwareID":"(?P<SW_GUID>[\w]*-[\w]*-[\w]*-[\w]*-[\w]*)"}'
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    curl_opts:
+    - --request
+    - GET
+    re_pattern: '%SOFTWARE_GUID%'
+    url: https://webdownloads.ts.fujitsu.com/deskupdate_5_1/data/api/v1/update/5.02.0056.0
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: https://webdownloads.ts.fujitsu.com/download/FileDownload/fileDownload.aspx?SoftwareGUID=%SW_GUID%&FileFolder=Downloadfiles&FileTypeExtension=EXE
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=FUJITSU CLIENT COMPUTING LIMITED, O=FUJITSU CLIENT COMPUTING LIMITED, STREET="1-1-2, KASHIMADA, SAIWAI-KU", L=KAWASAKI, S=Kanagawa, PostalCode=212-0058, C=JP
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

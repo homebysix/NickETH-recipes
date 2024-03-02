@@ -1,0 +1,30 @@
+Description: Download recipe for Enpass.
+Identifier: com.github.NickETH.recipes.download.Enpass-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Enpass
+  URL: https://www.enpass.io/downloads/
+  PLATFORM: x86
+  PF_STRING: ''
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (?P<url>https:\/\/dl\.enpass\.io\/stable\/windows\/setup\/(?P<version>([0-9]+\.)*[0-9]+)\/Enpass-setup\.exe?)
+    url: '%URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Enpass Technologies, Inc.", O="Enpass Technologies, Inc.", S=Delaware, C=US
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False

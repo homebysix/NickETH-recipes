@@ -1,0 +1,31 @@
+Description: Downloads latest iTunes installer for Windows.
+Identifier: com.github.NickETH.recipes.download.iTunes-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: iTunes
+  DOWNLOAD_URL: https://www.apple.com/itunes/download/win%PF_SHORT%
+  USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%DOWNLOAD_URL%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Apple Inc., O=Apple Inc., L=Cupertino, S=California, C=US
+    input_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  Arguments:
+    exe_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

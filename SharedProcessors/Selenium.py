@@ -8,6 +8,8 @@
 # Slightley altered for Windows. 220602, Nick Heim
 # Added a 1 second sleep after each command for stability.
 # Implemented Edge compatibility, see: https://docs.microsoft.com/en-us/microsoft-edge/webdriver-chromium/?tabs=python
+# Changes to selenium 4. "executable_path" was deprecated and has been removed!
+# See: https://stackoverflow.com/questions/64717302/deprecationwarning-executable-path-has-been-deprecated-selenium-python
 # More work to follow...
 
 from autopkglib import Processor, ProcessorError
@@ -218,11 +220,18 @@ class Selenium(Processor):
             "Constructing WebDriver Options object.",
             verbose_level=2
         )
+        # load variant specific modules for webdriver
         if self.browser_used == 'Chrome':
+            from selenium.webdriver.chrome.service import Service
+            s_binary=Service(self.webdriver_binary_path)
             from selenium.webdriver.chrome.options import Options
+            options = Options()
             webdriver_engine = webdriver.Chrome
         elif self.browser_used == 'Edge':
+            from selenium.webdriver.edge.service import Service
+            s_binary=Service(self.webdriver_binary_path)
             from selenium.webdriver.edge.options import Options
+            options = Options()
             webdriver_engine = webdriver.Edge
         else:
             self.output(
@@ -307,10 +316,9 @@ class Selenium(Processor):
             "Chrome executable driver: {}".format(self.browser_binary_path),
             verbose_level=3
         )
-        # browser = webdriver.Chrome(
-        # browser = webdriver.Edge(
+        # intialize the webdriver variant (Chrome or Edge)
         browser = webdriver_engine(
-            executable_path=self.webdriver_binary_path,
+            service=s_binary,
             options=self.options
         )
         self.output("Browser initialized", verbose_level=2)

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?include version.wxi?>
+  <!-- <?include $(sys.CURRENTDIR)Includes\ElementVariables.wxi ?> -->
+
+  <Product Id="$(var.Productcode)" Name="$(var.ProductNameWithVersion)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.ProductManufacturerLong)" UpgradeCode="$(var.ProductUpgradeCode)">
+    <Package Description="!(loc.PackageDescription)" Manufacturer="$(var.ProductManufacturerLong)" InstallerVersion="500" Compressed="yes" />
+    <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
+	<Binary Id="JSONStreamEditor" SourceFile="$(var.SetupResourcesDir)\jj.exe" />
+	<CustomAction Id="SetServerPath1" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [APPLICATIONFOLDER]Server\python.exe -i &quot;[SetServerPath1]&quot; -o &quot;[SetServerPath1]&quot; pythonPath" Execute="deferred" Impersonate="no" />
+	<CustomAction Id="SetServerPath2" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [APPLICATIONFOLDER]Server\python.exe -i &quot;[SetServerPath2]&quot; -o &quot;[SetServerPath2]&quot; userSetPythonEnvs.0.path" Execute="deferred" Impersonate="no" />
+	<CustomAction Id="InstallServer" FileKey="Main.exe" ExeCommand="env install --path [APPLICATIONFOLDER]Server" Execute="deferred" Impersonate="no" />
+    <Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
+	<Property Id="DEFAULTCONFIG" Value="1" />
+	<Property Id="INSTALLSERVER" Value="1" />
+	<PropertyRef Id="WIX_DIR_PROFILE" />
+    <Property Id="ARPHELPLINK" Value="!(loc.ProductHelpLink)" />
+    <Property Id="ARPURLINFOABOUT" Value="!(loc.ProductUrlInfoAbout)" />
+    <Property Id="ARPURLUPDATEINFO" Value="!(loc.ProductUrlUpdateInfo)" />
+    <Property Id="ALLUSERS" Value="1" />
+	<Property Id="DESKTOP_SC" Value="0" />
+    <Property Id="ARPPRODUCTICON" Value="MainIcon.exe" />
+	<SetProperty Id="SetServerPath1" After="CostFinalize" Value="[#settings_json]" Sequence="execute"/>
+	<SetProperty Id="SetServerPath2" After="CostFinalize" Value="[#app_data_json]" Sequence="execute"/>
+    <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
+
+    <!-- Windows 7 and later is required. -->
+    <Condition Message="!(loc.OSVersionRequired)"><![CDATA[Installed OR VersionNT >= 601]]></Condition>
+
+    <Upgrade Id="$(var.ProductUpgradeCode)">
+      <UpgradeVersion OnlyDetect="yes" Minimum="$(var.ProductVersion)" Property="NEWPRODUCTFOUND" IncludeMinimum="no" />
+      <UpgradeVersion Minimum="$(var.RTMProductVersion)" IncludeMinimum="yes" Maximum="$(var.ProductVersion)" Property="UPGRADEFOUND" IncludeMaximum="no" MigrateFeatures="yes" />
+    </Upgrade>
+    <CustomAction Id="PreventDowngrading" Error="!(loc.NewerVersionInstalled)" />
+
+    <InstallExecuteSequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+		<RemoveExistingProducts Before="InstallInitialize" />
+		<Custom Action="SetServerPath1" After="InstallFiles"><![CDATA[DEFAULTCONFIG="1" AND NOT REMOVE]]></Custom>
+		<Custom Action="SetServerPath2" After="InstallFiles"><![CDATA[DEFAULTCONFIG="1" AND NOT REMOVE]]></Custom>
+		<Custom Action="InstallServer" After="InstallFiles"><![CDATA[INSTALLSERVER="1" AND NOT REMOVE]]></Custom>
+	</InstallExecuteSequence>
+	<InstallUISequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+	</InstallUISequence>
+
+    <!-- Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- <Directory Id="ProgramFiles64Folder"> -->
+	  <Directory Id="Apps" Name="APPS">
+          <Directory Id="APPLICATIONFOLDER" Name="$(var.AppName)" >
+             <Directory Id="JupLabSrv" Name="Server" />
+          </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+      <Directory Id="DesktopFolder" />
+	  <Directory Id="AppDataFolder" />
+	</Directory>
+    <!--
+      RemoveFolderEx requires that we "remember" the path for uninstall.
+      This workaround is only required for the uninstall.
+    -->
+    <Property Id="APPLICATIONFOLDER">
+      <RegistrySearch Id="APPLICATIONFOLDER_REGSEARCH" Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="raw" Win64="$(var.Win64)" />
+    </Property>
+
+    <!-- Add the shortcuts to your installer package -->
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id="CleanupMainApplicationFolder" Guid="*">
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="string" Value="[APPLICATIONFOLDER]" KeyPath="yes" />
+        <!-- We need to use APPLICATIONFOLDER variable here or RemoveFolderEx will not remove on "install". -->
+        <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER" />
+      </Component>
+      <Component Id="Main_exe" Guid="{57890C5D-7154-48AA-8548-1A770EC61640}" Win64="$(var.Win64)" >
+        <File Id="Main.exe" Vital="yes" KeyPath="yes" Source="!(wix.APSourceDir)\$(var.AppVendor).exe" />
+		<Shortcut Id="AppStartMenuShortcut"
+		  Directory="ProgramMenuFolder"
+		  Advertise="yes"
+		  Name="$(var.ProductName)"
+		  WorkingDirectory="APPLICATIONFOLDER"
+		  Icon="MainIcon.exe">
+		    <!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="3c1b0cac-12aa-54d0-85ac-9a4ca6e1d795" /> -->
+		</Shortcut>
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppVendor)" Name="StartMenuShortcutInstalled" Type="integer" Value="1" />
+		<RegistryValue Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\$(var.AppVendor).exe" Value="[APPLICATIONFOLDER]$(var.AppVendor).exe" Type="string" />
+		<RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
+	  </Component>
+	  
+	  <Component Id="Config_JSON" Guid="{F5808DD0-538E-42C5-AD9E-183191D23430}" Win64="yes" KeyPath="yes">
+		<File Id="settings_json"
+			Name="settings.json"
+			Vital="yes"
+			Source="$(var.SetupResourcesDir)\settings.json">
+		</File>
+		<File Id="app_data_json"
+			Name="app-data.json"
+			Vital="yes"
+			Source="$(var.SetupResourcesDir)\app-data.json">
+		</File>
+	  </Component>
+	  <Component Id="ActiveSetup64" Guid="{B9AA340D-8CC9-438B-9664-06D8D8A5FDC0}">
+		<RegistryValue Id="RegHKLM2" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Version" Value="$(var.ASVersion)" Type="string" KeyPath="yes" />
+		<RegistryValue Id="RegHKLM1" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Stubpath" Value="msiexec /i [ProductCode] REINSTALL=UserSettings REINSTALLMODE=up /qn" Type="string" />
+		<RegistryValue Id="RegHKLM3" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Value="[ProductName]" Type="string" />
+	  </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+	  <Condition>DESKTOP_SC=1</Condition>
+        <Shortcut Id="AppDesktopShortcut" 
+		  Advertise="no" 
+		  Name="$(var.ProductName)" 
+		  Target="[APPLICATIONFOLDER]$(var.AppVendor).exe" 
+		  WorkingDirectory="APPLICATIONFOLDER" 
+		  Directory="DesktopFolder"
+		  Icon="MainIcon.exe">
+		    <!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="3c1b0cac-12aa-54d0-85ac-9a4ca6e1d795" /> -->
+			<!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="com.squirrel.element-desktop.Element" /> -->
+		</Shortcut>
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="DesktopShortcutInstalled" Type="integer" Value="[DESKTOP_SC]" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+	<DirectoryRef Id="AppDataFolder">
+		<Directory Id="Roaming_User" Name="$(var.ProductName)">
+			<Component Id="UserSettingsRepair" Guid="{EA5F6FD9-426A-42C2-BE73-0C53A0DE3296}">
+				<CopyFile Id="DupFile1" SourceProperty="APPLICATIONFOLDER" SourceName="settings.json" DestinationProperty="Roaming_User" DestinationName="settings.json" />
+				<CopyFile Id="DupFile2" SourceProperty="APPLICATIONFOLDER" SourceName="app-data.json" DestinationProperty="Roaming_User" DestinationName="app-data.json" />
+				<RegistryValue Id="regHKCU2" Root="HKCU" Key="SOFTWARE\Classes\$(var.ProductName)" Name="Config_JSON" Value="1" Type="integer" KeyPath="yes" />
+			</Component>
+		</Directory>
+    </DirectoryRef>
+    <!-- List of features to install -->
+    <Feature Id="UserSettings" InstallDefault="local" Description="Delivers user settings automatically to each profile." Display="expand" Level="1" Title="User Settings">
+      <ComponentRef Id="UserSettingsRepair" />
+	  <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="yes" InstallDefault="local">
+        <ComponentRef Id="Main_exe" />
+		<ComponentRef Id="CleanupMainApplicationFolder" />
+		<ComponentRef Id="Config_JSON" />
+		<ComponentRef Id="ActiveSetup64" />
+        <ComponentRef Id="DesktopShortcut" />
+        <ComponentGroupRef Id="AppFiles" />
+      </Feature>
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.SetupResourcesDir)\SideImage.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.SetupResourcesDir)\TopImage.bmp" />
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <!-- Skip license dialog. -->
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="5">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="5">1</Publish>
+    </UI>
+  </Product>
+</Wix>
