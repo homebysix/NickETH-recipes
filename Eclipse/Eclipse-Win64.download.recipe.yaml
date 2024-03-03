@@ -41,4 +41,8 @@ Process:
     url: https://eclipse.org/downloads/download.php?r=1&file=%match%&mirror_id=1190
     filename: '%NAME%.zip'
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
 - Processor: EndOfCheckPhase
