@@ -6,7 +6,7 @@ MinimumVersion: 1.3.1
 Input:
   NAME: NoMachineEnterpriseClient
   VENDOR: NoMachine
-  DOWNLOAD_URL: 'https://downloads.nomachine.com/download/?id=18'
+  #DOWNLOAD_URL: 'https://downloads.nomachine.com/download/?id=18'
   PLATFORM: x64
   PF_STRING: _64
 

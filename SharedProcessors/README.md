@@ -323,6 +323,22 @@ build_target, (required: False), Description: "Target to run in NANT-file."
 ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
 ```
 
+ResourceWorker
+-----------------
+Edit a resource from a Windows exe using ResourceHacker.
+Useful to do resource editing operations on an exe-file that common utilities can not do.
+Example recipe: GoogleEarthPro-Win64.build.recipe.yaml
+```
+Input variables:
+exe_path, (required: False), Description: "Path to the (setup.)exe, defaults to %pathname%."
+inout_dir, (required: True), Description: "In-/Output path (absolute) for files to work with."
+output_file, (required: True), Description: "Output filename (absolute path) of the resource to be written."
+input_file, (required: False), Description: "Input filename (absolute path) of the resource to be added."
+reswork_action, (required: False), Description: "Action to execute (extract/add). Default: extract."
+reswork_cmd, (required: False), Description: "Resource to extract (e.g. 'BIN,123,')."
+ignore_errors, (required: True), Description: "Ignore any errors during the extraction."
+```
+
 ResourceExtractor
 -----------------
 Extracts a resource from a Windows exe using ResourceHacker.
@@ -335,8 +351,6 @@ extract_dir, (required: True), Description: "Output path (absolute) for the extr
 extract_file, (required: True), Description: "Output filename of the resource to be extracted."
 extract_cmd, (required: True), Description: "Resource to extract (e.g. 'BIN,123,')."
 ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
-Output variables:
-version, Description: "Version of exe found."
 ```
 
 SevenZipExtractor

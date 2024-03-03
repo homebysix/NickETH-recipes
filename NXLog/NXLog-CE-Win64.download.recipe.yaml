@@ -6,19 +6,76 @@ Input:
   NAME: NXLog-CE
   VENDOR: NXLog Ltd.
   DOWNLOAD_URL: https://nxlog.co/products/nxlog-community-edition/download
+  SEARCH_FIRSTURL: https://nxlog.co/downloads/nxlog-ce#nxlog-community-edition
+  SEARCH_VER: '(nxlog-ce-(?P<version>([0-9]+\.)*[0-9]+)\.msi)'
+
   PLATFORM: x64
   PF_STRING: _64
 
+  INTERNAL_URL: 'put your path here'
+
+# The online search on NXLog's website was abondoned, because of complexity and constant changing.
+# 
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: (?P<match>https://nxlog.co/system/files/products/files/[\d]+/nxlog-ce-(?P<version>([0-9]+\.)*[0-9]+)\.msi)
-    url: '%DOWNLOAD_URL%'
+    re_pattern: '%SEARCH_VER%'
+    re_flags:
+    - DOTALL
+    url: '%SEARCH_FIRSTURL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: get the filename from internal source
+  Arguments:
+    cmdline_args:
+    - /C
+    - dir
+    - /b
+    - '%INTERNAL_URL%'
+    - '>'
+    - NXLogCE_win.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist
+  Arguments:
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_VER%'
+    url: file://%RECIPE_CACHE_DIR%/NXLogCE_win.txt
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '^(.*)$'
+    url: file://%RECIPE_CACHE_DIR%/version.txt
+    NEW_FILENAME: '%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%version% == %match%'
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%_%PLATFORM%.msi'
-    url: '%match%'
+    url: 'file:////d/sys/bms_tst/AutoPkg-in/Input/NX-Log-CE/%NEW_FILENAME%'
+    CHECK_FILESIZE_ONLY: True
+
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
+  Arguments:
+    file_content: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
 
 - Processor: EndOfCheckPhase
 

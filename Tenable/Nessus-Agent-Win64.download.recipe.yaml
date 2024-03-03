@@ -42,14 +42,14 @@ Process:
     predicate: download_changed == False
 
 - Processor: FileCreator
-  Comment: Generate the install.bds in the release dir.
+  Comment: Generate the version.txt in the release dir.
   Arguments:
     file_content: '%version%'
     file_path: '%RECIPE_CACHE_DIR%\downloads\version.txt'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Tenable Inc., O=Tenable Inc., L=Columbia, S=Maryland, C=US
+    expected_subject: CN="TENABLE, INC.", O="TENABLE, INC.", L=Columbia, S=Maryland, C=US, SERIALNUMBER=3569085, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
