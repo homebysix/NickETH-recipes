@@ -18,6 +18,34 @@ Process:
     re_pattern: '%SEARCH_PATTERN%'
     url: '%SEARCH_URL%'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist
+  Arguments:
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '^(.*)$'
+    url: file://%RECIPE_CACHE_DIR%/version.txt
+    # NEW_FILENAME: '%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%version% == %match%'
+
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
+  Arguments:
+    file_content: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
 - Processor: URLDownloader
   Arguments:
     filename: vlc-%VLCPLATFORM%.%PKGFORMAT%

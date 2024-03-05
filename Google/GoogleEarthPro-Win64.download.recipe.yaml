@@ -12,6 +12,10 @@ Process:
     filename: GoogleEarthPro64.exe
     url: '%DOWNLOAD_URL%'
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
 - Processor: EndOfCheckPhase
 
 - Processor: WindowsSignatureVerifier

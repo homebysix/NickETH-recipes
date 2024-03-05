@@ -6,7 +6,7 @@ Input:
   NAME: 'Command Update'
   NAMESHORT: Command_Update
   SEARCH_FIRSTURL: https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update?lwp=rt
-  SEARCH_SECONDURL: href="(https://www.dell.com/support/home/drivers/DriversDetails.driverId=[0-9A-Z]*)" target=._blank..Dell Command
+  SEARCH_SECONDURL: href="(https://www.dell.com/support/home/en-us/drivers/DriversDetails.driverId=[0-9A-Z]*)" target=._blank..Dell Command
   SEARCH_THIRDURL: (https://dl.dell.com/[0-9A-Z]*/[0-9]/Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
 
@@ -22,6 +22,8 @@ Process:
     selenium_options:
     - self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
     - self.options.add_argument("--disable-infobars")
+    #- self.options.add_argument("--disable-extensions")
+    #- self.options.add_argument("--remote-allow-origins=*")
     - |
         self.options.add_experimental_option("prefs", {
             "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
@@ -62,7 +64,8 @@ Process:
     url_downloader_summary_result: ''
     source_path: ''
     # https://dl.dell.com/FOLDER09268356M/1/Dell-Command-Update-Windows-Universal-Application_CJ0G9_WIN_4.7.1_A00.EXE
-    re_pattern: (Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_[0-9A-Z]*.EXE)
+    # https://dl.dell.com/FOLDER10012409M/3/Dell-Command-Update-Windows-Universal-Application_J6PNP_WIN_4.9.0_A02_02.EXE
+    re_pattern: (Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_[0-9A-Z_]*.EXE)
     text_in: '%match%'
     result_output_var_name: downloaded_package
 
