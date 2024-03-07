@@ -8,6 +8,7 @@ Input:
   NAMESHORT: Command_Update
   PLATFORM: x64
   PF_STRING: _64
+  LANG_STRING: _ML
 
 Process:
 

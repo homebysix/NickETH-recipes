@@ -57,41 +57,34 @@ Process:
           })
     webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
 
-- Processor: URLDownloader
-  Arguments:
-    filename: 'dummy.txt'
-    url: 'file://%AUTOPKG_DIR%\\dummy.txt'
-
 - Processor: com.github.jazzace.processors/TextSearcher
   Arguments:
     download_changed: False
     url_downloader_summary_result: ''
     source_path: ''
-    # https://dl.dell.com/FOLDER09268356M/1/Dell-Command-Update-Windows-Universal-Application_CJ0G9_WIN_4.7.1_A00.EXE
     # https://dl.dell.com/FOLDER10012409M/3/Dell-Command-Update-Windows-Universal-Application_J6PNP_WIN_4.9.0_A02_02.EXE
     re_pattern: (Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_[0-9A-Z_]*.EXE)
     text_in: '%match%'
     result_output_var_name: downloaded_package
 
-- Processor: Copier
-  Comment: Generate an initial version.txt file for the first run.
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist
   Arguments:
-    destination_path: '%RECIPE_CACHE_DIR%\version.txt'
-    overwrite: False
-    source_path: '%AUTOPKG_DIR%\\dummy.txt'
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
 
-- Processor: Copier
-  Comment: Generate an initial download file for the first run.
-  Arguments:
-    destination_path: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
-    overwrite: False
-    source_path: '%RECIPE_CACHE_DIR%\downloads\dummy.txt'
-   
 - Processor: com.github.NickETH.recipes.SharedProcessors/TextFileSearcher
   Arguments:
     re_pattern: '[0-9A-Z.]*'
     result_output_var_name: previous_version
     file_to_open: '%RECIPE_CACHE_DIR%\version.txt'
+
 
 - Processor: StopProcessingIf
   Arguments:
@@ -116,7 +109,7 @@ Process:
     - self.options.add_argument("--headless=chrome")
     - self.options.add_argument("--disable-infobars")
     - self.options.add_argument('--no-sandbox')
-    - self.options.add_argument("--disable-dev-tools")   
+    - self.options.add_argument("--disable-dev-tools")
     - |
         self.options.add_experimental_option("prefs", { \
             "download.default_directory": "%RECIPE_CACHE_DIR%\downloads",
@@ -126,17 +119,15 @@ Process:
           })
     webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
 
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAMESHORT%.exe'
+    url: 'file://%RECIPE_CACHE_DIR%/downloads/%downloaded_package%'
 
 - Processor: PathDeleter
   Comment: Delete the old installer file.
   Arguments:
-    path_list: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
-
-- Processor: FileMover
-  Comment: Rename the downloaded file to the standard name.
-  Arguments:
-    source: '%RECIPE_CACHE_DIR%\downloads\%downloaded_package%'
-    target: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
+    path_list: '%RECIPE_CACHE_DIR%\downloads\%downloaded_package%'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
