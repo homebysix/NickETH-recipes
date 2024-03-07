@@ -8,8 +8,9 @@
 # Slightley altered for Windows. 220602, Nick Heim
 # Added a 1 second sleep after each command for stability.
 # Implemented Edge compatibility, see: https://docs.microsoft.com/en-us/microsoft-edge/webdriver-chromium/?tabs=python
-# Changes to selenium 4. "executable_path" was deprecated and has been removed!
-# See: https://stackoverflow.com/questions/64717302/deprecationwarning-executable-path-has-been-deprecated-selenium-python
+# 240303: Changes to selenium 4. "executable_path" was deprecated and has been removed!
+#   See: https://stackoverflow.com/questions/64717302/deprecationwarning-executable-path-has-been-deprecated-selenium-python
+# 240307: Initialization for webdriver changed to reflect selenium 4.x
 # More work to follow...
 
 from autopkglib import Processor, ProcessorError
@@ -24,7 +25,7 @@ import time
 import fnmatch
 
 __all__ = ["Selenium"]
-__version__ = "1.0.5"
+__version__ = "1.3.1"
 
 
 class Selenium(Processor):
@@ -220,27 +221,21 @@ class Selenium(Processor):
             "Constructing WebDriver Options object.",
             verbose_level=2
         )
-        # load variant specific modules for webdriver
+        # initialize variant specific modules for webdriver
         if self.browser_used == 'Chrome':
-            from selenium.webdriver.chrome.service import Service
-            s_binary=Service(self.webdriver_binary_path)
-            from selenium.webdriver.chrome.options import Options
-            options = Options()
+            s_binary = webdriver.ChromeService(self.webdriver_binary_path)
             webdriver_engine = webdriver.Chrome
+            self.options = webdriver.ChromeOptions()
         elif self.browser_used == 'Edge':
-            from selenium.webdriver.edge.service import Service
-            s_binary=Service(self.webdriver_binary_path)
-            from selenium.webdriver.edge.options import Options
-            options = Options()
+            s_binary = webdriver.EdgeService(self.webdriver_binary_path)
             webdriver_engine = webdriver.Edge
+            self.options = webdriver.EdgeOptions()
+
         else:
             self.output(
                 "Not a valid value for a browser! Only 'Chrome' or 'Edge' supported.",
                 verbose_level=1
             )
-
-        # self.options = webdriver.ChromeOptions()
-        self.options = Options()
 
         # Set the user data directory if needed.
         self.output(
@@ -316,11 +311,13 @@ class Selenium(Processor):
             "Chrome executable driver: {}".format(self.browser_binary_path),
             verbose_level=3
         )
+        self.options.binary_location = self.browser_binary_path
         # intialize the webdriver variant (Chrome or Edge)
         browser = webdriver_engine(
             service=s_binary,
             options=self.options
         )
+
         self.output("Browser initialized", verbose_level=2)
 
         try:
