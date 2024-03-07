@@ -20,12 +20,14 @@ Process:
     selenium_commands:
     - browser.get("%SEARCH_FIRSTURL%")
     selenium_options:
-    - self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
+    - self.options.add_argument("--headless=chrome") # See: https://github.com/SeleniumHQ/selenium/issues/11634
     - self.options.add_argument("--disable-infobars")
+    - self.options.add_argument('--no-sandbox')
+    - self.options.add_argument("--disable-dev-tools") 
     #- self.options.add_argument("--disable-extensions")
     #- self.options.add_argument("--remote-allow-origins=*")
     - |
-        self.options.add_experimental_option("prefs", {
+        self.options.add_experimental_option("prefs", { \
             "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
@@ -42,11 +44,13 @@ Process:
     selenium_commands:
     - '%match%'
     selenium_options:
-    - self.options.add_argument("--headless=new")
+    - self.options.add_argument("--headless=chrome")
     - self.options.add_argument("--disable-infobars")
+    - self.options.add_argument('--no-sandbox')
+    - self.options.add_argument("--disable-dev-tools") 
     - |
-        self.options.add_experimental_option("prefs", {
-            "download.default_directory": "%RECIPE_CACHE_DIR%\\downloads",
+        self.options.add_experimental_option("prefs", { \
+            "download.default_directory": "%RECIPE_CACHE_DIR%\downloads",
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
@@ -109,11 +113,13 @@ Process:
     selenium_commands:
     - '%match%'
     selenium_options:
-    - self.options.add_argument("--headless=new")
+    - self.options.add_argument("--headless=chrome")
     - self.options.add_argument("--disable-infobars")
+    - self.options.add_argument('--no-sandbox')
+    - self.options.add_argument("--disable-dev-tools")   
     - |
-        self.options.add_experimental_option("prefs", {
-            "download.default_directory": "%RECIPE_CACHE_DIR%\\downloads",
+        self.options.add_experimental_option("prefs", { \
+            "download.default_directory": "%RECIPE_CACHE_DIR%\downloads",
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True

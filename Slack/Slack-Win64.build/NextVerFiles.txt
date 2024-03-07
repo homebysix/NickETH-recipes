@@ -1,0 +1,4 @@
+read\create-log-Slack_64_VVeerrssiioonn_ML.txt
+read\readme-Slack_64_VVeerrssiioonn_ML.txt
+helpers\Icon-Stub-1.exe
+sourceunzipped\Icon.idt
