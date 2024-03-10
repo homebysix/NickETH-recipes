@@ -37,7 +37,7 @@
 	<Target Name="WIX"
 		DependsOnTargets="Harvest">
         <Exec
-            Command='"$(WiX)bin\candle" -arch x64 -ext WixUtilExtension -ext WixUIExtension $(CandleVar) -v -sw0204 -sw1044 @(WixCode, &apos; &apos;)'
+            Command='"$(WiX)bin\candle" -arch $(Platform) -ext WixUtilExtension -ext WixUIExtension $(CandleVar) -v -sw0204 -sw1044 @(WixCode, &apos; &apos;)'
             ContinueOnError="true"
             WorkingDirectory="$(BuildDirectory)" />
         <Exec

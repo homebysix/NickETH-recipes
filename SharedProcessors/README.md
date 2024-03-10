@@ -312,6 +312,20 @@ Output variables:
 msi_value, Description: "Value from the SQL run."
 ```
 
+MSISumInfo
+----------
+Dump or apply (multiple) summary info changes to MSI-file using msiinfo.exe.
+Used to get or change the summary information in a MSI file.  
+Example recipe: GoogleChrome-Win64.build.recipe
+```
+Input variables:
+msi_path, (required: True), Description: "Path to the msi."
+cmnds_sinfo, (required: False), Description: "Dict of Suminfo commands to execute. Pairs of key(flag)/string are expected."
+ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
+Output variables:
+SumInfo_Dump	, Description: "Dump the actual values of MSI's SumInfo."
+```
+
 NANTrun
 -------
 Run NANT to build a NANT-(WIX-)project or to call a specific NANT-command.  
@@ -351,6 +365,26 @@ extract_dir, (required: True), Description: "Output path (absolute) for the extr
 extract_file, (required: True), Description: "Output filename of the resource to be extracted."
 extract_cmd, (required: True), Description: "Resource to extract (e.g. 'BIN,123,')."
 ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
+```
+
+Selenium
+--------
+Expose Selenium functionality to AutoPkg.
+Can do a full array of webdriver-calls in one sweep.
+```
+Input variables:
+primary_url, (required: True), Description: "The first url that will be retrieved."
+re_pattern, (default: [\s\S]*, required: False), Description: "Regular expression (Python) to match against page."
+browser_used, (default: Chrome, required: False), Description: "Browser to use with webdriver. Chrome or Edge(Chromium). Defaults to Chrome."
+selenium_options, (required: False), Description: "An array of strings to execute prior to the web driver being initialized. While some options may be set after initialization, within the 'selenium_commands' section, most should be set here."
+selenium_commands, (required: False), Description: "An array of strings to execute once the web driver is initialized.  Note that when these commands finish executing, the page_source property will be matched against the re_pattern variable to return your final result. If no commands are given in this variable, a simple regex match will be performed against the primary_url similar to the standard URLTexSearcher processor."
+result_output_var_name, (default: match, required: False), Description: "The name of the output variable that is returned by the match. If not specified then a default of 'match' will be used."
+browser_binary_path, (required: True), Description: "The full path to the binary of the web browser to use. Must be compatible with the selenium web driver binary."
+webdriver_binary_path, (required: True), Description: "The full path to the selenium web driver binary. This must be compatible with the web browser used."
+user_data_dir, (default: %RECIPE_CACHE_DIR%/selenium_user_data, required: False), Description: "The path to the directory to use for user data for the Selenium session. Cookies will be saved here. Setting this variable to an empty string will cause Selenium use its randomly generated path. This effectively purges the session once this processor run completes. Optionally you may wish to use PathDeleter between subsequent Selenium calls to purge and re-use the default directory. Defaults to %RECIPE_CACHE_DIR%/selenium_user_data"
+
+Output variables:
+result_output_var_name, Description: "First matched sub-pattern from input found on the fetched URL. Note the actual name of variable depends on the input variable 'result_output_var_name' or is assigned a default of 'match'. Named capture groups are also returned with the capture group name as the AutoPkg variable name."
 ```
 
 SevenZipExtractor

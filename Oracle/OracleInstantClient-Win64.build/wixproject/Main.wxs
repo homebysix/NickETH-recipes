@@ -59,13 +59,13 @@
       This workaround is only required for the uninstall.
     -->
     <Property Id="APPLICATIONFOLDER">
-      <RegistrySearch Id="APPLICATIONFOLDER_REGSEARCH" Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="raw" Win64="$(var.Win64)" />
+      <RegistrySearch Id="APPLICATIONFOLDER_REGSEARCH" Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)_$(var.Platform)" Name="Path" Type="raw" Win64="$(var.Win64)" />
     </Property>
 
     <!-- Add the shortcuts to your installer package -->
     <DirectoryRef Id="APPLICATIONFOLDER">
       <Component Id="CleanupMainApplicationFolder" Guid="*">
-        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="Path" Type="string" Value="[APPLICATIONFOLDER]" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)_$(var.Platform)" Name="Path" Type="string" Value="[APPLICATIONFOLDER]" KeyPath="yes" />
         <!-- We need to use APPLICATIONFOLDER variable here or RemoveFolderEx will not remove on "install". -->
         <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER" />
 		<Environment Action="set" Name="Path" Part="last" System="yes" Id="Oracle_Path" Value="[APPLICATIONFOLDER]" Permanent="no" />

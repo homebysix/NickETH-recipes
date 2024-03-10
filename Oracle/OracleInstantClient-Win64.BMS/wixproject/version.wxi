@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Include>
   <?define version="1.1.1"?>
-  <?define Productcode="{FD1911BA-A1A8-47AE-8400-D0E11C752759}"?>
-  <?define Upgradecode="{AF68DEC0-8FA0-4833-BBE6-62F36851D159}" ?>
+  <?define Productcode="{D5FBDCB6-977A-4815-B76A-00BF5C9BDF9D}"?>
+  <?define Upgradecode="{75A6C74A-FCF1-4611-B960-A313F682A107}" ?>
   <?define ETHZBuildNr="1"?>
 </Include>
