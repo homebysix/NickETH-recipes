@@ -1,15 +1,13 @@
-
 200113	Packaging KeePassXC x64
 	We download the MSI as is.
 	Alterations:
-	To disable AutoUpdate, we write a prepopulated keepassxc.ini file to each user profile on the very first start.
-	See the MST-file with Orca for details.
-	For this to work, we need and create an advertised shortcut.
+	We create an advertised shortcut.
 	And advertised shortcut needs an exe icon-file.
 	So we export the Icon Group IDI_ICON1 as .ico file.
 	Then we create an standalone Icon-file with Greenfish Icon Editor Pro.
 	New library, import the element.ico and save it as icon library with an .exe extension in 32-bit PE format.
 	The inner name seems not to be important.
+	The RemoveShortcuts action is missing in InstallExecuteSequence. We add it.
 	For the download links, see the recipe.
 
 200113	Version 1.0.0, by AutoPkg
