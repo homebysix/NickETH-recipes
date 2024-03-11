@@ -32,26 +32,32 @@ Process:
     bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0
     bms_app_integration:
+    bms_app_integration:
     - appname: '%NAME%'
-      currentversion:
-        job: '@_nV_%NAME% - Update (DYN)'
-        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
-        type: job
-      jobs:
+      bundles:
+      - action: exchange
+        name: 'nV_%NAME%'
       - action: add
-        name: '@_nV_%NAME% - Update (DYN)'
+        name: aV_%NAME% Uninstall
         version: new
-      - action: changetype
-        name: '@_nV_%NAME% - Update (DYN)'
+      - action: add
+        name: oV_%NAME% Uninstall
         version: previous
+      currentversion:
+        bundle: 'nV_%NAME%'
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
+        type: bundles
       platform: (%PLATFORM%)
       subspec: ''
       vendor: '%VENDOR%'
       version: '%build_ver% ML'
+      copyfolders: 1
     bms_job_kiosk:
     - jobname: '@_nV_KeePassXC - Update (DYN)'
       substring: 'Taskkill'
       jobdescription: 'Zum lokalen Verwalten von Passwörter. Kann ausserdem als alternative bzw. Backup-Authentisierungsmöglichkeit einer Multifaktor-Authentisierung anstelle eines Mobiltelefons verwendet werden.'
+      autoenableapp: 'KeePassXC - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_KeePassXC'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
