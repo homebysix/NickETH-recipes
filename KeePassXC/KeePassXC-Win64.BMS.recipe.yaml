@@ -32,7 +32,6 @@ Process:
     bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0
     bms_app_integration:
-    bms_app_integration:
     - appname: '%NAME%'
       bundles:
       - action: exchange
