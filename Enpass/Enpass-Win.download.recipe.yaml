@@ -11,11 +11,41 @@ Input:
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: (?P<url>https:\/\/dl\.enpass\.io\/stable\/windows\/setup\/(?P<version>([0-9]+\.)*[0-9]+)\/Enpass-setup\.exe?)
+    curl_opts:
+    - --cookie-jar
+    - '%RECIPE_CACHE_DIR%\%NAME%.txt'
+    re_pattern: 'download/windows/website/stable'
     url: '%URL%'
+
+- Processor: URLTextSearcher
+  Comment: We do this search only to dump the header, which contains the real download location.
+  Arguments:
+    curl_opts:
+    - --location
+    - --cookie
+    - '%RECIPE_CACHE_DIR%\%NAME%.txt'
+    - -D
+    - '%RECIPE_CACHE_DIR%\%NAME%-Header.txt'
+    re_pattern: 'enpass'
+    url: 'https://www.enpass.io/download/windows/website/stable'
+
+- Processor: URLTextSearcher
+  Comment: Get the real download location from the header.
+  Arguments:
+    curl_opts:
+    - --cookie
+    - '%RECIPE_CACHE_DIR%\%NAME%.txt'
+    # Location: https://dl.enpass.io/stable/windows/setup/6.9.5.1639/Enpass-setup.exe
+    re_pattern: (?P<url>https:\/\/dl\.enpass\.io\/stable\/windows\/setup\/(?P<version>([0-9]+\.)*[0-9]+)\/Enpass-setup\.exe?)
+    url: 'file://%RECIPE_CACHE_DIR%/%NAME%-Header.txt'
 
 - Processor: URLDownloader
   Arguments:
+    CHECK_FILESIZE_ONLY: true
+    curl_opts:
+    - --location
+    - --cookie
+    - '%RECIPE_CACHE_DIR%\%NAME%.txt'
     filename: '%NAME%.exe'
 
 - Processor: EndOfCheckPhase

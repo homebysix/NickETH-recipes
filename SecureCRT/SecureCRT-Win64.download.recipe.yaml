@@ -1,0 +1,34 @@
+Description: Download recipe for SecureCRT.
+Identifier: com.github.NickETH.recipes.download.SecureCRT-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: SecureCRT
+  PLATFORM: x64
+
+  SEARCH_FIRSTURL: https://www.vandyke.com/cgi-bin/releases.php?product=securecrt
+  SEARCH_STR: /cgi-bin/download_form_1.php\?(?P<DLpart1>pid=scrt_x64-bsafe_951).+?scrt-x64-bsafe\.(?P<version>([0-9]+\.)*[0-9]+)\.exe
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_STR%'
+    url: '%SEARCH_FIRSTURL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    #https://www.vandyke.com/cgi-bin/download_1.php?pid=scrt_x64-bsafe_951&export_check=accept&country=ch&submit=
+    url: https://www.vandyke.com/cgi-bin/download_1.php?%DLpart1%&export_check=accept&country=ch&submit=
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Comment: Check the signature on the EXE file
+  Arguments:
+    expected_subject: CN="VanDyke Software, Inc.", O="VanDyke Software, Inc.", L=Albuquerque, S=New Mexico, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

@@ -1,0 +1,8 @@
+
+200113	Create SecureCRT x64 for Windows
+	Attention: ETHZ License will be renewed once year by G. Antonitti.
+	Date: Around end of June.
+	Create a transform with the licensing information.
+
+200113	Version 1.0.0.0, by AutoPkg
+	

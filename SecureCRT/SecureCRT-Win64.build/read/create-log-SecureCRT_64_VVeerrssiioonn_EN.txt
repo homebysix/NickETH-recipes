@@ -1,0 +1,6 @@
+
+200113	Create SecureCRT x64 for Windows
+	Create a transform with the licensing information in the release folder.
+
+200113	Version 1.0.0.0, by AutoPkg
+	
