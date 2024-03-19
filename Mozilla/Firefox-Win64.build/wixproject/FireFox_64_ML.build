@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<project name="FireFox64_latest_ML" default="build-all">
+	<!--
+	Setup the environment.
+	Lot of variables (property).
+	-->
+	<include buildfile="global.prop"/>
+
+	<property name="FFVersion" value="${RealVersion}" />
+	<property name="FFexe" value="Firefox-Setup-x64" />
+	<property name="FFmsi" value="FireFox_64_${FFVersion}_ML.msi" />
+	<property name="FFdir" value="Mozilla Firefox" />
+
+	<property name="current.dir" value="${directory::get-current-directory()}" />
+	<property name="project.dir" value="${directory::get-parent-directory(current.dir)}" />
+
+	<!-- WiX 3 folder -->
+	<property name="wix.dir" value="${path::combine(environment::get-variable('WIX'), 'bin')}" readonly="true" />
+	<!-- Load the WiX3 tasks -->
+	<loadtasks assembly="${wix.dir}\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll" />
+
+	<!-- Tools folder -->
+	<property name="TOOLS_DIR" value="${arg.ToolsDir}" />
+	<echo message="Tools Dir: ${TOOLS_DIR}" />
+	
+	<!-- 7zip path -->
+	<property name="FULL_7Z_PATH" value="${arg.7ZipCmd}" />
+	<echo message="7zip path: ${FULL_7Z_PATH}" />
+
+    <target name="build-all">
+		<!-- 
+		Build the hole Firefox MSI.
+		Properties:
+
+		-->
+		<call target="instFFmain" />
+		<call target="Search-CH-harv" />
+		<call target="Search-ETH-harv" />
+		<call target="cck2-byteshift" />
+		<call target="FFcandle" />
+		<call target="FFlight" />
+		<call target="PostChanges"/>
+		<call target="GenerateMSTs"/>
+		<call target="makeGPVersion"/>
+		<call target="disable-download"/>
+	</target>
+
+	<target name="clean">
+        <!-- 
+		Clean up job.
+		Properties:
+			IN - FFmsi
+			IN - FFdir
+		-->
+		<delete>
+            <fileset>
+                <include name="${FFmsi}"/>
+                <include name="*.wixobj"/>
+				<include name="FF*.wxs"/>
+                <include name="..\release\*.*"/>				
+            </fileset>
+		</delete>
+		<delete dir="${FFdir}" />
+	</target>
+	
+	<target name="instFFmain">
+		<!-- 
+		Install the Firefox main EXE Extension.
+		Properties:
+			IN - FirefoxSRC
+			IN - FFexe
+			IN - FFdir
+			IN - download-component
+			OUT - DownloadSRC
+			OUT - SourceFILE
+		-->
+		<!--
+		The exe of the main app is taken from the AP download recipe
+		<property name="DownloadSRC" value="${FirefoxSRC}" />
+		<property name="SourceFILE" value="${FFexe}" />
+		<if test="${string::contains(download-component, 'yes')}" >
+			<call target="DL-File" />
+		</if>
+ -->        <!-- 
+            unzip, install and harvest the Firefox main EXE file.
+        -->
+
+		<!--
+		This is now done by the AP shared processor "MozillaAddonIntegrator".
+		<exec program="${FULL_7Z_PATH}">
+
+			<arg value="x" />
+			<arg value="-y" />
+			<arg file="..\sourcepkt\${FFexe}" />
+		</exec>
+		<move todir="${FFdir}">
+			<fileset basedir="core">
+				<include name="**/*" />
+			</fileset>
+		</move>
+
+		<delete dir="core" />
+		<delete file="setup.exe" />
+ -->
+		<!-- 
+		Starting with V57.x used to copy the extended Noscript default whitelist.
+		Default profile is being copied by CCK2.
+        -->		
+		<copy todir=".\${FFdir}\defaults\profile">
+			<fileset basedir=".\..\sourcepkt\ETH\profile">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<copy file="..\sourcepkt\ETH\override.ini" tofile=".\${FFdir}\browser\override.ini" />
+		<copy file="..\sourcepkt\ETH\Firefox.adm.zip" tofile=".\${FFdir}\Firefox.adm.zip" />
+		<copy file="..\sourcepkt\ETH\Firefox.admx.zip" tofile=".\${FFdir}\Firefox.admx.zip" />
+		<!-- 
+		Include CCK2
+        -->
+		<copy file="..\sourcepkt\ETH\autoconfig.js" tofile=".\${FFdir}\defaults\pref\autoconfig.js" />
+		<copy file="..\sourcepkt\ETH\cck2.cfg" tofile=".\${FFdir}\cck2.cfg" />
+		<copy todir=".\${FFdir}\cck2">
+			<fileset basedir=".\..\sourcepkt\ETH\cck2">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<call target="FF-harv" />
+	</target>
+
+
+	<target name="FF-harv">
+		<!-- 
+		Harvests the files from the main Firfox Installation to "FFfiles.wxs".
+		Preserves the GUID's from the previous version.
+		Properties:
+			IN - FFdir
+			IN - wix.FFSourceDir			
+		Problem: heat.exe is crashing during this run.
+			This is the reason, failonerror is set to false.
+			But to work silently, it is necessary to disable the WER GUI also.
+			Regkey/Value:
+			[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Windows Error Reporting]
+			"DontShowUI"=dword:00000001
+		-->
+		<!-- Exclude the extensions. They are harvested by the "MozillaAddonIntegrator" processor. -->
+		<move todir=".\Extensions\">
+			<fileset basedir=".\${FFdir}\browser\Extensions\">
+				<include name="**/*" />
+			</fileset>
+		</move>
+		<copy
+			file="Prev_Ver_FFfiles.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>
+
+		<exec program="${wix.dir}\heat.exe" failonerror="false">
+			<arg value="dir" />
+			<arg dir=".\${FFdir}" />
+			<arg value="-gg" />
+			<arg value="-platform" />
+			<arg value="Win64" />
+			<arg value="-v" />
+			<arg value="-svb6" />
+			<arg value="-sfrag" />
+			<arg value="-srd" />
+			<arg value="-suid" />
+			<arg value="-dr" />
+			<arg value="INSTALLDIR" />
+			<arg value="-cg" />
+			<arg value="FirefoxFiles" />
+			<arg value="-var" />
+			<arg value="wix.FFSourceDir" />
+			<arg value="-out" />
+			<arg file="FFfiles.wxs" />
+			<arg value="-t" />
+			<arg file="GUID-Preserve-x64.xslt" />
+
+		</exec>
+		<property name="source.file" value=".\FFfiles.wxs" />	
+		<property name="dest.file" value=".\-FFfiles.wxs" />
+		<property name="search.line" value="1BAA303D-B4B9" />
+
+		<!-- Move back the excluded extensions to its folder. -->
+		<move todir=".\${FFdir}\browser\Extensions\">
+			<fileset basedir=".\Extensions\">
+				<include name="**/*" />
+			</fileset>
+		</move>
+    </target>
+	
+	<target name="Ext-harv">
+		<!-- 
+		Harvests the files from an Extension to "FF${SourceFILE}.wxs".
+		Preserves the GUID's from the previous version.
+		It decides if the XPI is unpacked or not and behaves acordingly.
+		Properties:
+			IN - SourceFILE
+			IN - xpi-unpack
+			IN - xpi-name
+			IN - CGextXPI
+			IN - wix.FFExtDir			
+		-->
+		<copy
+			file="Prev_Ver_FF${SourceFILE}.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>
+		<if test="${not string::contains(xpi-unpack, 'true')}" >
+			<exec program="${wix.dir}\heat.exe">
+				<arg value="file" />
+				<arg file=".\${FFdir}\browser\Extensions\${xpi-name}.xpi" />
+				<arg value="-gg" />
+				<arg value="-sfrag" />
+				<arg value="-srd" />
+				<arg value="-suid" />
+				<arg value="-dr" />
+				<arg value="EXTENSIONS" />
+				<arg value="-cg" />
+				<arg value="${CGextXPI}" />
+				<arg value="-var" />
+				<arg value="wix.FFExtDir" />
+				<arg value="-out" />
+				<arg file="FF${SourceFILE}.wxs" />
+				<!--
+				<arg value="-t" />
+				<arg file="Comp-x64.xslt" />
+				-->
+				<arg value="-t" />
+				<arg file="GUID-Preserve-x64.xslt" />
+			</exec>
+		</if>
+	</target>
+	
+	<target name="Search-CH-harv">
+		<!-- 
+		Harvests the files from the CH Search plugin bundle to "FFSearchplug-CH.wxs".
+		Preserves the GUID's from the previous version.
+		Properties:
+			IN - FFdir
+			IN - wix.FFSearchDir
+		-->
+		<copy
+			file="Prev_Ver_FFSearchplug-CH.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>
+		<exec program="${wix.dir}\heat.exe">
+			<arg value="dir" />
+			<arg dir="..\sourcepkt\Search_CH" />
+			<arg value="-gg" />
+			<arg value="-sfrag" />
+			<arg value="-srd" />
+			<arg value="-suid" />
+			<arg value="-dr" />
+			<arg value="SEARCHPLUGINS" />
+			<arg value="-cg" />
+			<arg value="SearchCH" />
+			<arg value="-var" />
+			<arg value="wix.FFSearchDir" />
+			<arg value="-out" />
+			<arg file="FFSearchplug-CH.wxs" />
+			<!--
+			<arg value="-t" />
+			<arg file="Comp-x64.xslt" />
+			-->		
+			<arg value="-t" />
+			<arg file="GUID-Preserve-x64.xslt" />
+
+
+		</exec>
+		<copy todir=".\${FFdir}\distribution\searchplugins">
+			<fileset basedir="..\sourcepkt\Search_CH">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="Search-ETH-harv">
+		<!-- 
+		Harvests the files from the ETH Search plugin bundle to "FFSearchplug-ETH.wxs".
+		Preserves the GUID's from the previous version.
+		Properties:
+			IN - FFdir
+			IN - wix.FFSearchDir
+		-->
+		<copy
+			file="Prev_Ver_FFSearchplug-ETH.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>
+		<exec program="${wix.dir}\heat.exe">
+			<arg value="dir" />
+			<arg dir="..\sourcepkt\Search_ETH" />
+			<arg value="-gg" />
+			<arg value="-platform=x64" />
+			<arg value="-sfrag" />
+			<arg value="-srd" />
+			<arg value="-dr" />
+			<arg value="SEARCHPLUGINS" />
+			<arg value="-cg" />
+			<arg value="SearchETH" />
+			<arg value="-var" />
+			<arg value="wix.FFSearchDir" />
+			<arg value="-out" />
+			<arg file="FFSearchplug-ETH.wxs" />
+			<!--			
+			<arg value="-t" />
+			<arg file="Comp-x64.xslt" />
+			-->			
+			<arg value="-t" />
+			<arg file="GUID-Preserve-x64.xslt" />
+		</exec>
+		<copy todir=".\${FFdir}\distribution\searchplugins">
+			<fileset basedir="..\sourcepkt\Search_ETH">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="DL-File">
+        <!-- 
+		Gets a File from a webserver and stores it in "..\sourcepkt".
+		Properties:
+			IN - DownloadSRC
+			IN - SourceFILE
+		-->
+		<get src="${DownloadSRC}" dest="..\sourcepkt\${SourceFILE}" />
+	</target>
+	
+	<target name="FFlight">
+        <!-- 
+		Builds (link) the Firefox Project with English Interface.
+		Properties:
+			IN - FFmsi
+			IN - FFVersion
+		-->    
+		<property name="quote" value='"' />
+		<property name="Current.Dir" value="${directory::get-current-directory()}" />
+
+		<property name="lightFFSourceDirVAR" value="${'-dFFSourceDir=' + quote + Current.Dir + '\' + FFdir + quote}" />
+		<echo message="${lightFFSourceDirVAR}"/>
+
+		<property name="lightFFExtDirVAR" value="${'-dMozExtDir=' + quote + Current.Dir + '\' + FFdir + '\browser\extensions' + quote}" />
+		<echo message="${lightFFExtDirVAR}"/>
+
+        <!-- Todo: XML Search plugins do not work anymore.  -->
+		<property name="lightFFSearchDirVAR" value="${'-dFFSearchDir=' + quote + Current.Dir + '\' + FFdir + '\distribution\searchplugins' + quote}" />
+		<echo message="${lightFFSearchDirVAR}"/>
+
+		<light
+			exedir="${wix.dir}"
+			out="${FFmsi}"
+			warningsaserrors="false"
+			suppressices="ICE57;ICE27;ICE64;ICE69;ICE90;ICE91"
+			cultures="en-us"
+			extensions="WixUIExtension"
+			rebuild="true"
+			suppresspdb="true">
+			<!-- Specify additional options -->
+			<!-- ICE validation in WIX/light is broken, when running in background,
+				 See: https://github.com/wixtoolset/issues/issues/3968
+				 And: https://sourceforge.net/p/wix/bugs/2231/ 
+				 ""Solved" by adding the build-account to local admin
+			<arg line="-sval" />
+		    -->	
+			<arg line="${lightFFSourceDirVAR}" />
+			<arg line="${lightFFExtDirVAR}" />
+			<arg line="${lightFFSearchDirVAR}" />
+			<arg line="-dWixUIBannerBmp=..\sourcepkt\TopImage.bmp" />
+			<arg line="-dWixUIDialogBmp=..\sourcepkt\SideImage.bmp" />
+			<sources basedir=".\.">
+				<include name="FireFox_64_ML.wixobj" />
+				<include name="FireFoxReg_ML.wixobj" />
+				<include name="FF*.wixobj" />
+				<include name="MozExt_*.wixobj" />
+			</sources>
+		</light>
+    </target>
+		
+	<target name="FFcandle">
+        <!-- 
+		Compiles the Firefox Project files
+		Properties:
+			IN - wix.dir
+			IN - FFVersion
+        -->
+		<candle
+			exedir="${wix.dir}"
+			out=".\"
+			rebuild="true"
+			extensions="WixUIExtension;WixUtilExtension"
+			warningsaserrors="false">
+			<arg line="-sw0044" />
+			<arg line="-arch" />
+			<arg line="x64" />
+			<sources basedir=".">
+				<include name="FireFox_64_ML.wxs" />
+				<include name="FireFoxReg_ML.wxs" />
+				<include name="FF*.wxs" />
+				<include name="MozExt_*.wxs" />
+			</sources>
+		</candle>
+    </target>
+
+	<target name="cck2-byteshift" description="apply byteshift to cck2.cfg file">
+		<!--
+		Byteshift "CCK2.cfg.txt" to cck2.cfg
+		Used properties:
+			IN - current.dir
+			IN - project.dir
+			IN - FFdir
+		-->
+
+		<delete file="${project.dir}\sourcepkt\ETH\cck2.cfg"/>
+		
+		<exec program="powershell" workingdir="${current.dir}" verbose="true">
+			<arg value="-noprofile"/>
+			<arg value="-nologo"/>
+			<arg value="-ExecutionPolicy"/>
+			<arg value="Bypass"/>
+			<arg value="-command"/>
+			<arg value="${project.dir}\helpers\ByteShifter.ps1"/>
+			<arg value="${project.dir}\sourcepkt\ETH\cck2.cfg.txt"/>
+			<arg value="${project.dir}\sourcepkt\ETH\cck2.cfg"/>
+			<arg value="13"/>
+		</exec>
+		<copy file="..\sourcepkt\ETH\cck2.cfg" tofile=".\${FFdir}\cck2.cfg"  overwrite = "true"/>
+	</target>
+
+	<target name="PostChanges">
+        <!-- 
+		Move the MSI File to release
+		Set the readonly attribute on the MSI File
+		Notwendige Properties:
+			IN - FFVersion
+			IN - PackageVersion
+        -->
+		<move file="${FFmsi}" tofile="..\release\FireFox_64_${PackageVersion}_ML.msi" overwrite = "true"/>
+		<attrib file="..\release\FireFox_64_${PackageVersion}_ML.msi" readonly="true" />
+    </target>
+	
+	<target name="GenerateMSTs">
+        <!-- 
+		Erstellt die Transforms fuer unterschiedliche Beduerfnisse.
+		Notwendige Properties:
+			IN - ShortVersion
+			IN - PackageVersion
+		-->
+		<fileset id="MSTFiles" basedir="..\helpers">
+			<include name="*.mst"/>
+			<exclude name="*GP.mst"/>
+		</fileset>
+		<foreach item="File" property="fullpath">
+			<in>
+				<items refid="MSTFiles" />
+			</in>
+			<do>
+				<property name="MSTFileName" value="${path::get-file-name(fullpath)}" />
+				<echo message="Working on: ${MSTFileName}" />
+				<property name="MSTFileNameShort" value="${string::substring(MSTFileName, 0, (string::get-length(MSTFileName) - 8))}" />
+
+				<copy file="..\release\FireFox_64_${PackageVersion}_ML.msi" tofile="..\helpers\FireFox_64_${MSTFileNameShort}.msi" overwrite = "true"/>
+				<attrib file="..\helpers\FireFox_64_${MSTFileNameShort}.msi" readonly="false" />
+	    
+				<exec program="${TOOLS_DIR}\msitran.exe">
+					<arg value="-a" />
+					<arg file="..\helpers\${MSTFileName}" />
+					<arg file="..\helpers\FireFox_64_${MSTFileNameShort}.msi" />
+				</exec>
+				<!--
+				<delete file="..\testmsi\${MSTFileName}" />
+				-->
+				<exec program="${TOOLS_DIR}\msitran.exe">
+					<arg value="-g" />
+					<arg file="..\release\FireFox_64_${PackageVersion}_ML.msi" />
+					<arg file="..\helpers\FireFox_64_${MSTFileNameShort}.msi" />
+					<arg file="..\release\${MSTFileNameShort}${ShortVersion}.mst" />
+				</exec>
+				<delete file="..\helpers\FireFox_64_${MSTFileNameShort}.msi" />
+			</do>
+		</foreach>
+	</target>
+	<target name="makeGPVersion">
+		<!--
+		Generate an MSI file, which can be installed by AD Group-Policy software install.
+		This changes the  MSI-Schema to V200.
+		Used properties:
+			IN - PackageVersion
+			IN - ShortVersion
+		-->
+		<delete>
+            <fileset>
+                <include name="..\helpers\AllFeatures-*GP.mst"/>
+            </fileset>
+		</delete>
+		<copy file="..\release\FireFox_64_${PackageVersion}_ML.msi" tofile="..\release\FireFox_64_${PackageVersion}_GP.msi" overwrite = "true"/>
+		<attrib file="..\release\FireFox_64_${PackageVersion}_GP.msi" readonly="false" />
+		<exec program="${TOOLS_DIR}\msiinfo.exe" verbose="true">
+			<arg file="..\release\FireFox_64_${PackageVersion}_GP.msi" />
+			<arg value='-g' />
+			<arg value='200' />			
+		</exec>
+		<attrib file="..\release\FireFox_64_${PackageVersion}_GP.msi" readonly="true" />
+	</target>
+	<target name="disable-download">
+		<!--
+		Setzt das Attribut "download-component" in "global.prop" auf "no"
+		Damit werden beim naechsten Build keine Files mehr heruntergeladen.
+		Notwendige Properties:
+		keine
+		-->
+	<xmlpoke file="global.prop"
+				xpath="project/property[@name='download-component']/@value"
+                value="no"
+				failonerror = "false">
+		</xmlpoke>
+	</target>
+</project>

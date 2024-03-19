@@ -1,2 +1,3 @@
 read\create-log-ZoomClient_64_VVeerrssiioonn_ML.txt
 read\readme-ZoomClient_64_VVeerrssiioonn_ML.txt
+helpers\*.*

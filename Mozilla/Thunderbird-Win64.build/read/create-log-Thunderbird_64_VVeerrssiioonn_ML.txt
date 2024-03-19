@@ -1,0 +1,25 @@
+
+210101	repackaging as a WIX-project.
+	Addons installed as global Extensions (by side loading):
+	Language packs for DE, FR, IT, RM
+	Dictionaries for DE, FR, IT
+	Sieve, TbSync, Exchange ActiveSync 4 tbsync, Google-4-TbSync, CalDAV & CardDAV 4 tbsync, Compact Headers, LookOut
+	For more infos, see the recipe.
+	With some minor tweaks, the extensions can be installed as features.
+
+	Configuration:
+	Automatic language switching for th installed languages.
+	Autoupdate disabled.
+	For more infos, see the mozilla.cfg file.
+
+	MSI-Features:
+	Language_Pack_DEU, Language_Pack_FRA, Language_Pack_ITA, Language_Pack_RUM
+	TB_Sync (all tbsync based addons).
+	Sieve, LookOut, Extras (CompactHeader)
+
+	Properties:
+	DESKTOP_SC=0 (disable the desktop shortcut).
+	
+	See the project files for more details.	 
+
+210101	Released.

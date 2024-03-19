@@ -1,0 +1,46 @@
+Description: Downloads latest Thunderbird (x86/x64) offline installer for Windows.
+Identifier: com.github.NickETH.recipes.download.Thunderbird-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Thunderbird_64
+  PLATFORM_STR: '64'
+  MAJOR_REL: '115'
+  SEARCH_URL: https://www.thunderbird.net/en-US/thunderbird/releases/
+  DOWNLOAD_URL: https://releases.mozilla.org/pub/thunderbird/releases/%version%/win%PLATFORM_STR%/en-US/Thunderbird%20Setup%20%version%.exe
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_flags:
+    - M
+    - S
+    re_pattern: en-US/thunderbird/(?P<version>%MAJOR_REL%[0-9\.]+)/releasenotes(?!.*en-US/thunderbird/%MAJOR_REL%[0-9\.]+/releasenotes)
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-Setup-%PLATFORM_STR%.exe'
+    url: https://releases.mozilla.org/pub/thunderbird/releases/%version%/win%PLATFORM_STR%/en-US/Thunderbird%20Setup%20%version%.exe
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Mozilla Corporation, OU=Firefox Engineering Operations, O=Mozilla Corporation, L=Mountain View, S=California, C=US
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%\prev_version.txt'
+    overwrite: 'true'
+    source_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: FileCreator
+  Arguments:
+    file_content: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: EndOfCheckPhase
