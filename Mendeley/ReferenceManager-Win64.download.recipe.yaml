@@ -1,0 +1,39 @@
+Description: Downloads the latest version of Mendeley Reference Manager x64 for Windows.
+# Identifier: com.github.autopkg-win.download.Mendeley-ReferenceManager-Win
+Identifier: com.github.NickETH.recipes.download.ReferenceManager-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: ReferenceManager
+  VENDOR: Mendeley
+  PLATFORM: x64
+  PF_STRING: _64
+  SEARCH_URL: https://www.mendeley.com/download-reference-manager/windows
+  DOWNLOAD_PART_URL: https://static.mendeley.com/bin/desktop/mendeley-reference-manager
+  #                https://static.mendeley.com/bin/desktop/mendeley-reference-manager-2.110.2-x64.exe
+  VERSION_URL: (https://static\.mendeley\.com/bin/desktop/mendeley-reference-manager-(?P<version>([0-9]+\.)*[0-9]+)-x64\.exe)
+  USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Get the headers to extract the version from the filename
+  Arguments:
+    re_pattern: '%VERSION_URL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%match%'
+
+- Processor: WindowsSignatureVerifier
+  Comment: Check the signature on the downloaded file
+  Arguments:
+    expected_subject: CN=Elsevier Ltd, O=Elsevier Ltd, L=Kidlington, C=GB
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
