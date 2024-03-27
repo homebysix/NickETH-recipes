@@ -6,14 +6,15 @@
   <Product Id="$(var.Productcode)" Name="$(var.ProductNameWithVersion)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.ProductManufacturerLong)" UpgradeCode="$(var.ProductUpgradeCode)">
     <Package Description="!(loc.PackageDescription)" Manufacturer="$(var.ProductManufacturerLong)" InstallerVersion="200" Compressed="yes" />
     <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
-    <Icon Id="GithubDesktopIcon.exe" SourceFile="$(var.SetupResourcesDir)\GithubDesktop-Icon.exe" />
+    <!-- <Icon Id="GithubDesktopIcon.exe" SourceFile="$(var.SetupResourcesDir)\GithubDesktop-Icon.exe" /> -->
+	<Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
 	<PropertyRef Id="WIX_DIR_PROFILE" />
     <Property Id="ARPHELPLINK" Value="!(loc.ProductHelpLink)" />
     <Property Id="ARPURLINFOABOUT" Value="!(loc.ProductUrlInfoAbout)" />
     <Property Id="ARPURLUPDATEINFO" Value="!(loc.ProductUrlUpdateInfo)" />
     <Property Id="ALLUSERS" Value="1" />
 	<Property Id="DESKTOP_SC" Value="0" />
-    <Property Id="ARPPRODUCTICON" Value="GithubDesktopIcon.exe" />
+    <Property Id="ARPPRODUCTICON" Value="MainIcon.exe" />
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
 
@@ -67,7 +68,7 @@
 		  Advertise="yes"
 		  Name="$(var.ProductNameWithVersion)"
 		  WorkingDirectory="APPLICATIONFOLDER"
-		  Icon="GithubDesktopIcon.exe">
+		  Icon="MainIcon.exe">
 		</Shortcut>
         <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="StartMenuShortcutInstalled" Type="integer" Value="1" />
 		<RegistryValue Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\GithubDesktop.exe" Value="[APPLICATIONFOLDER]GithubDesktop.exe" Type="string" />
