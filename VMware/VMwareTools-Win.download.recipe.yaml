@@ -16,9 +16,9 @@ Process:
     url: '%SEARCH_URL%'
 
 - Processor: URLDownloader
-  filename: '%NAME%_%PLATFORM%.exe'
   Arguments:
     url: '%DL_URL%/%match%'
+    filename: '%NAME%_%PLATFORM%.exe'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
