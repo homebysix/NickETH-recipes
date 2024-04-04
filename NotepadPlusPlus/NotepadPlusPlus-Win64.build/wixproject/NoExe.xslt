@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- 
-Transform to alter the output from heat.exe for Texstudio
+Transform to alter the output from heat.exe for Notepad++
 Main functions:
--Remove the "Texstudio.exe", it is contained in Texstudio.wxs
-Version 1.0, 20210201, Nick Heim, ETHZ, ID-CD
+-Remove the "notepad++.exe", it is contained in Main.wxs
+Version 2.0, 20230623, Nick Heim, ETHZ, ID-CD
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -21,8 +21,8 @@ Version 1.0, 20210201, Nick Heim, ETHZ, ID-CD
 	</xsl:template>
 
 	<!-- Filter out the exe file -->
-<!-- 	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'NppShell.dll')]" use="@Id" />
+	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'notepad__.exe')]" use="@Id" />
 	<xsl:template match="wix:Component[key('exe-search', @Id)]" />
-	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" /> -->
+	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" />
 
 </xsl:stylesheet>

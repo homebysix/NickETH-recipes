@@ -62,12 +62,11 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'False'
 
-- Processor: PathDeleter
-  Comment: Delete the updater files from the build dir
-  Arguments:
-    path_list:
-    #- '%BUILD_DIR%\%pkg_dir%\wixproject\updater\*.*'
-    - '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\updater'
+# - Processor: PathDeleter
+  # Comment: Delete the updater files from the build dir
+  # Arguments:
+    # path_list:
+    # - '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\updater'
 
 - Processor: URLTextSearcher
   Arguments:
@@ -210,5 +209,14 @@ Process:
     build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
     build_property: BuildPlatform=%PLATFORM%;BuildName=%NAME%;BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;SourceDir=%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%;version=%build_ver%
     build_target: WIX
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQL
+  Comment: Change the settings for the config.xml file in the MSI-file which are not possible by WIX.
+  Arguments:
+    SQL_command:
+    - UPDATE `DuplicateFile` SET `DuplicateFile`.`File_`='config.xml' WHERE `DuplicateFile`.`FileKey`='DupFile1'
+    - DELETE FROM `File` WHERE `File`.`File`='config_xml'
+    - DELETE FROM `MsiFileHash` WHERE `MsiFileHash`.`File_`='config_xml'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps

@@ -11,7 +11,8 @@
 		<MajorVersion>$(version.Split(.)[0])</MajorVersion>
 		<MinorVersion>$(version.Split(.)[1])</MinorVersion>
 		<MaintenanceVersion>$(version.Split(.)[2])</MaintenanceVersion>
-		<CandleVar>-dPlatform=$(InstallerPlatform) -dSetupResourcesDir=$(BuildDir)\Resources -dMajorVersion=$(MajorVersion) -dMinorVersion=$(MinorVersion) -dMaintenanceVersion=$(MaintenanceVersion)</CandleVar>
+		<ASVersion>$(version.Replace('.', ','))</ASVersion>
+		<CandleVar>-dPlatform=$(InstallerPlatform) -dSetupResourcesDir=$(BuildDir)\Resources -dASVersion=$(ASVersion) -dMajorVersion=$(MajorVersion) -dMinorVersion=$(MinorVersion) -dMaintenanceVersion=$(MaintenanceVersion)</CandleVar>
 		<LightSrcDir>-dAPSourceDir=$(SourceDirectory)</LightSrcDir>
 		<MsiOut>..\Release\$(BuildName)_$(InstallerPlatform.Substring(1,2))_$(version)_ML.msi</MsiOut>
     </PropertyGroup>

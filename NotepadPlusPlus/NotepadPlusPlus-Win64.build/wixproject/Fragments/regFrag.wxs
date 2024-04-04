@@ -4,7 +4,10 @@
 	<?include $(sys.CURRENTDIR)Includes\nppVariables.wxi ?>
     <Fragment>
         <ComponentGroup Id="nppRegistryGroup">
-            <Component Id="cmpF971ED006DF427344D364C4667E1ACB6" Directory="TARGETDIR" Guid="{B1451F7A-82F6-460F-AE2D-BD84D7CC957F}" KeyPath="yes">
+            <Component Id="ClassReg01" Directory="TARGETDIR" Guid="{B1451F7A-82F6-460F-AE2D-BD84D7CC957F}" >
+				<RegistryKey Key="Software\Microsoft\Windows\CurrentVersion\App Paths\notepad++.exe" Root="HKLM" >
+                    <RegistryValue Value="[APPLICATIONFOLDER]notepad++.exe" Type="string" KeyPath="yes" />
+                </RegistryKey>
 			    <RegistryKey Key="*\shell\ANotepad++64" Root="HKCR">
                     <RegistryValue Name="ExplorerCommandHandler" Value="{B298D29A-A6ED-11DE-BA8C-A68E55D89593}" Type="string" />
                     <RegistryValue Value="Notepad++ Context menu" Type="string" />
@@ -17,9 +20,7 @@
                     <RegistryValue Value="[APPLICATIONFOLDER]\contextMenu\NppShell.dll" Type="string" />
                     <RegistryValue Name="ThreadingModel" Value="Apartment" Type="string" />
                 </RegistryKey>
-				<RegistryKey Key="Software\Microsoft\Windows\CurrentVersion\App Paths\notepad++.exe" Root="HKLM">
-                    <RegistryValue Value="[APPLICATIONFOLDER]notepad++.exe" Type="string" />
-                </RegistryKey>
+
 				
 <!--
                 <RegistryKey Key="*\shellex\ContextMenuHandlers\ANotepad++64" Root="HKCR">
