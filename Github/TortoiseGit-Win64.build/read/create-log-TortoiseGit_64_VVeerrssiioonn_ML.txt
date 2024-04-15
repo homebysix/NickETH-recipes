@@ -1,0 +1,12 @@
+
+200113	Create TortoiseGit x64 for Windows
+	Download the Windows MSI installer
+	Get the MSI installers for de, fr, it languages
+	Extract the languages MSI's to get the sources from it
+	Build it to an MSM.
+	-We create an advertised shortcut.
+	-And advertised shortcut needs an exe icon-file.
+	We get the Icon file to generate the baramundi Kiosk Icons with AutoPkg
+
+200113	Version 1.0.0, by AutoPkg
+	

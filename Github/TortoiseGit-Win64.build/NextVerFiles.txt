@@ -1,0 +1,10 @@
+read\create-log-TortoiseGit_64_VVeerrssiioonn_ML.txt
+read\readme-TortoiseGit_64_VVeerrssiioonn_ML.txt
+helpers\*.*
+wixproject\Main.wxs
+wixproject\Comp-x64.xslt
+wixproject\TortoiseGitLang_64.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*

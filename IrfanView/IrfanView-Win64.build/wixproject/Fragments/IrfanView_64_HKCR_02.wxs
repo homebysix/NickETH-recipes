@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <!-- <Directory Id="TARGETDIR"> -->
+		<DirectoryRef Id="APPLICATIONFOLDER">
+                <Component Id="RegData_HKCR64_02" Guid="{C34B0B99-F014-45B2-A03C-FD9A85D9F453}" Win64="yes">
+                    <RegistryValue Id="Registry_B2D718A2_BBD0_4C4A_8827_90B60230B0F1_" Root="HKCR" Key="IrfanView.aif" Value="IrfanView AIF File" Type="string" KeyPath="yes" />
+                    <RegistryValue Id="Registry_65A2994A_9A88_4FEB_BAFE_D4BC3FE6AD98_" Root="HKCR" Key="IrfanView.ani" Value="IrfanView ANI File" Type="string" />
+                    <RegistryValue Id="Registry_C4451E9B_CE18_4C08_8C8D_D191D943CFE5_" Root="HKCR" Key="IrfanView.asf" Value="IrfanView ASF File" Type="string" />
+                    <RegistryValue Id="Registry_4947C7F3_C6D2_4CBA_A36F_0A4D86A966AB_" Root="HKCR" Key="IrfanView.au" Value="IrfanView AU File" Type="string" />
+                    <RegistryValue Id="Registry_AF16E385_8ABD_499C_AA56_C206C7F773C3_" Root="HKCR" Key="IrfanView.avi" Value="IrfanView AVI File" Type="string" />
+                    <RegistryValue Id="Registry_F01BDA68_EE73_40BB_B5D2_8531062BC0EB_" Root="HKCR" Key="IrfanView.b3d" Value="IrfanView B3D File" Type="string" />
+                    <RegistryValue Id="Registry_2B89B40E_23E0_4FFD_83A9_9EFD0532705A_" Root="HKCR" Key="IrfanView.bmp" Value="IrfanView BMP File" Type="string" />
+                    <RegistryValue Id="Registry_C2D1BDBC_0EBD_431D_86A0_961009DC7878_" Root="HKCR" Key="IrfanView.clp" Value="IrfanView CLP File" Type="string" />
+                    <RegistryValue Id="Registry_A8DD2E64_25D0_4127_AE6C_CCB5D0499233_" Root="HKCR" Key="IrfanView.cr2" Value="IrfanView CR2 File" Type="string" />
+                    <RegistryValue Id="Registry_885F10F5_A577_47CF_AC69_FFC67032AEB6_" Root="HKCR" Key="IrfanView.cr3" Value="IrfanView CR3 File" Type="string" />
+                    <RegistryValue Id="Registry_43B4BA91_B115_4980_8300_B1C7BB5336D6_" Root="HKCR" Key="IrfanView.crw" Value="IrfanView CRW File" Type="string" />
+                    <RegistryValue Id="Registry_3EAE703F_D16A_4525_AA61_E6E95D443C90_" Root="HKCR" Key="IrfanView.cur" Value="IrfanView CUR File" Type="string" />
+                    <RegistryValue Id="Registry_F412269B_CBB2_401C_AFAA_3B7FB9B1CA17_" Root="HKCR" Key="IrfanView.dcm" Value="IrfanView DCM File" Type="string" />
+                    <RegistryValue Id="Registry_AE241EB6_C748_43CC_BC35_F01C6F34E93E_" Root="HKCR" Key="IrfanView.dcx" Value="IrfanView DCX File" Type="string" />
+                    <RegistryValue Id="Registry_96D45456_4A13_486E_905E_D0AFBD2CC960_" Root="HKCR" Key="IrfanView.dds" Value="IrfanView DDS File" Type="string" />
+                    <RegistryValue Id="Registry_A65A6414_5AA0_4A8D_B22B_C920497F86D6_" Root="HKCR" Key="IrfanView.djvu" Value="IrfanView DJVU File" Type="string" />
+                    <RegistryValue Id="Registry_A79F40A4_3B73_4753_853A_1708E135E956_" Root="HKCR" Key="IrfanView.dxf" Value="IrfanView DXF File" Type="string" />
+                    <RegistryValue Id="Registry_6F164A08_45C0_40AF_AF78_322C29E1A020_" Root="HKCR" Key="IrfanView.ecw" Value="IrfanView ECW File" Type="string" />
+                    <RegistryValue Id="Registry_D34AC748_0BFC_4C55_8739_90D2EC7C70BE_" Root="HKCR" Key="IrfanView.emf" Value="IrfanView EMF File" Type="string" />
+                    <RegistryValue Id="Registry_C8E34FC3_D266_4D39_865F_9BB0046C07C9_" Root="HKCR" Key="IrfanView.eps" Value="IrfanView EPS File" Type="string" />
+                    <RegistryValue Id="Registry_DC2F5CD6_31DF_4D62_BACE_573B11A0FE5C_" Root="HKCR" Key="IrfanView.exr" Value="IrfanView EXR File" Type="string" />
+                    <RegistryValue Id="Registry_7075DEAC_FD02_4ED1_9643_7AF97AAFC3D9_" Root="HKCR" Key="IrfanView.flv" Value="IrfanView FLV File" Type="string" />
+                    <RegistryValue Id="Registry_BBB0BDFB_2DB4_4610_9A51_BABC223C8D1A_" Root="HKCR" Key="IrfanView.g3" Value="IrfanView G3 File" Type="string" />
+                    <RegistryValue Id="Registry_62440B60_8C5D_41E0_95DE_57E446237137_" Root="HKCR" Key="IrfanView.gif" Value="IrfanView GIF File" Type="string" />
+                    <RegistryValue Id="Registry_0BD5C4C8_DEDB_4645_B0A5_EE5216C0D35C_" Root="HKCR" Key="IrfanView.hdp" Value="IrfanView HDP File" Type="string" />
+                    <RegistryValue Id="Registry_884F3844_2011_42EE_96D4_BF7C31A2BDA2_" Root="HKCR" Key="IrfanView.heic" Value="IrfanView HEIC File" Type="string" />
+                    <RegistryValue Id="Registry_8EDBE4EA_3538_414A_8B87_C96E5033F559_" Root="HKCR" Key="IrfanView.ico" Value="IrfanView ICO File" Type="string" />
+                    <RegistryValue Id="Registry_7C338F2B_1B83_4281_B748_50FF920D8C90_" Root="HKCR" Key="IrfanView.iff" Value="IrfanView IFF File" Type="string" />
+                    <RegistryValue Id="Registry_25D6822F_937A_4C35_AFFE_58BFE3E15EEE_" Root="HKCR" Key="IrfanView.jls" Value="IrfanView JLS File" Type="string" />
+                    <RegistryValue Id="Registry_1E7508B5_9E52_4E49_9AFB_3585A983B5A1_" Root="HKCR" Key="IrfanView.jng" Value="IrfanView JNG File" Type="string" />
+                    <RegistryValue Id="Registry_8D8593C9_1D49_4948_9FD2_3587DE060AB2_" Root="HKCR" Key="IrfanView.jp2" Value="IrfanView JP2 File" Type="string" />
+                    <RegistryValue Id="Registry_B51A9966_3F06_411C_859B_EC5AC469D02F_" Root="HKCR" Key="IrfanView.jpm" Value="IrfanView JPM File" Type="string" />
+                    <RegistryValue Id="Registry_ABB720AE_0CB0_43BF_9E1F_E4953CC4DF3D_" Root="HKCR" Key="IrfanView.jxl" Value="IrfanView JXL File" Type="string" />
+                    <RegistryValue Id="Registry_01F59C7C_BDA2_425A_8040_EA4152A4054F_" Root="HKCR" Key="IrfanView.mid" Value="IrfanView MID File" Type="string" />
+                    <RegistryValue Id="Registry_E7B556A9_6432_4258_BA4D_C1D88F5F0E40_" Root="HKCR" Key="IrfanView.mng" Value="IrfanView MNG File" Type="string" />
+                    <RegistryValue Id="Registry_A9568643_1872_4AC8_9042_6F959EB5F4AC_" Root="HKCR" Key="IrfanView.mov" Value="IrfanView MOV File" Type="string" />
+                    <RegistryValue Id="Registry_D99BD437_BCA1_42EB_A22C_A70C3C850D7F_" Root="HKCR" Key="IrfanView.mp3" Value="IrfanView MP3 File" Type="string" />
+                    <RegistryValue Id="Registry_FC8FFA3E_CA7E_45DF_A69F_E9E3127306A7_" Root="HKCR" Key="IrfanView.mpe" Value="IrfanView MPE File" Type="string" />
+                    <RegistryValue Id="Registry_62230F5D_FC9F_4611_9CCF_F4EB65D4F445_" Root="HKCR" Key="IrfanView.mpg" Value="IrfanView MPG File" Type="string" />
+                    <RegistryValue Id="Registry_D4326A2A_E02C_4E85_A476_0AF4DD7FCE63_" Root="HKCR" Key="IrfanView.ogg" Value="IrfanView OGG File" Type="string" />
+                    <RegistryValue Id="Registry_E03ACABD_AD25_4CF9_AEE9_B46F657E2DBA_" Root="HKCR" Key="IrfanView.pbm" Value="IrfanView PBM File" Type="string" />
+                    <RegistryValue Id="Registry_D68FBC89_F016_4B12_B2A9_35F2B1569850_" Root="HKCR" Key="IrfanView.pcd" Value="IrfanView PCD File" Type="string" />
+                    <RegistryValue Id="Registry_916B97E8_5C43_4C32_8F58_68E7A8262E8C_" Root="HKCR" Key="IrfanView.pcx" Value="IrfanView PCX File" Type="string" />
+                    <RegistryValue Id="Registry_0D3F33FD_73EF_4401_A326_D38698BF1833_" Root="HKCR" Key="IrfanView.pgm" Value="IrfanView PGM File" Type="string" />
+                    <RegistryValue Id="Registry_73F34582_B3F3_44D4_8052_ED8B36BBA2E8_" Root="HKCR" Key="IrfanView.ppm" Value="IrfanView PPM File" Type="string" />
+                    <RegistryValue Id="Registry_25AF358A_6747_4FEA_AB28_E2CB3014C1E7_" Root="HKCR" Key="IrfanView.psd" Value="IrfanView PSD File" Type="string" />
+                    <RegistryValue Id="Registry_818302B6_0CB4_4947_938D_3360D3E8A7AA_" Root="HKCR" Key="IrfanView.psp" Value="IrfanView PSP File" Type="string" />
+                    <RegistryValue Id="Registry_AA3569CD_986F_4E3F_98F0_2844F2FE04B7_" Root="HKCR" Key="IrfanView.qoi" Value="IrfanView QOI File" Type="string" />
+                    <RegistryValue Id="Registry_A2DDA63F_BD0D_4709_A223_2A3DDE6D1ABD_" Root="HKCR" Key="IrfanView.ras" Value="IrfanView RAS File" Type="string" />
+                    <RegistryValue Id="Registry_BAAD08C5_13B3_42E1_A917_6BC0953DB3D6_" Root="HKCR" Key="IrfanView.raw" Value="IrfanView RAW File" Type="string" />
+                    <RegistryValue Id="Registry_AF8AF20F_CFC1_4DFB_ADA9_970597389AB8_" Root="HKCR" Key="IrfanView.rle" Value="IrfanView RLE File" Type="string" />
+                    <RegistryValue Id="Registry_79B1150F_DBAF_4797_B617_7403EF3A999A_" Root="HKCR" Key="IrfanView.rmi" Value="IrfanView RMI File" Type="string" />
+                    <RegistryValue Id="Registry_CC70C807_5516_4418_9D85_DC13B43216FF_" Root="HKCR" Key="IrfanView.sff" Value="IrfanView SFF File" Type="string" />
+                    <RegistryValue Id="Registry_ED6063A2_5A97_4448_9CB3_A7392CDCAA74_" Root="HKCR" Key="IrfanView.sgi" Value="IrfanView SGI File" Type="string" />
+                    <RegistryValue Id="Registry_C8DFFBDE_40EB_4489_A3C9_6183D012371B_" Root="HKCR" Key="IrfanView.sid" Value="IrfanView SID File" Type="string" />
+                    <RegistryValue Id="Registry_3011EAC5_18E6_4706_830C_DB38FDBE5D8F_" Root="HKCR" Key="IrfanView.swf" Value="IrfanView SWF File" Type="string" />
+                    <RegistryValue Id="Registry_3FAE776B_D022_40A4_8959_A6F15DD2870A_" Root="HKCR" Key="IrfanView.tga" Value="IrfanView TGA File" Type="string" />
+                    <RegistryValue Id="Registry_86867EAE_C057_4FF5_9807_D82B052E9B65_" Root="HKCR" Key="IrfanView.ttf" Value="IrfanView TTF File" Type="string" />
+                    <RegistryValue Id="Registry_BFFD63C8_CB2A_46B8_82F0_75F6AA38C239_" Root="HKCR" Key="IrfanView.wav" Value="IrfanView WAV File" Type="string" />
+                    <RegistryValue Id="Registry_CA33C31A_4AA2_4FCA_96E7_86330BDBA652_" Root="HKCR" Key="IrfanView.wbmp" Value="IrfanView WBMP File" Type="string" />
+                    <RegistryValue Id="Registry_213E2523_C9AB_4C58_8864_DC9D71D5C5BF_" Root="HKCR" Key="IrfanView.webp" Value="IrfanView WEBP File" Type="string" />
+                    <RegistryValue Id="Registry_EACAAD22_F79F_436F_AC0B_01416AED1D83_" Root="HKCR" Key="IrfanView.wma" Value="IrfanView WMA File" Type="string" />
+                    <RegistryValue Id="Registry_1DA69D74_5101_4337_B1B1_F2A2C85EAEBC_" Root="HKCR" Key="IrfanView.wmf" Value="IrfanView WMF File" Type="string" />
+                    <RegistryValue Id="Registry_700878EC_F35C_42C7_8473_171EFC892C0F_" Root="HKCR" Key="IrfanView.wmv" Value="IrfanView WMV File" Type="string" />
+                    <RegistryValue Id="Registry_0EA7FA18_3DB8_4662_92F1_E7CF7FCC41AC_" Root="HKCR" Key="IrfanView.xbm" Value="IrfanView XBM File" Type="string" />
+                    <RegistryValue Id="Registry_FA3EA693_3077_4C06_A3F3_2755EE6CB172_" Root="HKCR" Key="IrfanView.xpm" Value="IrfanView XPM File" Type="string" />
+                </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="IrfanViewRegCR_02">
+            <ComponentRef Id="RegData_HKCR64_02" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

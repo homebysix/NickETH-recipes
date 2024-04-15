@@ -1,0 +1,13 @@
+
+200113	Create IrfanView x64 for Windows
+	Download the Windows ger/enu exe installer for german and english version.
+	Get irfanview_lang_french.zip, irfanview_lang_italian.zip and iview466_plugins_x64.zip
+	Get the Plugins installer.
+	Extract everything to a WiX project.
+	Build it to an MSI.
+	We create an advertised shortcut.
+	We get the Icon file to generate the baramundi Kiosk Icons with AutoPkg.
+	And we implement Active Setup to transport a default INI-file to the users profile.
+
+200113	Version 1.0.0, by AutoPkg
+	

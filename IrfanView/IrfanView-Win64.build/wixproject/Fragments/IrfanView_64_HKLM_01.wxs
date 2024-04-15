@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <!-- <Directory Id="TARGETDIR"> -->
+		<DirectoryRef Id="APPLICATIONFOLDER">
+                <Component Id="RegData_HKLM64_01" Guid="{4C7ACAB4-3805-45B8-A1FD-77B21524B5EF}" Win64="yes">
+                    <RegistryValue Id="Registry_F02F7CC1_F47A_4340_A1CC_A834F31A77C2_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities" Name="ApplicationDescription" Value="Picture viewer, editor and converter - one of the most popular viewers worldwide" Type="string" />
+                    <RegistryValue Id="Registry_BE0A6C9B_AE68_484A_8597_98AFD8B47C46_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".acr" Value="IrfanView.dcm" Type="string" />
+                    <RegistryValue Id="Registry_1D1904F5_88A6_44AF_BA5B_2F9C8F66E5AE_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".aif" Value="IrfanView.aif" Type="string" />
+                    <RegistryValue Id="Registry_DDC029DC_A7CA_4008_95F3_7CD9C59F458F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ani" Value="IrfanView.ani" Type="string" />
+                    <RegistryValue Id="Registry_6868636C_592C_4C94_BC45_1F18F7BCD4DE_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".asf" Value="IrfanView.asf" Type="string" />
+                    <RegistryValue Id="Registry_87E5362A_00D7_4C5C_AA4A_BB7BCDB70B26_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".au" Value="IrfanView.au" Type="string" />
+                    <RegistryValue Id="Registry_AB22B1D7_38F4_44D1_9639_13D53043E7BC_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".avi" Value="IrfanView.avi" Type="string" />
+                    <RegistryValue Id="Registry_E4787836_FB11_44F8_8BFB_1C83D9E2D94C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".b3d" Value="IrfanView.b3d" Type="string" />
+                    <RegistryValue Id="Registry_8C1EA85F_12EB_412A_B89C_20C587BA6B59_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".bmp" Value="IrfanView.bmp" Type="string" />
+                    <RegistryValue Id="Registry_F65FC99E_BFA3_473E_B502_EA1A6ACBB8FF_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".clp" Value="IrfanView.clp" Type="string" />
+                    <RegistryValue Id="Registry_4777F000_B488_41E9_B942_369278BA152E_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".cr2" Value="IrfanView.cr2" Type="string" />
+                    <RegistryValue Id="Registry_D93DA886_C29F_4520_8933_DE4EE9E461A0_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".cr3" Value="IrfanView.cr3" Type="string" />
+                    <RegistryValue Id="Registry_99DC9779_15BB_4DDA_8621_229A0FF27E66_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".crw" Value="IrfanView.crw" Type="string" />
+                    <RegistryValue Id="Registry_F7B9AA16_A1FA_40A6_9F76_A452A6D7B108_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".cur" Value="IrfanView.cur" Type="string" />
+                    <RegistryValue Id="Registry_A93D9BE9_E68F_4828_BCC6_F918CB81080F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".dcm" Value="IrfanView.dcm" Type="string" />
+                    <RegistryValue Id="Registry_45225E91_BA5B_4D38_B1BC_EE1826AE7F2C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".dcx" Value="IrfanView.dcx" Type="string" />
+                    <RegistryValue Id="Registry_996B2780_2D1C_4D9C_A778_E9A36EE9F295_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".dds" Value="IrfanView.dds" Type="string" />
+                    <RegistryValue Id="Registry_6D628275_6DB8_4B3A_AF28_A47F8882046A_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".dib" Value="IrfanView.bmp" Type="string" />
+                    <RegistryValue Id="Registry_3A5BFB7C_B7ED_408D_B06C_FD49B61F9EF3_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".djvu" Value="IrfanView.djvu" Type="string" />
+                    <RegistryValue Id="Registry_0566086D_4484_4252_97DA_AF53E148F9B3_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".dxf" Value="IrfanView.dxf" Type="string" />
+                    <RegistryValue Id="Registry_E2A61589_186E_4C1E_9AD7_D6D69FF22506_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ecw" Value="IrfanView.ecw" Type="string" />
+                    <RegistryValue Id="Registry_3B3CF863_6A2D_4ABA_A13E_ED24FAE6A652_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".emf" Value="IrfanView.emf" Type="string" />
+                    <RegistryValue Id="Registry_B833CBBC_71DB_49ED_BFF8_AF43A9F07541_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".eps" Value="IrfanView.eps" Type="string" />
+                    <RegistryValue Id="Registry_6D4662A3_FE91_42BB_8DA0_F77202A25CE2_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".exr" Value="IrfanView.exr" Type="string" />
+                    <RegistryValue Id="Registry_7AA0CFD0_023D_4CD8_83BE_DE40FD4F54CD_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".flv" Value="IrfanView.flv" Type="string" />
+                    <RegistryValue Id="Registry_F6B6C0D7_E793_4DA4_B727_56CC3B9E6A69_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".g3" Value="IrfanView.g3" Type="string" />
+                    <RegistryValue Id="Registry_D35090E2_B617_4C86_8438_3AB96C3DA93E_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".gif" Value="IrfanView.gif" Type="string" />
+                    <RegistryValue Id="Registry_5F3DCBC6_D79D_4492_94D1_ED0A9EE11885_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".hdp" Value="IrfanView.hdp" Type="string" />
+                    <RegistryValue Id="Registry_E290B85E_3E06_4019_BF7D_6D143E523DAD_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".heic" Value="IrfanView.heic" Type="string" />
+                    <RegistryValue Id="Registry_4D8E74D1_09F7_4C03_97D6_B834C5CE11CF_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ico" Value="IrfanView.ico" Type="string" />
+                    <RegistryValue Id="Registry_D9D7663A_E6CE_4746_AB6E_D78DA0C6F030_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".iff" Value="IrfanView.iff" Type="string" />
+                    <RegistryValue Id="Registry_2E197D96_3767_4A93_95C3_DE449A72AA28_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ima" Value="IrfanView.dcm" Type="string" />
+                    <RegistryValue Id="Registry_36BC5E24_E67E_4EFD_83F4_E2D553744140_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".iw44" Value="IrfanView.djvu" Type="string" />
+                    <RegistryValue Id="Registry_89D80E05_7F91_430C_ACE6_3E9A7A54FC15_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".j2k" Value="IrfanView.jp2" Type="string" />
+                    <RegistryValue Id="Registry_EF272951_C4CA_42C9_AA0C_C4D2A190203C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jfif" Value="IrfanView.jpg" Type="string" />
+                    <RegistryValue Id="Registry_8BE90947_E4BC_48C9_B710_5FFA0610053B_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jls" Value="IrfanView.jls" Type="string" />
+                    <RegistryValue Id="Registry_EC5F95C2_B1BD_4254_B6AD_8B32C7C610D9_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jng" Value="IrfanView.jng" Type="string" />
+                    <RegistryValue Id="Registry_81956B6A_2B7C_4DA8_AB30_51EA36655CE8_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jp2" Value="IrfanView.jp2" Type="string" />
+                    <RegistryValue Id="Registry_422DC48B_E773_4938_B5FC_4F638A9BC8E9_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jpc" Value="IrfanView.jp2" Type="string" />
+                    <RegistryValue Id="Registry_3B3B338A_7852_4BE5_94A3_CA00547FEAFE_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jpe" Value="IrfanView.jpg" Type="string" />
+                    <RegistryValue Id="Registry_E8E80569_45BF_40E9_A6AB_D4B5955DE95F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jpeg" Value="IrfanView.jpg" Type="string" />
+                    <RegistryValue Id="Registry_F3DC6BFF_3992_461A_8C9C_29A54E2AE9A1_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jpg" Value="IrfanView.jpg" Type="string" />
+                    <RegistryValue Id="Registry_8E86B6A3_3DB1_404B_8838_F7B74169AA5C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jpm" Value="IrfanView.jpm" Type="string" />
+                    <RegistryValue Id="Registry_CF6082CE_6A28_4116_9B59_0BC1C23D1F2D_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jxl" Value="IrfanView.jxl" Type="string" />
+                    <RegistryValue Id="Registry_2AF164F6_B68F_4A80_B83C_86028842DD20_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".jxr" Value="IrfanView.hdp" Type="string" />
+                    <RegistryValue Id="Registry_070F719A_D572_4D24_8B1A_EB895F9D44CF_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".lbm" Value="IrfanView.iff" Type="string" />
+                    <RegistryValue Id="Registry_EB67ABE2_95DB_442F_A01E_312EEC558F9B_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mid" Value="IrfanView.mid" Type="string" />
+                    <RegistryValue Id="Registry_BDC2F527_2D93_40B7_8C6C_6B86D07FBB7A_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mng" Value="IrfanView.mng" Type="string" />
+                    <RegistryValue Id="Registry_01180DAD_A7B1_4E62_B12B_6A8D68C2870E_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mov" Value="IrfanView.mov" Type="string" />
+                    <RegistryValue Id="Registry_3285D2CF_6D21_4CC6_9420_C1F9065EDB99_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mp3" Value="IrfanView.mp3" Type="string" />
+                    <RegistryValue Id="Registry_906032C6_BC44_4165_AF0E_C20708B03839_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mpe" Value="IrfanView.mpe" Type="string" />
+                    <RegistryValue Id="Registry_283C8259_41C3_4395_8ED8_698672BE0A3D_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mpeg" Value="IrfanView.mpg" Type="string" />
+                    <RegistryValue Id="Registry_EA36B7FC_0D7E_47A0_A99C_FD66CA8E3611_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".mpg" Value="IrfanView.mpg" Type="string" />
+                    <RegistryValue Id="Registry_3F072F25_77CC_42E8_961E_31B42A53F659_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ogg" Value="IrfanView.ogg" Type="string" />
+                    <RegistryValue Id="Registry_5B10FD6E_8FCD_43AB_91FF_C63B779B995D_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".pbm" Value="IrfanView.pbm" Type="string" />
+                    <RegistryValue Id="Registry_8427E444_BA6B_4277_BC9C_AB46F20935DA_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".pcd" Value="IrfanView.pcd" Type="string" />
+                    <RegistryValue Id="Registry_63F11D85_7443_405E_BA10_01301D317680_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".pcx" Value="IrfanView.pcx" Type="string" />
+                    <RegistryValue Id="Registry_4D687117_D423_455D_B78D_580833F0A60F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".pgm" Value="IrfanView.pgm" Type="string" />
+                    <RegistryValue Id="Registry_CA2641C6_7474_43DA_8F2A_02899DE5405A_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".png" Value="IrfanView.png" Type="string" />
+                    <RegistryValue Id="Registry_D89DF7C3_9ECD_4960_ACD3_56E82916ABD9_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ppm" Value="IrfanView.ppm" Type="string" />
+                    <RegistryValue Id="Registry_9FD04D32_BE5A_49F8_BB95_7714E477524C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ps" Value="IrfanView.eps" Type="string" />
+                    <RegistryValue Id="Registry_F9384BB7_9711_4DE7_AD9B_97F676135F23_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".psd" Value="IrfanView.psd" Type="string" />
+                    <RegistryValue Id="Registry_E088DEB2_3412_4E7E_A89F_78FC1F1CBFA5_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".psp" Value="IrfanView.psp" Type="string" />
+                    <RegistryValue Id="Registry_31FAB634_0897_4A33_A8CC_107F394E2ABE_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".qoi" Value="IrfanView.qoi" Type="string" />
+                    <RegistryValue Id="Registry_1441B6E5_218E_47E0_8F22_2F70638B06C1_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ras" Value="IrfanView.ras" Type="string" />
+                    <RegistryValue Id="Registry_3EE6B5BE_51DF_4FDD_BEFE_A710B0C0F65B_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".raw" Value="IrfanView.raw" Type="string" />
+                    <RegistryValue Id="Registry_8277D3C1_221E_4971_9FCD_19DDA916D154_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".rgb" Value="IrfanView.sgi" Type="string" />
+                    <RegistryValue Id="Registry_E2CDAEBD_8114_41EC_805A_4C8A5826487D_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".rle" Value="IrfanView.rle" Type="string" />
+                    <RegistryValue Id="Registry_333627ED_58F0_40A9_BE5D_D2320B5FC64F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".rmi" Value="IrfanView.rmi" Type="string" />
+                    <RegistryValue Id="Registry_F540D9E5_6E4A_46CD_BDF2_D3B569AC90B7_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".sff" Value="IrfanView.sff" Type="string" />
+                    <RegistryValue Id="Registry_5320DB8A_4E3A_4CCB_83B7_8C2B93904E4F_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".sgi" Value="IrfanView.sgi" Type="string" />
+                    <RegistryValue Id="Registry_1A51CF27_FA10_47A7_B1CC_9D0CCB9FC93A_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".sid" Value="IrfanView.sid" Type="string" />
+                    <RegistryValue Id="Registry_8B0F63D5_687A_4559_A2E6_9042A4892CDD_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".snd" Value="IrfanView.au" Type="string" />
+                    <RegistryValue Id="Registry_8A88B05C_4F25_46B0_A78B_C5069B702C58_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".sun" Value="IrfanView.ras" Type="string" />
+                    <RegistryValue Id="Registry_A6D476B1_60B7_44F3_AE6A_D8361A504A61_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".swf" Value="IrfanView.swf" Type="string" />
+                    <RegistryValue Id="Registry_2F0D057A_58B1_4591_A368_D77BF27F3DB8_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".tga" Value="IrfanView.tga" Type="string" />
+                    <RegistryValue Id="Registry_A4B6977F_E7CC_4D92_A53B_84756F4C8A75_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".tif" Value="IrfanView.tif" Type="string" />
+                    <RegistryValue Id="Registry_85C97471_0BA3_46C8_BA29_7B5EBA6C1F9C_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".tiff" Value="IrfanView.tif" Type="string" />
+                    <RegistryValue Id="Registry_110FCF62_D55A_4A36_BB49_1D09D1557C52_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".ttf" Value="IrfanView.ttf" Type="string" />
+                    <RegistryValue Id="Registry_CF51C4E8_D614_4237_9E44_F8968C62E8D2_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wav" Value="IrfanView.wav" Type="string" />
+                    <RegistryValue Id="Registry_12845D72_4C11_46C8_9857_6DA69ED68EC0_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wbmp" Value="IrfanView.wbmp" Type="string" />
+                    <RegistryValue Id="Registry_F0F0A01D_6B0A_4325_97F2_4DFA269DC580_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wdp" Value="IrfanView.hdp" Type="string" />
+                    <RegistryValue Id="Registry_8CFEA1A1_DEE5_4EC2_A0DC_8EA400413508_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".webp" Value="IrfanView.webp" Type="string" />
+                    <RegistryValue Id="Registry_468A4CC3_7933_48F1_8B6B_B164F5738D86_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wma" Value="IrfanView.wma" Type="string" />
+                    <RegistryValue Id="Registry_91173143_F9C5_4361_BEBF_A70E1D9FF8DF_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wmf" Value="IrfanView.wmf" Type="string" />
+                    <RegistryValue Id="Registry_9E291FE0_908D_493E_89B3_64CA1E0A4E2D_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".wmv" Value="IrfanView.wmv" Type="string" />
+                    <RegistryValue Id="Registry_D077183D_D982_4FB3_9E2F_4835331AFCF3_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".xbm" Value="IrfanView.xbm" Type="string" />
+                    <RegistryValue Id="Registry_5ECD7665_CE64_41F0_9C54_D923FE37D802_" Root="HKLM" Key="SOFTWARE\IrfanView\Capabilities\FileAssociations" Name=".xpm" Value="IrfanView.xpm" Type="string" />
+                    <RegistryValue Id="Registry_4D98D93B_D143_48B0_9F4F_989CC70F0B3F_" Root="HKLM" Key="SOFTWARE\IrfanView\shell\open\command" Value="&quot;[APPLICATIONFOLDER]i_view64.exe&quot;" Type="string" />
+                    <RegistryValue Id="Registry_B200BC6B_DC56_4135_A1B7_8F0FB3DCDED1_" Root="HKLM" Key="SOFTWARE\RegisteredApplications" Name="IrfanView" Value="SOFTWARE\IrfanView\Capabilities" Type="string" KeyPath="yes" />
+                </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="IrfanViewRegLM_01">
+            <ComponentRef Id="RegData_HKLM64_01" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

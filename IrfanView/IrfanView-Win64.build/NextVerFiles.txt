@@ -1,0 +1,11 @@
+read\create-log-IrfanView_64_VVeerrssiioonn_ML.txt
+read\readme-IrfanView_64_VVeerrssiioonn_ML.txt
+helpers\*.*
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\IrfanView.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*
+wixproject\Fragments\*.*
