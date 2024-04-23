@@ -1,8 +1,8 @@
 {
-	"global": {
-		"theme": "system",
-		"environmentUrls": {
-			"base": ""
-		}
-	}
+  "global_environment_environment": {
+    "region": "Self-hosted",
+    "urls": {
+      "base": ""
+    }
+  }
 }

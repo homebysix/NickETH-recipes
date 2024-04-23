@@ -7,8 +7,7 @@
     <Package Description="!(loc.PackageDescription)" Manufacturer="$(var.ProductManufacturerLong)" InstallerVersion="500" Compressed="yes" />
     <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
 	<Binary Id="JSONStreamEditor" SourceFile="$(var.SetupResourcesDir)\jj.exe" />
-	<!-- <CustomAction Id="SetServerPath1" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [APPLICATIONFOLDER]Server\python.exe -i &quot;[SetServerPath1]&quot; -o &quot;[SetServerPath1]&quot; pythonPath" Execute="deferred" Impersonate="no" /> -->
-	<CustomAction Id="SetServerPath2" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [INTERNALSERVER] -i &quot;[SetServerPath2]&quot; -o &quot;[SetServerPath2]&quot; global.environmentUrls.base" Execute="deferred" Impersonate="no" />
+	<CustomAction Id="SetServerPath2" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [INTERNALSERVER] -i &quot;[SetServerPath2]&quot; -o &quot;[SetServerPath2]&quot; global_environment_environment.urls.base" Execute="deferred" Impersonate="no" />
     <Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
 	<Property Id="DEFAULTCONFIG" Value="1" />
 	<!-- <Property Id="INTERNALSERVER" Value="" /> -->
