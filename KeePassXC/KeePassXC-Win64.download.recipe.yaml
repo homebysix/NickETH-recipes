@@ -19,13 +19,13 @@ Process:
   Arguments:
     filename: '%NAME%_%PLATFORM%.msi'
 
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="DroidMonkey Apps, LLC", O="DroidMonkey Apps, LLC", S=Virginia, C=US
+    input_path: '%pathname%'
+
 - Processor: StopProcessingIf
   Arguments:
     predicate: download_changed == False
-
-- Processor: WindowsSignatureVerifier
-  Arguments:
-    expected_subject: CN="DroidMonkey Apps, LLC", O="DroidMonkey Apps, LLC", STREET=6653 Audrey Kay Ct, L=Franconia, S=Virginia, PostalCode=22315, C=US
-    input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase

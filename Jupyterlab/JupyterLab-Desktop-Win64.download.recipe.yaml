@@ -14,7 +14,7 @@ Process:
   Arguments:
     # https://github.com/jupyterlab/jupyterlab-desktop/releases/download/v3.1.18-1/JupyterLab-Setup-Windows.exe
     # asset_regex: arduino-ide_(?P<finalversion>([0-9]+\.)*[0-9]+)_Windows_64bit\.msi
-    asset_regex: JupyterLab-Setup-Windows\.exe
+    asset_regex: JupyterLab-Setup-Windows-x64\.exe
     github_repo: jupyterlab/jupyterlab-desktop
     include_prereleases: false
 
