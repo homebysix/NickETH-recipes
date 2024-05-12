@@ -7,7 +7,7 @@ Input:
   PLATFORM: x64
 
   SEARCH_FIRSTURL: https://www.vandyke.com/cgi-bin/releases.php?product=securecrt
-  SEARCH_STR: /cgi-bin/download_form_1.php\?(?P<DLpart1>pid=scrt_x64-bsafe_951).+?scrt-x64-bsafe\.(?P<version>([0-9]+\.)*[0-9]+)\.exe
+  SEARCH_STR: /cgi-bin/download_form_1.php\?(?P<DLpart1>pid=scrt_x64-bsafe_[0-9]+).+?scrt-x64-bsafe\.(?P<version>([0-9]+\.)*[0-9]+)\.exe
 
 Process:
 - Processor: URLTextSearcher
