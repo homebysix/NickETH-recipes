@@ -1,0 +1,30 @@
+Description: Download recipe for Python x64.
+Identifier: com.github.NickETH.recipes.download.Python-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Python
+  URL: https://www.python.org/downloads/windows/
+  PLATFORM: x64
+  PF_STRING: _64
+  MAIN_VER: '3.11'
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (https://www.python.org/.*python-(?P<version>%MAIN_VER%\.[0-9]+)-amd64\.exe?)
+    url: '%URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    prefetch_filename: '%NAME%-x64.exe'
+    url: '%match%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Python Software Foundation, O=Python Software Foundation, L=Beaverton, S=Oregon, C=US
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
