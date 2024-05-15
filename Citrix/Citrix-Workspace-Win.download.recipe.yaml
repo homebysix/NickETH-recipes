@@ -1,0 +1,25 @@
+Description: Downloads the latest version of Citrix Workspace for Windows.
+Identifier: com.github.NickETH.recipes.download.Citrix-Workspace-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: CitrixWorkspace
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (?P<DYNAMIC_URL>//downloads.citrix.com/[\d]+/CitrixWorkspaceApp\.exe\?__gda__\=[\w]+\=[\w]+\~[\w]+\=/\*\~[\w]+\=[\w]+)
+    url: https://www.citrix.com/downloads/workspace-app/windows/workspace-app-for-windows-latest.html
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: https:%DYNAMIC_URL%
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Comment: Check the signature on the downloaded file
+  Arguments:
+    expected_subject: CN="Citrix Systems, Inc.", OU=Citrix SHA256 2022, O="Citrix Systems, Inc.", L=Fort Lauderdale, S=Florida, C=US
+    input_path: '%pathname%'
