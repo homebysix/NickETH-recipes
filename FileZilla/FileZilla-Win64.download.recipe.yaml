@@ -14,10 +14,14 @@ Process:
     re_pattern: '%SEARCH_PATTERN%'
     result_output_var_name: match
     url: '%SEARCH_URL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.exe'
     url: '%match%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
 
 - Processor: EndOfCheckPhase
