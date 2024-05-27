@@ -75,6 +75,10 @@ Process:
     filename: '%DOWNLOAD_FILE%_zulu_%PLATFORM%.zip'
     url: '%zululink%'
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
 - Processor: FileCreator
   Arguments:
     file_content: '%version%'

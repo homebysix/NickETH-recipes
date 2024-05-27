@@ -1,0 +1,7 @@
+read\create-log-Adoptium_JDK_VVeerrssiioonn_ML.txt
+read\readme-Adoptium_JDK_VVeerrssiioonn_ML.txt
+helpers\Zulu-JFX-JDK_11-x86.txt
+wixproject\Comp-x64.xslt
+wixproject\JavaFX.build
+wixproject\Main.wxs
+wixproject\Lang\*.*

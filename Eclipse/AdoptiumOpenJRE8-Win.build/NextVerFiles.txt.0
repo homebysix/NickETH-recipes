@@ -1,0 +1,7 @@
+read\create-log-Adoptium_JRE_VVeerrssiioonn_ML.txt
+read\readme-Adoptium_JRE_VVeerrssiioonn_ML.txt
+helpers\Zulu-JFX-JRE_8-x86.txt
+wixproject\version.wxi
+wixproject\global.prop
+wixproject\JavaFX_ML.build
+wixproject\JavaFX_ML.wxs
