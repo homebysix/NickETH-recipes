@@ -1,0 +1,32 @@
+Description: Downloads latest Keepass MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.download.Keepass-MSI
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Keepass
+  SEARCH_URL_MSI: (?P<msi_dl_link>https://sourceforge\.net/projects/keepass/files/KeePass%20[0-9]\.x/([0-9]+\.)*[0-9]+/KeePass-(?P<version>[0-9]+\.[0-9]+(\.([0-9]+))?).msi/download)
+  DOWNLOAD_FILE: Keepass
+  ver_build: '0'
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_MSI%'
+    url: http://sourceforge.net/api/file/index/project-id/95013/rss
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: 'False'
+    filename: '%NAME%.msi'
+    url: '%msi_dl_link%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Open Source Developer, Dominik Reichl", O=Open Source Developer, L=Metzingen, S=Baden-Württemberg, C=DE
+    input_path: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

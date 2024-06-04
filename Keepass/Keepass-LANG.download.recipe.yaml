@@ -1,0 +1,60 @@
+Description: Downloads latest Keepass language packs for Windows.
+Identifier: com.github.NickETH.recipes.download.Keepass-LANG
+ParentRecipe: com.github.NickETH.recipes.download.Keepass-MSI
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Keepass
+  SEARCH_URL_GER: (?P<trans_dl_link_ger>https://sourceforge\.net/projects/keepass/files/Translations%20[0-9]\.x/([0-9]+\.)*[0-9]+/KeePass-([0-9]+\.)*[0-9]+-German.zip/download)
+  SEARCH_URL_FRA: (?P<trans_dl_link_fra>https://sourceforge\.net/projects/keepass/files/Translations%20[0-9]\.x/([0-9]+\.)*[0-9]+/KeePass-([0-9]+\.)*[0-9]+-French.zip/download)
+  SEARCH_URL_ITA: (?P<trans_dl_link_ita>https://sourceforge\.net/projects/keepass/files/Translations%20[0-9]\.x/([0-9]+\.)*[0-9]+/KeePass-([0-9]+\.)*[0-9]+-Italian.zip/download)
+  SEARCH_URL_SPA: (?P<trans_dl_link_spa>https://sourceforge\.net/projects/keepass/files/Translations%20[0-9]\.x/([0-9]+\.)*[0-9]+/KeePass-([0-9]+\.)*[0-9]+-Spanish.zip/download)
+  DOWNLOAD_FILE: Keepass
+  ver_build: '0'
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_GER%'
+    url: http://sourceforge.net/api/file/index/project-id/95013/rss
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: 'False'
+    filename: '%NAME%-ger.zip'
+    url: '%trans_dl_link_ger%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_FRA%'
+    url: http://sourceforge.net/api/file/index/project-id/95013/rss
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: 'False'
+    filename: '%NAME%-fra.zip'
+    url: '%trans_dl_link_fra%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_ITA%'
+    url: http://sourceforge.net/api/file/index/project-id/95013/rss
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: 'False'
+    filename: '%NAME%-ita.zip'
+    url: '%trans_dl_link_ita%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_SPA%'
+    url: http://sourceforge.net/api/file/index/project-id/95013/rss
+
+- Processor: URLDownloader
+  Arguments:
+    CHECK_FILESIZE_ONLY: 'False'
+    filename: '%NAME%-spa.zip'
+    url: '%trans_dl_link_spa%'
+
+- Processor: EndOfCheckPhase

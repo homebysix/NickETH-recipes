@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="ProductLanguage">1033</String>
+	<String Id="ProductName">Keepass</String>
+	<String Id="ProductHelpLink">https://keepass.info/</String>
+  <String Id="ProductUrlInfoAbout">https://keepass.info/</String>
+  <String Id="ProductUrlUpdateInfo">https://keepass.info/</String>
+	<String Id="PackageDescription">Keepass</String>
+	<String Id="FeatureStartMenuShortcut">Start Menu shortcut</String>
+	<String Id="FeatureDesktopShortcut">Desktop shortcut</String>
+	<String Id="NewerVersionInstalled">Newer version of Keepass is already installed.</String>
+	<String Id="OSVersionRequired">Windows 7 or later is required.</String>
+	<String Id="WixUI_ExitDialogOptionalCheckboxText">Launch Keepass</String>
+</WixLocalization>

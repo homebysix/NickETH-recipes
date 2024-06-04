@@ -9,7 +9,6 @@ Auto updater is disabled (on per machine version only).
 Desktop shortcut is disabled by default.  
 
 # Microsoft Teams Work or School MSIX (x64) AutoPkg recipes
-# Microsoft Teams Work or School MSIX (x64) AutoPkg recipes
 **download** (get the actual installer)  
 **build** (alter the MSI to get the needed behaviour)  
 **BMS** (import the package into baramundi server)  

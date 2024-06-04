@@ -1,0 +1,10 @@
+read\create-log-Keepass_VVeerrssiioonn_ML.txt
+read\readme-Keepass_VVeerrssiioonn_ML.txt
+helpers\KeePass.config.enforced.xml
+helpers\Keepass_256.png
+wixproject\version.wxi
+wixproject\global.prop
+wixproject\KeepassLangNCfg.build
+wixproject\Main.wxs
+wixproject\Lang\*.*
+
