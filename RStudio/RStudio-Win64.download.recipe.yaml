@@ -1,0 +1,32 @@
+Description: Downloads the latest RStudio installer for Windows.
+Identifier: com.github.NickETH.recipes.download.RStudio-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: RStudio
+  SEARCH_URL: https://www.rstudio.com/products/rstudio/download/#download
+  SEARCH_PATTERN: (?P<exe>RStudio-20(?P<versionraw>[0-9.]+)-(?P<buildraw>[0-9]+)\.exe)
+  DOWNLOAD_MIRROR: https://download1.rstudio.org/electron/windows
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%DOWNLOAD_MIRROR%/%exe%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=RStudio PBC, O=RStudio PBC, L=Boston, S=Massachusetts, C=US
+    input_path: '%pathname%'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%versionraw%.%buildraw%'
+    rename_var: version
+
+- Processor: EndOfCheckPhase
