@@ -25,7 +25,7 @@
 	</ItemGroup>
 	<Target Name="Harvest" >
 		<Exec
-            Command='"$(WIX)bin\heat" dir $(DestinationDirectory) -dr APPLICATIONFOLDER -v -sw5150 -sreg -srd -suid -svb6 -sfrag -cg AppFiles -var wix.APSourceDir -gg -out RStudiofiles.wxs -t NoExe.xslt'
+            Command='"$(WIX)bin\heat" dir $(DestinationDirectory) -dr APPLICATIONFOLDER -v -sw5150 -sreg -srd -suid -svb6 -sfrag -cg AppFiles -var wix.APSourceDir -gg -out RStudiofiles.wxs'
             ContinueOnError="false"
             WorkingDirectory="." />
     </Target>
