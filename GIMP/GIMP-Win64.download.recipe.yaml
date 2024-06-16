@@ -36,7 +36,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Jernej Simoncic, O=Jernej Simoncic, STREET=Herbersteinova 29, L=Ljubljana, C=SI
+    expected_subject: CN=Jernej Simoncic, O=Jernej Simoncic, L=Ljubljana, C=SI
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
