@@ -32,7 +32,7 @@ Process:
     CHECK_FILESIZE_ONLY: false
     filename: '%NAME%_%PLATFORM%.exe'
     # https://downloads.slack-edge.com/releases/windows/4.36.140/prod/x64/SlackSetup.exe
-    url: https://downloads.slack-edge.com/releases/windows/%ver3digit%/prod/x64/SlackSetup.exe
+    url: https://downloads.slack-edge.com/desktop-releases/windows/x64/%ver3digit%/SlackSetup.exe
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
