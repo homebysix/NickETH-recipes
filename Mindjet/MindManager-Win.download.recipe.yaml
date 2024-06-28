@@ -60,7 +60,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Corel Corporation, O=Corel Corporation, L=Ottawa, S=Ontario, C=CA
+    expected_subject: CN=Corel Corporation, OU=Ad Remover, O=Corel Corporation, L=Ottawa, S=Ontario, C=CA
     input_path: '%pathname%'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
