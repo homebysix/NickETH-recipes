@@ -22,7 +22,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN="VMware, Inc.", O="VMware, Inc.", L=Palo Alto, S=California, C=US, SERIALNUMBER=2853894, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+    expected_subject: CN=Broadcom Inc, O=Broadcom Inc, L=San Jose, S=California, C=US, SERIALNUMBER=6610117, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
