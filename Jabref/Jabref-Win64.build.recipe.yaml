@@ -1,0 +1,86 @@
+Description: Alters latest Jabref MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.build.Jabref-Win64
+ParentRecipe: com.github.NickETH.recipes.download.Jabref-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Jabref
+  VENDOR: Jabref.org
+  PLATFORM: x64
+  PF_STRING: '_64'
+  LANG_STRING: _ML
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Comment: Get the version from Jabref.msi into msi_value
+  Arguments:
+    SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'
+    msi_path: '%pathname%'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%msi_value%'
+    rename_var: version
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create the build environment
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: release:read
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%%LANG_STRING%'
+    rename_var: pkg_dir
+
+- Processor: Copier
+  Comment: Save a copy of the downloaded MSI to the release dir.
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Get the icon library from the MSI and generate the Kiosk-icons.
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    msi_icon_name: 'JpARPPRODUCTICON'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQL
+  Comment: Change a few settings in the Jabref MSI-file
+  Arguments:
+    SQL_command:
+    - UPDATE `Component` SET `Component`.`Condition`='DESKTOPSC=1' WHERE `Component`.`Component`='cshortcuted19f475eb9a3edfaffe9fd0a73bd4ff'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: EndOfCheckPhase

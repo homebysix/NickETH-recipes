@@ -23,7 +23,7 @@ Process:
 - Processor: GitHubReleasesInfoProvider
   Arguments:
     # asset_regex: 'ghostscript-(?P&lt;version&gt;([0-9]+\.)*[0-9]+)-linux-x86_64.tgz'
-    asset_regex: 'ghostscript-(([0-9]+\.)*[0-9]+)-linux-x86_64.tgz'
+    asset_regex: 'ghostscript-(([0-9]+\.)*[0-9]+)\.tar\.gz'
     # https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs1000/gs1000w64.exe
     github_repo: ArtifexSoftware/ghostpdl-downloads
     include_prereleases: false
@@ -31,7 +31,7 @@ Process:
 - Processor: com.github.jazzace.processors/TextSearcher
   Arguments:
     text_in: '%url%'
-    re_pattern: 'ghostscript-((?P<versionmajor>[0-9]+)\.(?P<versionminor>[0-9]+)\.(?P<versionbuild>[0-9]+))-linux'
+    re_pattern: 'ghostscript-((?P<versionmajor>[0-9]+)\.(?P<versionminor>[0-9]+)\.(?P<versionbuild>[0-9]+))\.tar\.gz'
     result_output_var_name: version
 
 - Processor: StopProcessingIf
@@ -40,7 +40,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN="Artifex Software, Inc.", O="Artifex Software, Inc.", L=Novato, S=California, C=US
+    expected_subject: CN="Artifex Software, Inc.", O="Artifex Software, Inc.", S=California, C=US
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase

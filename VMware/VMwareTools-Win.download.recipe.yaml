@@ -19,6 +19,7 @@ Process:
   Arguments:
     url: '%DL_URL%/%match%'
     filename: '%NAME%_%PLATFORM%.exe'
+    CHECK_FILESIZE_ONLY: True
 
 - Processor: WindowsSignatureVerifier
   Arguments:

@@ -1,0 +1,28 @@
+Description: Downloads the latest version of the JabRef MSI-Installer from GitHub.
+Identifier: com.github.NickETH.recipes.download.Jabref-Win64
+MinimumVersion: 1.3.1
+
+
+Input:
+  NAME: Jabref
+  VENDOR: Jabref.org
+  PLATFORM: x64
+  PF_STRING: '_64'
+  LANG_STRING: _ML
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: JabRef-[\S]+\.msi
+    github_repo: JabRef/jabref
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.msi'
+    url: '%url%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase
