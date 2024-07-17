@@ -7,6 +7,7 @@ Input:
   NAME: FileMakerPro
   ALTNAME: 'FileMaker Pro'
   PRODUCT_ID: PRO2064WIN
+  MAJOR_VERSION: '20'
   PLATFORM: x64
   PF_STRING: _64
 

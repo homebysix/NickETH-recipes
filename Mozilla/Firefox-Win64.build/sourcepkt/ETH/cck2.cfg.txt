@@ -6,6 +6,7 @@ lockPref("plugins.hide_infobar_for_outdated_plugin", false);
 lockPref("xpinstall.signatures.required", false);
 lockPref("app.update.silent", true);
 lockPref("app.update.service.enabled", false);
+lockPref("dom.private-attribution.submission.enabled", false);
 defaultPref("intl.locale.requested","");
 defaultPref("browser.startup.homepage","data:text/plain,browser.startup.homepage=www.ethz.ch");
 pref("browser.search.widget.inNavBar", true);
@@ -21,6 +22,7 @@ pref("browser.search.widget.inNavBar", true);
 pref("pdfjs.enableScripting", false);
 pref("extensions.adblockplus.currentVersion", "");
 pref("browser.privateWindowSeparation.enabled", false);
+pref("network.trr.mode", 5);
 var config = {
   "cckVersion": "2.4.5",
   "name": "ETHZ ID",

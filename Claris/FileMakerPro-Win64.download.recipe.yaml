@@ -6,13 +6,15 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: FileMakerPro
+  MAJOR_VERSION: '20'
   PRODUCT_ID: PRO2064WIN
   SEARCH_PATTERN: ("%PRODUCT_ID%","url":"(?P<url>https://downloads.claris.com/esd/fmp_(?P<version>[\d.]+)_x64.exe)")
 
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: '%SEARCH_PATTERN%'
+    # re_pattern: '%SEARCH_PATTERN%'
+    re_pattern: ("PRO%MAJOR_VERSION%64WIN","url":"(?P<url>https://downloads.claris.com/esd/fmp_(?P<version>[\d.]+)_x64.exe)")
     url: https://www.filemaker.com/redirects/ss.txt
 
 - Processor: URLDownloader
@@ -28,5 +30,5 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Claris International Inc., O=Claris International Inc., L=Santa Clara, S=California, C=US
+    expected_subject: CN=Claris International Inc., O=Claris International Inc., L=Cupertino, S=California, C=US, SERIALNUMBER=2107514, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware,OID.1.3.6.1.4.1.311.60.2.1.3=US
     input_path: '%pathname%'

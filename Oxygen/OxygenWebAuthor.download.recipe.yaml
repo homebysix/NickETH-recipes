@@ -1,0 +1,18 @@
+Description: Downloads latest Oxygen Web Author.
+Identifier: com.github.peshay.download.OxygenWebAuthor
+MinimumVersion: 0.6.1
+
+Input:
+  NAME: OxygenWebAuthor
+
+Process:
+- Processor: OxygenURLProvider
+  Arguments:
+    platform_name: All
+    product_name: web-author
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%url%'
+
+- Processor: EndOfCheckPhase

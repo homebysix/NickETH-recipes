@@ -354,7 +354,7 @@
 			exedir="${wix.dir}"
 			out="${FFmsi}"
 			warningsaserrors="false"
-			suppressices="ICE57;ICE27;ICE64;ICE69;ICE90;ICE91"
+			suppressices="ICE57;ICE27;ICE61;ICE64;ICE69;ICE90;ICE91"
 			cultures="en-us"
 			extensions="WixUIExtension"
 			rebuild="true"
