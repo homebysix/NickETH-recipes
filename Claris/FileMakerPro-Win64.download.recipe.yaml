@@ -19,7 +19,7 @@ Process:
 
 - Processor: URLDownloader
   Arguments:
-    filename: '%NAME%-x64.exe'
+    filename: '%NAME%%MAJOR_VERSION%-x64.exe'
     url: '%url%'
 
 - Processor: EndOfCheckPhase
