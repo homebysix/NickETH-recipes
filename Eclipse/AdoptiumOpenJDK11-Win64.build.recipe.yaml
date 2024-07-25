@@ -112,7 +112,7 @@ Process:
   Arguments:
     SQL_command:
     - INSERT INTO `Feature` (`Feature`.`Feature`,`Feature`.`Feature_Parent`,`Feature`.`Title`,`Feature`.`Description`, `Feature`.`Display`,`Feature`.`Level`,`Feature`.`Directory_`,`Feature`.`Attributes`) VALUES ('FeatureJavaFX','FeatureMain','JavaFX','Install JavaFX',%FEATUREVER%,2,'INSTALLDIR',8)
-    - UPDATE `Property` SET `Property`.`Value`='Adoptium Java RE Hotspot x64 %version% ML' WHERE `Property`.`Property`='ProductName'
+    - UPDATE `Property` SET `Property`.`Value`='Adoptium Java DK Hotspot x64 %version% ML' WHERE `Property`.`Property`='ProductName'
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%FILENAME%%PF_STRING%_%version%%LANG_STRING%.msi'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
