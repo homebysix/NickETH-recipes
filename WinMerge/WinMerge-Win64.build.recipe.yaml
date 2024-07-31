@@ -20,7 +20,7 @@ Process:
     pkg_dir: '%NAME%%PF_STRING%_%version%_ML'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
-    ver_fields: '3'
+    ver_fields: '4'
 
 - Processor: com.github.sebtomasi.SharedProcessors/RenameVar
   Arguments:
