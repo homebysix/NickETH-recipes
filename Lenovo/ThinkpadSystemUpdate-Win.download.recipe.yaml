@@ -31,8 +31,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    # expected_subject: CN=Lenovo, O=Lenovo, L=Morrisville, S=North Carolina, C=US
-    expected_subject: CN=Lenovo, OU=G08, O=Lenovo, L=Morrisville, S=North Carolina, C=US
+    expected_subject: CN=Lenovo, O=Lenovo, L=Morrisville, S=North Carolina, C=US
     input_path: '%pathname%'
 
 - Processor: StopProcessingIf
