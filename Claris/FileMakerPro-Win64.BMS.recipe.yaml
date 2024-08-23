@@ -8,6 +8,8 @@ Input:
   ALTNAME: 'FileMaker Pro'
   VENDOR: Claris
   PRODUCT_ID: PRO2064WIN
+  MAJOR_VERSION: '20'
+  UNINST_BUND_VER: '19-20'
   PLATFORM: x64
   PF_STRING: _64
   LANG_STRING: _ML
@@ -34,7 +36,7 @@ Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Arguments:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
-    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %major_version%.msi'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %MAJOR_VERSION%.msi'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   Arguments:
@@ -63,7 +65,7 @@ Process:
       </ACTION>
       <ACTION type="RunEmbeddedCmd" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
       <DATA>
-      <SCRIPT>netsh advfirewall firewall add rule name=&quot;%ALTNAME% %major_version%&quot; dir=in program=&quot;{&#37;ProgramW6432&#37;}&#92;Filemaker&#92;Filemaker Pro 20&#92;Filemaker Pro.exe&quot; enable=yes protocol=any profile=any action=allow remoteip=127.0.0.1
+      <SCRIPT>netsh advfirewall firewall add rule name=&quot;%ALTNAME% %MAJOR_VERSION%&quot; dir=in program=&quot;{&#37;ProgramW6432&#37;}&#92;Filemaker&#92;Filemaker Pro %MAJOR_VERSION%&#92;Filemaker Pro.exe&quot; enable=yes protocol=any profile=any action=allow remoteip=127.0.0.1
       </SCRIPT>
       <RETURNCODES>0</RETURNCODES>
       <VARNAME></VARNAME>
@@ -72,7 +74,7 @@ Process:
       </ACTION>
       </ACTIONS>
       </baramundiDeployScript>
-    file_path: '%BUILD_DIR%\%pkg_dir%\release\i_FM%major_version%FW.bds'
+    file_path: '%BUILD_DIR%\%pkg_dir%\release\i_FM%MAJOR_VERSION%FW.bds'
 
 - Processor: FileCreator
   Comment: Generate the firewall uninstall.bds in the release dir.
@@ -94,7 +96,7 @@ Process:
       </ACTION>
       <ACTION type="RunEmbeddedCmd" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
       <DATA>
-      <SCRIPT>netsh advfirewall firewall delete rule name=&quot;%ALTNAME% %major_version%&quot;
+      <SCRIPT>netsh advfirewall firewall delete rule name=&quot;%ALTNAME% %MAJOR_VERSION%&quot;
       </SCRIPT>
       <RETURNCODES>0</RETURNCODES>
       <VARNAME></VARNAME>
@@ -103,7 +105,7 @@ Process:
       </ACTION>
       </ACTIONS>
       </baramundiDeployScript>
-    file_path: '%BUILD_DIR%\%pkg_dir%\release\u_FM%major_version%FW.bds'
+    file_path: '%BUILD_DIR%\%pkg_dir%\release\u_FM%MAJOR_VERSION%FW.bds'
     
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS) QSS
@@ -112,23 +114,23 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%ALTNAME% %major_version%.msi'
-    bms_app_installparm: /qn /norestart ALLUSERS=1 TRANSFORMS="p20_1031.mst"
-    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\i_FM%major_version%FW.bds'
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%ALTNAME% %MAJOR_VERSION%.msi'
+    bms_app_installparm: /qn /norestart ALLUSERS=1 TRANSFORMS="p%MAJOR_VERSION%_1031.mst"
+    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\i_FM%MAJOR_VERSION%FW.bds'
     bms_app_integration:
-    - appname: '%ALTNAME% %major_version%'
+    - appname: '%ALTNAME% %MAJOR_VERSION%'
       bundles:
       - action: exchange
         name: nV_%ALTNAME% %major_version%
       - action: add
-        name: aV_%ALTNAME% %major_version% Uninstall
+        name: aV_%ALTNAME% %UNINST_BUND_VER% Uninstall
         version: new
       - action: add
-        name: oV_%ALTNAME% 19-20 Uninstall
+        name: oV_%ALTNAME% %UNINST_BUND_VER% Uninstall
         version: previous
       copyfolders: 1
       currentversion:
-        bundle: nV_%ALTNAME% %major_version%
+        bundle: nV_%ALTNAME% %MAJOR_VERSION%
         search: '[d]+\.[d]+\.[d]+\.[d]+ ML'
         type: bundles
       platform: ''
@@ -146,12 +148,12 @@ Process:
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
     bms_app_iopt_usebbt: true
-    bms_app_name: '%ALTNAME% %major_version%'
+    bms_app_name: '%ALTNAME% %MAJOR_VERSION%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: msiexec.exe
     bms_app_uninstparm: /x %msi_value% /qn
-    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\u_FM%major_version%FW.bds'
+    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\u_FM%MAJOR_VERSION%FW.bds'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% ML'

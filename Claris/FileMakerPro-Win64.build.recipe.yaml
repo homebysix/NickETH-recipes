@@ -36,11 +36,11 @@ Process:
     re_pattern: '^\d+\.\d+\.\d+'
     result_output_var_name: 'short_version'
 
-- Processor: com.github.jazzace.processors/TextSearcher
-  Arguments:
-    text_in: '%build_ver%'
-    re_pattern: '^\d+'
-    result_output_var_name: 'major_version'
+# - Processor: com.github.jazzace.processors/TextSearcher
+  # Arguments:
+    # text_in: '%build_ver%'
+    # re_pattern: '^\d+'
+    # result_output_var_name: 'major_version'
 
 - Processor: Copier
   Comment: Copy the FileMaker installer file to the build dir
@@ -70,7 +70,7 @@ Process:
   Arguments:
     destination_path: '%BUILD_DIR%\%pkg_dir%\helpers\%NAME%%PF_STRING%_1031.msi'
     overwrite: 'true'
-    source_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %major_version%.msi'
+    source_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %MAJOR_VERSION%.msi'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
   Comment: Apply the language transform to the FileMaker MSI copy
@@ -96,16 +96,16 @@ Process:
     - UPDATE `Property` SET `Property`.`Value`='1031' WHERE `Property`.`Property`='ProductLanguage'
     - DELETE FROM `LaunchCondition` WHERE `LaunchCondition`.`Condition`='ACTIONPROPERTY Or (LanguagePackInstaller=0) Or Installed'
     - INSERT INTO `Directory` (`Directory`.`Directory`,`Directory`.`Directory_Parent`,`Directory`.`DefaultDir`) VALUES ('SHORTCUTDIR','ProgramMenuFolder','Filemaker')
-    - UPDATE `Shortcut` SET `Shortcut`.`Directory_`='SHORTCUTDIR', `Shortcut`.`Name`='FILEMA~4|FileMaker Pro %major_version%' WHERE `Shortcut`.`Shortcut`='FileMakerDeveloper'
+    - UPDATE `Shortcut` SET `Shortcut`.`Directory_`='SHORTCUTDIR', `Shortcut`.`Name`='FILEMA~4|FileMaker Pro %MAJOR_VERSION%' WHERE `Shortcut`.`Shortcut`='FileMakerDeveloper'
     msi_path: '%BUILD_DIR%\%pkg_dir%\helpers\%NAME%%PF_STRING%_1031.msi'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
   Comment: Generate a new 1031 language transform from the FileMaker MSI-file and the copy
   Arguments:
     mode: -g
-    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %major_version%.msi'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %MAJOR_VERSION%.msi'
     msi_path_new: '%BUILD_DIR%\%pkg_dir%\helpers\%NAME%%PF_STRING%_1031.msi'
-    mst_paths: '%BUILD_DIR%\%pkg_dir%\release\p%major_version%_1031.mst'
+    mst_paths: '%BUILD_DIR%\%pkg_dir%\release\p%MAJOR_VERSION%_1031.mst'
 
 - Processor: com.github.haircut.processors/AppIconExtractor
   Arguments:
@@ -117,7 +117,7 @@ Process:
     # composite_uninstall_template: /Users/haircut/Documents/delete.png
     icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
     #source_app: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
-    source_app: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %major_version%.msi'
+    source_app: '%BUILD_DIR%\%pkg_dir%\release\%ALTNAME% %MAJOR_VERSION%.msi'
     #msi_icon_name: 'MainExecutableIcon.ico'
     composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
     composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
