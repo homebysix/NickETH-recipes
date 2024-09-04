@@ -1,0 +1,8 @@
+
+200113	Packaging Scribus x64
+	We download the EXE as is.
+	No alterations at all.
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0, by AutoPkg
