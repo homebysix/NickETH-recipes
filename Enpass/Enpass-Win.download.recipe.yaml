@@ -26,7 +26,7 @@ Process:
     - '%RECIPE_CACHE_DIR%\%NAME%.txt'
     - -D
     - '%RECIPE_CACHE_DIR%\%NAME%-Header.txt'
-    re_pattern: 'enpass'
+    re_pattern: 'Enpass'
     url: 'https://www.enpass.io/download/windows/website/stable'
 
 - Processor: URLTextSearcher
@@ -52,7 +52,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN="Enpass Technologies, Inc.", O="Enpass Technologies, Inc.", S=Delaware, C=US
+    expected_subject: CN=Enpass Technologies Inc., O=Enpass Technologies Inc., L=Wilmington, S=Delaware, C=US, SERIALNUMBER=7506274, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
     input_path: '%pathname%'
 
 - Processor: StopProcessingIf
