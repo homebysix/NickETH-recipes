@@ -12,7 +12,13 @@ Process:
 - Processor: URLTextSearcher
   Comment: Get the most recent release notes page
   Arguments:
-    re_pattern: continuous/.*\.html
+    # See: https://www.rexegg.com/regex-best-trick.php#thetrick
+    # And: https://wyssmann.com/blog/2021/03/regular-expression-ignore-or-exclude-a-specific-word-find-everything-else/
+    # We need to make sure, that the left side finds something. But this is not given back, since it is negative.
+    re_pattern: continuous/dccontinuous.*?\.html.*?\d \((?!Mac only)\)\<\/span\>|(continuous/dccontinuous.*?\.html).*?\d\<\/span\>
+    #re_pattern: continuous/.*\.html
+    re_flags: 
+    - MULTILINE
     url: '%SEARCH_URL%'
 
 - Processor: URLTextSearcher

@@ -5,68 +5,47 @@ MinimumVersion: 1.3.1
 Input:
   NAME: 'Command Update'
   NAMESHORT: Command_Update
+  VENDOR: DELL
+  DOWNLOAD_URL: https://nxlog.co/products/nxlog-community-edition/download
   SEARCH_FIRSTURL: https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update?lwp=rt
-  SEARCH_SECONDURL: href="(https://www.dell.com/support/home/en-us/drivers/DriversDetails.driverId=[0-9A-Z]*)" target=._blank..Dell Command
-  SEARCH_THIRDURL: (https://dl.dell.com/[0-9A-Z]*/[0-9]/Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
-  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+  SEARCH_VER: '^(Dell.*?(?P<version>([0-9]+.)*[0-9]+).*?.exe)$'
+  #SEARCH_VER: '(Dell.*?\.exe)'
 
+  PLATFORM: x64
+  PF_STRING: _64
+
+  INTERNAL_URL: 'put your path here'
+
+
+# The online search on Dell's website was abondoned, because of complexity and constant changing.
+# 
 Process:
-- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
-  Arguments:
-    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    browser_used: Edge
-    primary_url: '%SEARCH_FIRSTURL%'
-    re_pattern: '%SEARCH_SECONDURL%'
-    selenium_commands:
-    - browser.get("%SEARCH_FIRSTURL%")
-    selenium_options:
-    # - self.options.add_argument("--headless=chrome") # See: https://github.com/SeleniumHQ/selenium/issues/11634
-    - self.options.add_argument("--headless")
-    - self.options.add_argument("--disable-infobars")
-    - self.options.add_argument('--no-sandbox')
-    - self.options.add_argument("--disable-dev-tools") 
-    #- self.options.add_argument("--disable-extensions")
-    #- self.options.add_argument("--remote-allow-origins=*")
-    - |
-        self.options.add_experimental_option("prefs", { \
-            "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-          })
-    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_VER%'
+    # re_flags:
+    # - DOTALL
+    # url: '%SEARCH_FIRSTURL%'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: get the filename from internal source
   Arguments:
-    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    browser_used: Edge
-    primary_url: '%match%'
-    re_pattern: '%SEARCH_THIRDURL%'
-    selenium_commands:
-    - '%match%'
-    selenium_options:
-    - self.options.add_argument("--headless")
-    - self.options.add_argument("--disable-infobars")
-    - self.options.add_argument('--no-sandbox')
-    - self.options.add_argument("--disable-dev-tools") 
-    - |
-        self.options.add_experimental_option("prefs", { \
-            "download.default_directory": "%RECIPE_CACHE_DIR%\downloads",
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-          })
-    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+    cmdline_args:
+    - /C
+    - dir
+    - /b
+    - '%INTERNAL_URL%'
+    - '>'
+    - DELL_CU_win.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
 
-- Processor: com.github.jazzace.processors/TextSearcher
+- Processor: URLTextSearcher
   Arguments:
-    download_changed: False
-    url_downloader_summary_result: ''
-    source_path: ''
-    # https://dl.dell.com/FOLDER10012409M/3/Dell-Command-Update-Windows-Universal-Application_J6PNP_WIN_4.9.0_A02_02.EXE
-    re_pattern: (Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN_(?P<version>([0-9]+\.)*[0-9]+)_[0-9A-Z_]*.EXE)
-    text_in: '%match%'
-    result_output_var_name: downloaded_package
+    re_pattern: '%SEARCH_VER%'
+    re_flags:
+     - IGNORECASE
+    url: file://%RECIPE_CACHE_DIR%/DELL_CU_win.txt
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: create a version.txt file, if it does not exist
@@ -80,59 +59,30 @@ Process:
     exe_file: 'cmd.exe'
     exe_folder: '%RECIPE_CACHE_DIR%'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/TextFileSearcher
+- Processor: URLTextSearcher
   Arguments:
-    re_pattern: '[0-9A-Z.]*'
-    result_output_var_name: previous_version
-    file_to_open: '%RECIPE_CACHE_DIR%\version.txt'
-
+    re_pattern: '^(.*)$'
+    url: file://D:/AutoPkg/Cache/com.github.NickETH.recipes.download.CommandUpdate-Win64/DELL_CU_win.txt
+    NEW_FILENAME: '%match%'
 
 - Processor: StopProcessingIf
   Arguments:
-    predicate: previous_version == version
-
-- Processor: FileCreator
-  Comment: Generate the version.txt file in the cache dir.
-  Arguments:
-    file_content: |
-      %version%
-    file_path: '%RECIPE_CACHE_DIR%\version.txt'
-
-- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
-  Arguments:
-    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    browser_used: Edge
-    primary_url: '%match%'
-    re_pattern: .*
-    selenium_commands:
-    - '%match%'
-    selenium_options:
-    - self.options.add_argument("--headless")
-    - self.options.add_argument("--disable-infobars")
-    - self.options.add_argument('--no-sandbox')
-    - self.options.add_argument("--disable-dev-tools")
-    - |
-        self.options.add_experimental_option("prefs", { \
-            "download.default_directory": "%RECIPE_CACHE_DIR%\downloads",
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-          })
-    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+    predicate: '%version% == %match%'
 
 - Processor: URLDownloader
   Arguments:
-    filename: '%NAMESHORT%.exe'
-    url: 'file://%RECIPE_CACHE_DIR%/downloads/%downloaded_package%'
+    filename: '%NAMESHORT%_%PLATFORM%.exe'
+    url: 'file:////d/sys/bms_tst/AutoPkg-in/Input/Dell_Command_Update/%NEW_FILENAME%'
+    CHECK_FILESIZE_ONLY: True
 
-- Processor: PathDeleter
-  Comment: Delete the old installer file.
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
   Arguments:
-    path_list: '%RECIPE_CACHE_DIR%\downloads\%downloaded_package%'
-
-- Processor: WindowsSignatureVerifier
-  Arguments:
-    expected_subject: CN=Dell Inc, OU=DUP Client Creation Service, O=Dell Inc, L=Round Rock, S=Texas, C=US
-    input_path: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
+    file_content: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
 
 - Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False

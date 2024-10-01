@@ -33,14 +33,14 @@ Process:
 - Processor: Copier
   Comment: Copy the CommandUpdate installer file to the build dir
   Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%.exe'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%_%PLATFORM%.exe'
     overwrite: 'true'
-    source_path: '%RECIPE_CACHE_DIR%\downloads\%NAMESHORT%.exe'
+    source_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the exe-installer from the Universal package
   Arguments:
-    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%.exe'
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%_%PLATFORM%.exe'
     extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
     extract_file: '*'
     ignore_pattern: ''

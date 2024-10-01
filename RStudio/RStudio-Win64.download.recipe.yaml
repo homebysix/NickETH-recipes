@@ -21,7 +21,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=RStudio PBC, O=RStudio PBC, L=Boston, S=Massachusetts, C=US
+    expected_subject: CN="Posit Software, PBC", O="Posit Software, PBC", L=Boston, S=Massachusetts, C=US
     input_path: '%pathname%'
 
 - Processor: com.github.sebtomasi.SharedProcessors/RenameVar
