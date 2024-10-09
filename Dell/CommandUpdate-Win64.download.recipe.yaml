@@ -62,7 +62,7 @@ Process:
 - Processor: URLTextSearcher
   Arguments:
     re_pattern: '^(.*)$'
-    url: file://D:/AutoPkg/Cache/com.github.NickETH.recipes.download.CommandUpdate-Win64/DELL_CU_win.txt
+    url: file://%RECIPE_CACHE_DIR%/version.txt
     NEW_FILENAME: '%match%'
 
 - Processor: StopProcessingIf
