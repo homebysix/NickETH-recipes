@@ -14,16 +14,18 @@ Process:
     - --request
     - GET
     re_pattern: '%SOFTWARE_GUID%'
-    url: https://webdownloads.ts.fujitsu.com/deskupdate_5_1/data/api/v1/update/5.02.0056.0
+    url: https://webdownloads5.ts.fujitsu.com/deskupdate_5_1/data/api/v2/update/5.02.0056.0
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.exe'
     url: https://webdownloads.ts.fujitsu.com/download/FileDownload/fileDownload.aspx?SoftwareGUID=%SW_GUID%&FileFolder=Downloadfiles&FileTypeExtension=EXE
+    #$url = 'https://webdownloads2.ts.fujitsu.com/download/FileDownload/fileDownload.aspx?SoftwareGUID=A63621A0-4BE1-476E-9B86-309ADB82E0A8&FileFolder=Downloadfiles&FileTypeExtension=EXE&FileNameClient=FTS_DeskUpdateSetup_5020064_1295759.EXE'
+
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=FUJITSU CLIENT COMPUTING LIMITED, O=FUJITSU CLIENT COMPUTING LIMITED, STREET="1-1-2, KASHIMADA, SAIWAI-KU", L=KAWASAKI, S=Kanagawa, PostalCode=212-0058, C=JP
+    expected_subject: CN=FUJITSU CLIENT COMPUTING LIMITED, O=FUJITSU CLIENT COMPUTING LIMITED, S=Kanagawa, C=JP
     input_path: '%pathname%'
 
 - Processor: StopProcessingIf
