@@ -1,0 +1,52 @@
+Description: Downloads the latest PDF24 Creator for Windows.
+Identifier: com.github.NickETH.recipes.download.PDF24-Creator-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'PDF24-Creator'
+  SEARCH_URL: https://creator.pdf24.org/listVersions.php
+  #DOWNLOAD_URL: https://www.plotsoft.com/download/PDFill_X64.msi
+  VENDOR: 'geek software GmbH'
+  PLATFORM: x64
+  PF_STRING: '_64'
+  LANG_STRING: _ML
+  DIP_NAME: PDFill
+  DIP_SUBDIR: ML
+
+Process:
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: '%NAME%-%PLATFORM%.msi'
+    # url: '%DOWNLOAD_URL%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    msi_path: '%pathname%'
+    #https://download.pdf24.org/pdf24-creator-11.11.0.msi
+    #https://download.pdf24.org/pdf24-creator-11.18.0-x64.msi
+    re_pattern: '(https://download.pdf24.org/pdf24-creator-(?P<version>([0-9]+\.)*[0-9]+)-%PLATFORM%\.msi)'
+    #re_pattern: '<updateTo>(?P<version>([0-9]+\.)*[0-9]+)</updateTo>'
+    url: '%SEARCH_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+  # # <url>http://download.endnote.com/updates/20.0/EN205Update.msp</url>
+    # # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9\.]Update.msp)</url>'
+    # re_pattern: '<url>(http://download.endnote.com/updates/[0-9\.]+/EN[0-9]+Update.msp)</url>'
+    # url: '%SEARCH_UPDATE_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-%PLATFORM%.msi'
+    url: '%match%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: 'CN=Geek Software GmbH, O=Geek Software GmbH, S=Berlin, C=DE, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.3=DE, SERIALNUMBER=HRB 100865'
+    input_path: '%pathname%'
