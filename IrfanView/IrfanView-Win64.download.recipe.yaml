@@ -8,7 +8,8 @@ Input:
   PLATFORM: x64
   PF_STRING: _64
   SEARCH_URL: https://www.irfanview.com/64bit.htm
-  SEARCH_URL_PLUG: 'https://www.heise.de/download/product/irfanview-plugins-73737/download'
+  #SEARCH_URL_PLUG: 'https://www.heise.de/download/product/irfanview-plugins-73737/download'
+  SEARCH_URL_PLUG: 'https://www.techspot.com/downloads/472-irfanview-plugins.html'
   # <a href="https://www.irfanview.info/files/iview466g_x64.zip" class="alt-download">Download von IrfanView-64</a> iview466_x64_setup.exe
   VERSION_URL: (https://www.irfanview.info/files/iview(?P<versionraw>[0-9]+)g_x64_setup\.exe)
   USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
@@ -52,23 +53,31 @@ Process:
 - Processor: URLTextSearcher
   Comment: Get the download page for the plugins.
   Arguments:
-    # href="/download/product/irfanview-plugins-73737/download/danke?id=6af785c4-3ef1-4542-a9d2-10e1e25e4922" title="IrfanView PlugIns 4.67 64-Bit herunterladen
-    re_pattern: href="(?P<dlpart>/download/product/irfanview-plugins-73737/download/danke\?id=[-0-9a-f]*)" title="IrfanView PlugIns (?P<versionplug>[\.0-9]*) 64-Bit herunterladen
+    #re_pattern: href="(?P<dlpart>/download/product/irfanview-plugins-73737/download/danke\?id=[-0-9a-f]*)" title="IrfanView PlugIns (?P<versionplug>[\.0-9]*) 64-Bit herunterladen
+    re_pattern: <a href="(?P<dlpart>/downloads/downloadnow/472/\?evp=[0-9a-f]+&file=[0-9]*).*?\s.+?Installer.64.+?</a>
     url: '%SEARCH_URL_PLUG%'
+    curl_opts:
+    - -L
+    #re_flags: DOTALL
 
 - Processor: URLTextSearcher
   Comment: Get the final download link for the plugins.
   Arguments:
     # url=https://download.heise.de/files/cwMkiNvLOEc_K2Brms0k7w/311233/iview467_plugins_x64_setup.exe?expires=1712789317">
-    re_pattern: url=(?P<dlfile>https://download.heise.de/files/[a-zA-Z0-9_]+?/[0-9]+?/iview[0-9]+?_plugins_x64_setup.exe\?expires=[0-9]+?)">
+    #re_pattern: url=(?P<dlfile>https://download.heise.de/files/[a-zA-Z0-9_]+?/[0-9]+?/iview[0-9]+?_plugins_x64_setup.exe\?expires=[0-9]+?)">
+    re_pattern: '<a href="(?P<dlfile>/downloads/downloadnowfile/472/\?evp=[-0-9a-f]*?&file=[0-9]*?)".*?Click here.*?</a>'
     curl_opts:
     - -L
-    url: 'https://www.heise.de/%dlpart%'
+    #url: 'https://www.heise.de/%dlpart%'
+    url: 'https://www.techspot.com%dlpart%'
 
 - Processor: URLDownloader
   Arguments:
     # version: '%versionbuild%'
     filename: '%NAME%_Plugins_%PLATFORM%.exe'
-    url: '%dlfile%'
+    #url: '%dlfile%'
+    url: 'https://www.techspot.com%dlfile%'
+    curl_opts:
+    - -L
 
 - Processor: EndOfCheckPhase

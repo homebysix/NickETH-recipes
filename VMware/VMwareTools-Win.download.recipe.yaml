@@ -5,7 +5,8 @@ MinimumVersion: 1.3.1
 Input:
   NAME: VmwareTools
   PLATFORM: x64
-  SEARCH_PATTERN_DMG: (VMware-tools-(?P<version>([0-9]+\.)*[0-9]+)[\d+\.\-]+-x86_64\.exe)
+  #VMware-tools-12.5.0-24276846-x64.exe
+  SEARCH_PATTERN_DMG: (VMware-tools-(?P<version>([0-9]+\.)*[0-9]+)[\d+\.\-]+-x64\.exe)
   SEARCH_URL: https://packages.vmware.com/tools/releases/latest/windows/x64/
   DL_URL: https://packages.vmware.com/tools/releases/latest/windows/x64/
 
