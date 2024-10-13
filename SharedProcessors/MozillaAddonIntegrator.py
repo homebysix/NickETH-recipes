@@ -19,7 +19,8 @@
 # 20210522 Nick Heim: Python v3 changes. Partly taken from: https://github.com/Stebalien/firefox-tweak
 # 20210530 Nick Heim: Extended to MozillaAddonIntegrator for functions see the code.
 # 20220310 Nick Heim: Sanitizing the code.
-
+# 20241013 Nick Heim: Make change sideloading aware of "nothing to do".
+    
 import os
 import shutil
 import sys
@@ -586,8 +587,11 @@ class MozillaAddonIntegrator(Processor):
             js_file_content = open_js_file.read()
         re_pattern = re.compile('MOZ_ALLOW_ADDON_SIDELOAD:\s*.*\s*false')
         match = re_pattern.search(js_file_content)
-        new_pattern = match.group().replace('false', 'true')
-        js_file_content_new = js_file_content.replace(match.group(), new_pattern)
+        if not match is None:
+            new_pattern = match.group().replace('false', 'true')
+            js_file_content_new = js_file_content.replace(match.group(), new_pattern)
+        else:
+            js_file_content_new = js_file_content
         with open(js_file,"w") as new_js_file:
             new_js_file.write(js_file_content_new)
         self.zip_file_compress(esl_sz_cmd, verbosity, omni_edit_path, config_file, extract_dir, mode='u')

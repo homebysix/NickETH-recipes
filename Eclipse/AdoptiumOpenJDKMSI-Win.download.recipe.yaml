@@ -10,7 +10,7 @@ Process:
     curl_opts:
     - -L
     - -I
-    re_pattern: 'Location: (?P<msi_dl_link>https.+?msi)'
+    re_pattern: 'location: (?P<msi_dl_link>https.+?msi)'
     url: '%SEARCH_URL%'
 
 - Processor: URLTextSearcher

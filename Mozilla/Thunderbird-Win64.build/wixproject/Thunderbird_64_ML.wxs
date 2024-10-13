@@ -95,9 +95,9 @@
 					<ComponentGroupRef Id="ExtEAS4TBSyncFiles" />
 				</Feature>
 				
-                <Feature Id="Sieve" AllowAdvertise="system" Description="This installs the Sieve extensions" Display="expand" Level="100" Title="Sieve">
+<!--                 <Feature Id="Sieve" AllowAdvertise="system" Description="This installs the Sieve extensions" Display="expand" Level="100" Title="Sieve">
 					<ComponentGroupRef Id="ExtSieveFiles" />
-				</Feature>
+				</Feature> -->
 
                 <Feature Id="LookOut" AllowAdvertise="system" Description="This installs the LookOut extensions" Display="expand" Level="100" Title="LookOut">
 					<ComponentGroupRef Id="ExtLookOutFiles" />
