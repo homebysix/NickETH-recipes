@@ -86,6 +86,13 @@ Process:
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%-perComp%PF_STRING%_%build_ver%_ML.msi'
     mst_paths: '%BUILD_DIR%\%pkg_dir%\helpers\teams_perComp_x64.mst'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
+  Comment: Apply the per User transform to the Teams MSI
+  Arguments:
+    mode: -a
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    mst_paths: '%BUILD_DIR%\%pkg_dir%\helpers\teams_perUser_x64.mst'
+    
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
     file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
