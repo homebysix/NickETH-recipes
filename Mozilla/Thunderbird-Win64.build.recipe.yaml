@@ -68,14 +68,13 @@ Process:
     ext_install_xslt: '%BUILD_DIR%\%pkg_dir%\wixproject\GUID-Preserve-x64.xslt'
     install_exe: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-Setup-%PLATFORM_STR%.exe'
     new_extensions:
-    - de.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%/linux-x86_64/xpi/de.xpi|||ExtlpDEFiles
-    - fr.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%/linux-x86_64/xpi/fr.xpi|||ExtlpFRFiles
-    - it.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%/linux-x86_64/xpi/it.xpi|||ExtlpITFiles
-    - rm.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%/linux-x86_64/xpi/rm.xpi|||ExtlpRMFiles
+    - de.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%%ESR_STRING%/linux-x86_64/xpi/de.xpi|||ExtlpDEFiles
+    - fr.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%%ESR_STRING%/linux-x86_64/xpi/fr.xpi|||ExtlpFRFiles
+    - it.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%%ESR_STRING%/linux-x86_64/xpi/it.xpi|||ExtlpITFiles
+    - rm.xpi|||https://releases.mozilla.org/pub/thunderbird/releases/%version%%ESR_STRING%/linux-x86_64/xpi/rm.xpi|||ExtlpRMFiles
     - dict-de.xpi|||https://addons.mozilla.org/firefox/downloads/latest/german-dictionary-de_ch-for-sp/|||ExtdicDEFiles
     - dict-fr.xpi|||https://addons.mozilla.org/firefox/downloads/file/3581786/|||ExtdicFRFiles
     - dict-it.xpi|||https://addons.mozilla.org/firefox/downloads/latest/dizionario-italiano/|||ExtdicITFiles
-    #- sieve.xpi|||https://polybox.ethz.ch/index.php/s/G6e4OKrKqIBk3LR/download|||ExtSieveFiles
     - tbsync.xpi|||https://addons.thunderbird.net/thunderbird/downloads/latest/tbsync/addon-773590-latest.xpi|||ExtTBSyncFiles
     - dav-4-tbsync.xpi|||https://addons.thunderbird.net/thunderbird/downloads/latest/dav-4-tbsync/addon-986258-latest.xpi|||ExtDAV4TBSyncFiles
     - google-4-tbsync.xpi|||https://addons.thunderbird.net/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi|||ExtGoogle4TBSyncFiles
@@ -84,6 +83,7 @@ Process:
     - LookOut.xpi|||https://addons.thunderbird.net/thunderbird/downloads/latest/lookout-fix-version/addon-711780-latest.xpi|||ExtLookOutFiles
     omni_path: omni.ja
     temp_path: '%BUILD_DIR%\%pkg_dir%\adm'
+    #- sieve.xpi|||https://polybox.ethz.ch/index.php/s/G6e4OKrKqIBk3LR/download|||ExtSieveFiles
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
 
