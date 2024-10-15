@@ -115,6 +115,22 @@ Process:
     - UPDATE `Property` SET `Property`.`Value`='Adoptium Java RE Hotspot x64 %version% ML' WHERE `Property`.`Property`='ProductName'
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%FILENAME%%PF_STRING%_%version%%LANG_STRING%.msi'
 
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    #source_app: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
+    source_app: '%BUILD_DIR%\%pkg_dir%\release\%FILENAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    msi_icon_name: 'logo.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIApplySumInfo

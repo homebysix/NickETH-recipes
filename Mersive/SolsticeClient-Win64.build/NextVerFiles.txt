@@ -1,0 +1,5 @@
+helpers\SolClnt_DTSC_FW2_Conf.mst
+helpers\WixFirewallCA-merge.msi
+helpers\solstice-512.png
+read\create-log-SolsticeClient_64_VVeerrssiioonn_ML.txt
+read\readme-SolsticeClient_64_VVeerrssiioonn_ML.txt
