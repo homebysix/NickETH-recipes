@@ -44,6 +44,22 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'True'
 
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Extract the SQL Dev icons and generate BMS-Kiosk-Icons
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\Resources\SqlDeveloper-Icon.exe'
+    #msi_icon_name: 'agentmonitor.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
     file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
