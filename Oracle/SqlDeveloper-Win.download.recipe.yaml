@@ -20,7 +20,7 @@ Input:
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: 'Windows 64-bit with JDK 11 included.*?SHA1: ([a-z0-9]+)</li>'
+    re_pattern: 'Windows 64-bit with JDK 17 included.*?SHA1: ([a-z0-9]+)</li>'
     re_flags:
     - DOTALL
     url: '%SEARCH_FIRSTURL%'
