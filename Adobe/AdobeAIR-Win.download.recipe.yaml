@@ -1,0 +1,42 @@
+Description: Downloads latest Adobe AIR installer for Windows.
+Identifier: com.github.NickETH.recipes.download.AdobeAIR-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: AdobeAIR
+  DOWNLOAD_URL: https://airsdk.harman.com/
+  USER_AGENT: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
+  SEARCH_URL: https://airsdk.harman.com/runtime
+  SEARCH_PATTERN1: main\.[a-f0-9]+?\.js
+  SEARCH_PATTERN2: (assets/downloads/(?P<version>([0-9]+\.)*[0-9]+)/AdobeAIR.exe)
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Get the js-file with the most recent release
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN1%'
+    url: '%SEARCH_URL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+
+- Processor: URLTextSearcher
+  Comment: Get the most recent release download link.
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN2%'
+    url: '%DOWNLOAD_URL%%match%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%DOWNLOAD_URL%%match%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Harman International Industries, Incorporated", OU=Information Technology, O="Harman International Industries, Incorporated", L=Stamford, S=Connecticut, C=US, SERIALNUMBER=886255, OID.2.5.4.15=Private organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

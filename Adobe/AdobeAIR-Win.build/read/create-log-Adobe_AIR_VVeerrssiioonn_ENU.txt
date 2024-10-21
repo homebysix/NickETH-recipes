@@ -1,0 +1,56 @@
+
+200113	Create Adobe AIR for Windows
+	This software is now distributed by Harman.
+	We download it from:
+	https://airsdk.harman.com/assets/downloads/AdobeAIR.exe<
+
+	This is an MSI-Installer, but it comes in a strange package with loose files.
+	We pack it to a single MSI.
+	
+	cscript WiMkCab2.vbs setup.msi Data1 /L /C /U /E
+	See the recipe for details.
+
+
+	Configuration settings:
+
+	Disable Auto Update + Installation of "Untrusted Applications" (See Admin-Guide):
+	Insert this lines into the Registry table:
+	HKLM1	2	Software\Policies\Adobe\AIR	UpdateDisabled	#1	AIR_Policies
+	HKLM2	2	Software\Policies\Adobe\AIR	UntrustedAppInstallDisabled	#1	AIR_Policies
+
+	Insert into the Component table:
+	AIR_Policies	{0025F296-022D-403E-BA9B-CEC21EB76A1E}	AIR	4		HKLM1
+
+	Insert into the FeatureComponents table:
+	Management	AIR_Policies
+
+	To disable the EULA-popup, we need to create a file named "eulaAccepted" containing '3' in:
+	%ALLUSERSPROFILE%\Application Data\Adobe\AIR.
+
+	This file goes into a new Cab-File.
+
+	We store 'custom.cab' into the 'Binary' table (this way, it can be put into an MST)
+
+	And we need a new line for the CAB-file in the Media table:
+	2	25		#Binary.custom.cab		
+
+	Also a line in the File table:
+	eulaAccepted	AIR_EULA_accept	eulaAccepted	4			512	25
+	
+	A line in the 'MsiFileHash'.
+
+	An entry in the Component table:
+	AIR_EULA_accept	{6348E65A-0D8B-4F51-B0E3-069A2E7CA40B}	AIRAdobeCommonAppDataFolder	0	EULAACCEPT	eulaAccepted
+
+	...the FeatureComponents table:
+	Management	AIR_EULA_accept
+
+	...and a Property table insert:
+	EULAACCEPT	1
+
+	This gives us the possibility to toggle this on the command line.
+
+	All this changes are stored in the transform 'AIR-Corp-config.mst'.
+
+190218	Released v1.0
+
