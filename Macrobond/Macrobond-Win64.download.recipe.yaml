@@ -1,0 +1,24 @@
+Description: Downloads the latest Macrobond installer package for Windows.
+Identifier: com.github.NickETH.recipes.download.Macrobond-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Macrobond
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (?P<PatchFileMSP>Patch-(?P<version>([0-9]+\.)*[0-9]+)-release\.x64\.msp)
+    url: https://techinfo.macrobond.com/installation-mainapp/
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: (?P<match>https://download.macrobond.com/installation/mainapp/([0-9]+\.)*[0-9]+-release/Macrobond.x64-([0-9]+\.)*[0-9]+\.zip)
+    url: https://techinfo.macrobond.com/installation-mainapp/
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.zip'
+    url: '%match%'
+
+- Processor: EndOfCheckPhase
