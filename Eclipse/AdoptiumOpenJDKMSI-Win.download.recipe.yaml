@@ -17,7 +17,7 @@ Process:
   Arguments:
     curl_opts:
     - -L
-    re_pattern: 'msi.*?"semver": "(?P<orgversion>(?P<ver_major>[0-9]+)\.(?P<ver_majorminor>[0-9]+)\.(?P<ver_minor>[0-9]+)\+(?P<ver_build>\d+)(?!.*\d))'
+    re_pattern: 'msi.*?semver.*?(?P<orgversion>(?P<ver_major>[0-9]+)\.(?P<ver_majorminor>[0-9]+)\.(?P<ver_minor>[0-9]+)\+(?P<ver_build>\d+))'
     re_flags:
     - DOTALL
     url: https://api.adoptium.net/v3/assets/latest/%FEATUREVER%/hotspot?vendor=adoptium
