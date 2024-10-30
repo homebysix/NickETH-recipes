@@ -20,7 +20,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: E=winmergejp@gmail.com, CN=Takashi Sawanaka, O=Takashi Sawanaka, S=Chiba, C=JP
+    expected_subject: CN=Takashi Sawanaka, O=Takashi Sawanaka, L=Chiba, S=Chiba, C=JP
     input_path: '%pathname%'
 
 - Processor: StopProcessingIf
