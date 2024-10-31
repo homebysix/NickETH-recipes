@@ -16,6 +16,7 @@
 # Extended with writer for JSON app integration file, 20220323, Hm
 # Changed subprocess.run(cmd), added capture_output=True. Sometimes, it hangs without it. 20220726, Hm
 # Extended JSON file with sharepoint and kiosk sections. Added icon copy function. 20221123, Hm
+# Extended icon copy function to work with existing JSON files. 20241031, Hm
 # Todo: Generic read function for optional parameter processing with for statement and value types
 
 import os
@@ -337,6 +338,8 @@ class BMSImporter(Processor):
         if "bms_app_integration" in self.env:
             bms_app_integration = {}
             bms_app_integration['bms_app_integration'] = self.env.get('bms_app_integration')
+            # bms_app_kio_subspec = bms_app_integration['bms_app_integration']['subspec']
+            # self.output("New subspec: %s" % bms_app_kio_subspec)
             if "json_file_dest" in self.env:
                 json_file_dest = self.env.get('json_file_dest')
                 if verbosity > 1:
@@ -355,8 +358,10 @@ class BMSImporter(Processor):
                                     bms_app_int_version = bms_app_int_element['version']
                                 else:
                                     bms_app_int_version = bms_app_int_element['version'] + " " + bms_app_int_element['subspec']
+
                             else:
                                 bms_app_int_version = bms_app_int_element['version']
+                                # bms_app_kio_subspec = ""
 
                             if bms_app_int_element['appname'] == bms_app_name and bms_app_int_version == bms_app_version:
                                 bms_app_int_element_exists = True
@@ -366,9 +371,38 @@ class BMSImporter(Processor):
                         if bms_app_int_element_exists != True:
                             for arrobj in bms_app_integration['bms_app_integration']:
                                 JSONData['bms_app_integration'].append(arrobj)
-                            outfile.seek(0)
-                            #json.dump(JSONData, outfile, indent=4, sort_keys=True)
-                            json.dump(JSONData, outfile, indent=4, sort_keys=True, ensure_ascii=False)
+                                # bms_app_kio_subspec = arrobj['subspec']
+                                # self.output("New subspec: %s" % bms_app_kio_subspec)
+
+                        if "bms_job_kiosk" in self.env:
+                            bms_app_integration['bms_job_kiosk'] = self.env.get('bms_job_kiosk')
+                            bms_app_kio_ex_app = bms_app_integration['bms_job_kiosk'][0]['jobname']
+                            bms_app_kio_element_exists = False
+                            for bms_app_kio_element in JSONData['bms_job_kiosk']:
+                                # if bms_app_kio_element['jobname'] == (bms_app_name):
+                                if bms_app_kio_element['jobname'] == (bms_app_kio_ex_app):
+                                    bms_app_kio_element_exists = True
+                                    # self.output("Existing kiosk object: %s" % bms_app_kio_element['jobname'])
+                                    break
+                            if bms_app_kio_element_exists != True:
+                                for arrobj in bms_app_integration['bms_job_kiosk']:
+                                    # self.output("jobname no subspec: %s" % arrobj['jobname'])
+                                    # arrobj['jobname'] = (arrobj['jobname'] + " " + bms_app_kio_subspec)
+                                    # self.output("jobname with subspec: %s" % arrobj['jobname'])
+                                    # self.output("arrobj: %s" % arrobj)
+                                    JSONData['bms_job_kiosk'].append(arrobj)
+
+                            # get the icon files source
+                            if "icon_file_src" in self.env:
+                                icon_file_src = self.env.get('icon_file_src')
+                                job_icon_path = os.path.join((os.path.split(json_file_dest)[0]), "Icons")
+                                if not os.path.isdir(job_icon_path):
+                                    os.mkdir(job_icon_path)
+                                for icon_file in glob.glob(icon_file_src):
+                                    shutil.copy(icon_file, job_icon_path)                            
+                        outfile.seek(0)
+
+                        json.dump(JSONData, outfile, indent=4, sort_keys=True, ensure_ascii=False)
                 else:
                     with open(json_file_dest, "w") as outfile:
                         # Sharepoint and kiosk functions are only active when creating a new file!
