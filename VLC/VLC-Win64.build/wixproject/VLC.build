@@ -1,0 +1,70 @@
+<Project DefaultTargets="WIX" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
+    <PropertyGroup>
+		<InstallerPlatform>$(BuildPlatform)</InstallerPlatform>
+		<Platform>$(InstallerPlatform)</Platform>
+		<PRODUCT_SKU>$(BuildName)</PRODUCT_SKU>
+		<CULTURE>en-us</CULTURE>
+		<LANGIDS>1033</LANGIDS>
+        <BuildDirectory>$(BuildDir)</BuildDirectory>
+		<SourceDirectory>$(SourceDir)</SourceDirectory>
+		<ASVersion>$(version.Replace('.', ','))</ASVersion>
+		<CandleVar>-dPlatform=$(InstallerPlatform) -dSetupResourcesDir=$(BuildDir)\Resources -dASVersion=$(ASVersion) -dAPInstallFolder=$(InstallFolder)</CandleVar>
+		<!-- <CandleVar>-dPlatform=$(InstallerPlatform) -dSetupResourcesDir=$(BuildDir)\Resources</CandleVar> -->
+		<LightSrcDir>-dAPSourceDir=$(SourceDirectory) -dAPInstallFolder=$(InstallFolder)</LightSrcDir>
+		<!-- <LightSrcDir>-dAPSourceDir=$(SourceDirectory)</LightSrcDir> -->
+		<MsiOut>..\Release\$(BuildName)_$(InstallerPlatform.Substring(1,2))_$(version)_ML.msi</MsiOut>
+    </PropertyGroup>
+	<!-- The list of WIX input files -->
+	<ItemGroup>
+		<WixCode Include="product.wxs" />
+		<WixCode Include="axvlc.wxs" />
+		<WixCode Include="extensions.wxs" />
+		<WixCode Include="Plugins.fragment.wxs" />
+		<WixCode Include="Locale.fragment.wxs" />
+		<WixCode Include="Lua.fragment.wxs" />
+		<WixCode Include="Skins.fragment.wxs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<WixObject Include="product.wixobj" />
+		<WixObject Include="axvlc.wixobj" />
+		<WixObject Include="extensions.wixobj" />
+		<WixObject Include="Plugins.fragment.wixobj" />
+		<WixObject Include="Locale.fragment.wixobj" />
+		<WixObject Include="Lua.fragment.wixobj" />
+		<WixObject Include="Skins.fragment.wixobj" />
+	</ItemGroup>
+	<Target Name="Harvest" >
+		<Exec
+            Command='"$(WIX)bin\heat" dir $(SourceDirectory)\plugins -dr APPLICATIONFOLDER -v -sw5150 -sreg -svb6 -sfrag -cg CompPluginsGroup -gg -out Plugins.fragment.wxs'
+            ContinueOnError="false"
+            WorkingDirectory="." />
+			<Exec
+            Command='"$(WIX)bin\heat" dir $(SourceDirectory)\locale -dr APPLICATIONFOLDER -v -sw5150 -sreg -svb6 -sfrag -cg CompLocaleGroup -gg -out Locale.fragment.wxs'
+            ContinueOnError="false"
+            WorkingDirectory="." />
+		<Exec
+            Command='"$(WIX)bin\heat" dir $(SourceDirectory)\lua -dr APPLICATIONFOLDER -v -sw5150 -sreg -svb6 -sfrag -cg CompLuaGroup -gg -out Lua.fragment.wxs'
+            ContinueOnError="false"
+            WorkingDirectory="." />
+		<Exec
+            Command='"$(WIX)bin\heat" dir $(SourceDirectory)\skins -dr APPLICATIONFOLDER -v -sw5150 -sreg -svb6 -sfrag -cg CompSkinsGroup -gg -out Skins.fragment.wxs'
+            ContinueOnError="false"
+            WorkingDirectory="." />
+    </Target>
+	<Target Name="WIX"
+		DependsOnTargets="Harvest">
+        <Exec
+            Command='"$(WiX)bin\candle" -arch $(InstallerPlatform) -ext WixUtilExtension -ext WixUIExtension $(CandleVar) -v -sw0204 -sw1044 @(WixCode, &apos; &apos;)'
+            ContinueOnError="true"
+            WorkingDirectory="$(BuildDirectory)" />
+        <Exec
+            Command='"$(WiX)bin\light" -ext WixUtilExtension -ext WixUIExtension $(LightSrcDir) -b $(SourceDirectory)\plugins -b $(SourceDirectory)\locale -b $(SourceDirectory)\lua -b $(SourceDirectory)\skins -v -sice:ICE57 -sice:ICE43 -sice:ICE69 -sw1076 -sw0204 -loc "Lang\$(PRODUCT_SKU).$(CULTURE).wxl" -cultures:$(CULTURE) -out $(MsiOut) @(WixObject, &apos; &apos;)'
+            ContinueOnError="true"
+            WorkingDirectory="." />
+		<Delete Files="$(MsiOut.Replace('.msi', '.wixpdb'))" />
+
+  <!-- A message at the end -->
+		<Message Text="Install package has been created." />
+	</Target>
+</Project>

@@ -9,7 +9,7 @@ Input:
   VLCPLATFORM: win64
   PLATFORM: x64
   PF_STRING: _64
-  SEARCH_PATTERN: get\.videolan\.org\/vlc\/(?P<version>[0-9.]+)\/win64\/vlc-[0-9.]+-win64\.exe
+  SEARCH_PATTERN: (vlc-(?P<version>[0-9.]+)-win64\.%PKGFORMAT%)
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget

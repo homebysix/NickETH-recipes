@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="ProductLanguage">1033</String>
+	<String Id="ProductName">VLC media player</String>
+	<String Id="ProductHelpLink">https://www.videolan.org/support/</String>
+  <String Id="ProductUrlInfoAbout">https://www.videolan.org/vlc/</String>
+  <String Id="ProductUrlUpdateInfo">https://www.videolan.org/vlc/</String>
+	<String Id="PackageDescription">VideoLAN Client</String>
+	<String Id="FeatureStartMenuShortcut">Start Menu shortcut</String>
+	<String Id="FeatureDesktopShortcut">Desktop shortcut</String>
+	<String Id="NewerVersionInstalled">Newer version of VLC is already installed.</String>
+	<String Id="OSVersionRequired">Windows 7 or later is required.</String>
+	<String Id="WixUI_ExitDialogOptionalCheckboxText">Launch VLC</String>
+</WixLocalization>
+
+    <?define ShortProductName = "VLC" ?>
+    <?define ProductName = "VLC media player" ?>
+    <?define Manufacturer = "VideoLAN" ?>
+    <?define AboutURL = "https://www.videolan.org/vlc/" ?>
+    <?define SupportURL = "https://www.videolan.org/support/" ?>
+    <?define UpdatesURL = "https://www.videolan.org/vlc/" ?>
