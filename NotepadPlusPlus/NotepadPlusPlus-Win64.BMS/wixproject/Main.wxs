@@ -11,10 +11,10 @@
     <Property Id="ARPURLUPDATEINFO" Value="!(loc.ProductUrlUpdateInfo)" />
     <Property Id="ALLUSERS" Value="1" />
 	<Property Id="DESKTOP_SC" Value="0" />
-    <!-- <Property Id="ARPPRODUCTICON" Value="notepadpp.ico" /> -->
+    <Property Id="DISABLE_UPDATE" Value="1" />
 	<Property Id="ARPPRODUCTICON" Value="MainIcon.exe" />
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
-    <!-- <Icon Id="notepadpp.ico" SourceFile="$(var.SetupResourcesDir)\notepadpp.ico" /> -->
+
 	<Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
 
     <!-- Windows 7 and later is required. -->
@@ -27,12 +27,13 @@
     <CustomAction Id="PreventDowngrading" Error="!(loc.NewerVersionInstalled)" />
 
     <InstallExecuteSequence>
-			<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
-			<RemoveExistingProducts Before="InstallInitialize" />
-		</InstallExecuteSequence>
-		<InstallUISequence>
-			<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
-		</InstallUISequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+		<RemoveExistingProducts Before="InstallInitialize" />
+		<MoveFiles Sequence="4100" />
+	</InstallExecuteSequence>
+	<InstallUISequence>
+		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+	</InstallUISequence>
 
     <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -43,6 +44,7 @@
       </Directory>
       <Directory Id="ProgramMenuFolder" />
       <Directory Id="DesktopFolder" />
+	  <Directory Id="AppDataFolder" />
     </Directory>
 
     <!--
@@ -60,6 +62,31 @@
         <!-- We need to use APPLICATIONFOLDER variable here or RemoveFolderEx will not remove on "install". -->
         <util:RemoveFolderEx On="uninstall" Property="APPLICATIONFOLDER" />
       </Component>
+      <Component Id="Notepad_exe" Guid="{D5CA9738-1603-414E-9D8D-87487954E62E}" Win64="yes" >
+        <File Id="NotepadEXE" Name="Notepad++.exe" Vital="yes" KeyPath="yes" Source="!(wix.APSourceDir)\$(var.AppName).exe" />
+		<Shortcut Id="AppStartMenuShortcut"
+		  Directory="ProgramMenuFolder"
+		  Advertise="yes"
+		  Name="$(var.AppName)"
+		  WorkingDirectory="APPLICATIONFOLDER"
+		  Icon="MainIcon.exe">
+		    <!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="3c1b0cac-12aa-54d0-85ac-9a4ca6e1d795" /> -->
+		</Shortcut>
+        <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppName)" Name="StartMenuShortcutInstalled" Type="integer" Value="1" />
+	  </Component>
+<!-- 	  <Component Id="configXML" Guid="{1AEDD5B7-9A71-4771-8200-2F07434B50DB}" Win64="yes" KeyPath="yes">
+		<File Id="config_xml"
+			Name="config.xml"
+			Vital="yes"
+			SelfReg="true"
+			Source="!(wix.APSourceDir)\config.xml">
+		</File>
+	  </Component> -->
+<!-- 	  <Component Id="ActiveSetup64" Guid="{8B821104-9EAF-42D5-9578-9378359E7DDC}">
+		<RegistryValue Id="RegHKLM2" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Version" Value="$(var.ASVersion)" Type="string" KeyPath="yes" />
+		<RegistryValue Id="RegHKLM1" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Stubpath" Value="msiexec /i [ProductCode] REINSTALL=UserSettings REINSTALLMODE=up /qn" Type="string" />
+		<RegistryValue Id="RegHKLM3" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Value="[ProductName]" Type="string" />
+	  </Component> -->
     </DirectoryRef>
 <!--     <DirectoryRef Id="contextMenu">
 	  <Component Id="contextMenuDLL" Guid="{302DCB68-544E-4645-9D4B-221F457C9063}" Win64="yes" KeyPath="yes">
@@ -71,27 +98,35 @@
 		</File>
 	  </Component>
     </DirectoryRef> -->
-    <DirectoryRef Id="ProgramMenuFolder">
+<!--     <DirectoryRef Id="ProgramMenuFolder">
       <Component Id="StartMenuShortcut" Guid="*">
         <Shortcut Id="AppStartMenuShortcut" Advertise="no" Name="$(var.AppName)" Target="[APPLICATIONFOLDER]notepad++.exe" WorkingDirectory="APPLICATIONFOLDER" />
         <RegistryValue Root="HKMU" Key="Software\$(var.AppName)" Name="StartMenuShortcutInstalled" Type="integer" Value="1" KeyPath="yes" />
       </Component>
-    </DirectoryRef>
+    </DirectoryRef> -->
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcut" Guid="*">
 	  <Condition>DESKTOP_SC=1</Condition>
-        <Shortcut Id="AppDesktopShortcut" Advertise="no" Name="$(var.AppName)" Target="[APPLICATIONFOLDER]notepad++.exe" WorkingDirectory="APPLICATIONFOLDER" Directory="DesktopFolder" />
+        <!-- <Shortcut Id="AppDesktopShortcut" Advertise="no" Name="$(var.AppName)" Target="[APPLICATIONFOLDER]notepad++.exe" WorkingDirectory="APPLICATIONFOLDER" Directory="DesktopFolder" /> -->
+		<Shortcut Id="AppDesktopShortcut"
+		  Directory="DesktopFolder"
+		  Advertise="yes"
+		  Name="$(var.AppName)"
+		  WorkingDirectory="APPLICATIONFOLDER"
+		  Icon="MainIcon.exe">
+		    <!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="3c1b0cac-12aa-54d0-85ac-9a4ca6e1d795" /> -->
+		</Shortcut>
         <RegistryValue Root="HKMU" Key="Software\$(var.AppName)" Name="DesktopShortcutInstalled" Type="integer" Value="[DESKTOP_SC]" KeyPath="yes" />
       </Component>
     </DirectoryRef>
 
     <!-- List of features to install -->
-    <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="no" InstallDefault="local">
+<!--     <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="no" InstallDefault="local">
       <ComponentRef Id="CleanupMainApplicationFolder" />
       <ComponentRef Id="DesktopShortcut" />
       <ComponentRef Id="StartMenuShortcut" />
       <ComponentGroupRef Id="AppFiles" />
-      <ComponentGroupRef Id="nppRegistryGroup" />
+      <ComponentGroupRef Id="nppRegistryGroup" /> -->
 	  
       <!-- <Feature Id="DesktopShortcutFeature" Title="!(loc.FeatureDesktopShortcut)" Level="1" Absent="allow" AllowAdvertise="no" InstallDefault="followParent">
         <ComponentRef Id="DesktopShortcut" />
@@ -99,6 +134,62 @@
       <Feature Id="StartmenuShortcutFeature" Title="!(loc.FeatureStartMenuShortcut)" Level="1" Absent="allow" AllowAdvertise="no" InstallDefault="followParent">
         <ComponentRef Id="StartMenuShortcut" />
       </Feature> -->
+<!-- 	<DirectoryRef Id="AppDataFolder">
+		<Directory Id="Npp_User" Name="$(var.AppName)">
+			<Component Id="UserSettingsRepair" Guid="{B3854BEE-ADD3-473E-8812-8465E000B749}">
+				<File Id="config_xml"
+					Name="config.xml"
+
+					Source="!(wix.APSourceDir)\config.xml">
+					- Vital="yes" -
+					<CopyFile Id="DupFile1" DestinationProperty="Npp_User" DestinationName="config.xml" />
+				</File>
+				- <CopyFile Id="DupFile1" SourceProperty="APPLICATIONFOLDER" SourceName="config.xml" DestinationProperty="Npp_User" DestinationName="config.xml" /> -
+				<RegistryValue Id="regHKCU2" Root="HKCU" Key="SOFTWARE\Classes\$(var.AppName)" Name="Config_XML" Value="1" Type="integer" KeyPath="yes" />
+			</Component>
+			<Component Id="Disable_Update" Guid="{36E52818-4676-46CB-8494-C6F63905AFC4}">
+				<Condition>DISABLE_UPDATE=1</Condition>
+				<RegistryValue Id="regHKCU3" Root="HKCU" Key="SOFTWARE\Classes\$(var.AppName)" Name="NoUpdate" Value="1" Type="integer" KeyPath="yes" />
+
+							- <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20080426">yes</GUIConfig> -
+							<util:XmlFile Id="config_xml_1"
+								Action="setValue"
+								ElementPath="/NotepadPlus/GUIConfigs/GUIConfig[\[]@name='noUpdate'[\]]"
+								Value="yes"
+								File="[Npp_User]config.xml"
+								SelectionLanguage="XPath"
+								Sequence="1" />
+							<util:XmlFile Id="config_xml_2"
+								Action="setValue"
+								ElementPath="/NotepadPlus/GUIConfigs/GUIConfig[\[]@name='noUpdate'[\]]"
+								Name="nextUpdateDate"
+								Value="20380426"
+								File="[Npp_User]config.xml"
+								SelectionLanguage="XPath"
+								Sequence="2" />
+							<util:XmlFile Id="config_xml_3"
+								Action="setValue"
+								ElementPath="/NotepadPlus/GUIConfigs/GUIConfig[\[]@name='noUpdate'[\]]"
+								Name="intervalDays"
+								Value="3650"
+								File="[Npp_User]config.xml"
+								SelectionLanguage="XPath"
+								Sequence="3" />
+			</Component>
+		</Directory>
+    </DirectoryRef>
+ -->    <!-- List of features to install -->
+    <Feature Id="UserSettings" InstallDefault="local" Description="Delivers user settings automatically to each profile." Display="expand" Level="1" Title="User Settings">
+<!--       <ComponentRef Id="UserSettingsRepair" />
+	  <ComponentRef Id="Disable_Update" /> -->
+	  <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="yes" InstallDefault="local">
+		<ComponentRef Id="CleanupMainApplicationFolder" />
+		<ComponentRef Id="DesktopShortcut" />
+		<ComponentRef Id="Notepad_exe" />
+		<!-- <ComponentRef Id="ActiveSetup64" /> -->
+		<ComponentGroupRef Id="AppFiles" />
+		<ComponentGroupRef Id="nppRegistryGroup" />
+      </Feature>
     </Feature>
 
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />

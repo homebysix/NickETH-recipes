@@ -82,11 +82,11 @@
 			Source="!(wix.APSourceDir)\config.xml">
 		</File>
 	  </Component> -->
-	  <Component Id="ActiveSetup64" Guid="{8B821104-9EAF-42D5-9578-9378359E7DDC}">
+<!-- 	  <Component Id="ActiveSetup64" Guid="{8B821104-9EAF-42D5-9578-9378359E7DDC}">
 		<RegistryValue Id="RegHKLM2" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Version" Value="$(var.ASVersion)" Type="string" KeyPath="yes" />
 		<RegistryValue Id="RegHKLM1" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Name="Stubpath" Value="msiexec /i [ProductCode] REINSTALL=UserSettings REINSTALLMODE=up /qn" Type="string" />
 		<RegistryValue Id="RegHKLM3" Root="HKLM" Key="SOFTWARE\Microsoft\Active Setup\Installed Components\[UpgradeCode]" Value="[ProductName]" Type="string" />
-	  </Component>
+	  </Component> -->
     </DirectoryRef>
 <!--     <DirectoryRef Id="contextMenu">
 	  <Component Id="contextMenuDLL" Guid="{302DCB68-544E-4645-9D4B-221F457C9063}" Win64="yes" KeyPath="yes">
@@ -134,24 +134,24 @@
       <Feature Id="StartmenuShortcutFeature" Title="!(loc.FeatureStartMenuShortcut)" Level="1" Absent="allow" AllowAdvertise="no" InstallDefault="followParent">
         <ComponentRef Id="StartMenuShortcut" />
       </Feature> -->
-	<DirectoryRef Id="AppDataFolder">
+<!-- 	<DirectoryRef Id="AppDataFolder">
 		<Directory Id="Npp_User" Name="$(var.AppName)">
 			<Component Id="UserSettingsRepair" Guid="{B3854BEE-ADD3-473E-8812-8465E000B749}">
 				<File Id="config_xml"
 					Name="config.xml"
 
 					Source="!(wix.APSourceDir)\config.xml">
-					<!-- Vital="yes" -->
+					- Vital="yes" -
 					<CopyFile Id="DupFile1" DestinationProperty="Npp_User" DestinationName="config.xml" />
 				</File>
-				<!-- <CopyFile Id="DupFile1" SourceProperty="APPLICATIONFOLDER" SourceName="config.xml" DestinationProperty="Npp_User" DestinationName="config.xml" /> -->
+				- <CopyFile Id="DupFile1" SourceProperty="APPLICATIONFOLDER" SourceName="config.xml" DestinationProperty="Npp_User" DestinationName="config.xml" /> -
 				<RegistryValue Id="regHKCU2" Root="HKCU" Key="SOFTWARE\Classes\$(var.AppName)" Name="Config_XML" Value="1" Type="integer" KeyPath="yes" />
 			</Component>
 			<Component Id="Disable_Update" Guid="{36E52818-4676-46CB-8494-C6F63905AFC4}">
 				<Condition>DISABLE_UPDATE=1</Condition>
 				<RegistryValue Id="regHKCU3" Root="HKCU" Key="SOFTWARE\Classes\$(var.AppName)" Name="NoUpdate" Value="1" Type="integer" KeyPath="yes" />
 
-							<!-- <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20080426">yes</GUIConfig> -->
+							- <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20080426">yes</GUIConfig> -
 							<util:XmlFile Id="config_xml_1"
 								Action="setValue"
 								ElementPath="/NotepadPlus/GUIConfigs/GUIConfig[\[]@name='noUpdate'[\]]"
@@ -178,15 +178,15 @@
 			</Component>
 		</Directory>
     </DirectoryRef>
-    <!-- List of features to install -->
+ -->    <!-- List of features to install -->
     <Feature Id="UserSettings" InstallDefault="local" Description="Delivers user settings automatically to each profile." Display="expand" Level="1" Title="User Settings">
-      <ComponentRef Id="UserSettingsRepair" />
-	  <ComponentRef Id="Disable_Update" />
+<!--       <ComponentRef Id="UserSettingsRepair" />
+	  <ComponentRef Id="Disable_Update" /> -->
 	  <Feature Id="MainApplication" ConfigurableDirectory="APPLICATIONFOLDER" Level="1" Title="$(var.AppName)" Absent="disallow" Display="expand" AllowAdvertise="yes" InstallDefault="local">
 		<ComponentRef Id="CleanupMainApplicationFolder" />
 		<ComponentRef Id="DesktopShortcut" />
 		<ComponentRef Id="Notepad_exe" />
-		<ComponentRef Id="ActiveSetup64" />
+		<!-- <ComponentRef Id="ActiveSetup64" /> -->
 		<ComponentGroupRef Id="AppFiles" />
 		<ComponentGroupRef Id="nppRegistryGroup" />
       </Feature>
