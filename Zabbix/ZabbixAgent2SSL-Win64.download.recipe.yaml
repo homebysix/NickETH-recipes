@@ -5,21 +5,27 @@ MinimumVersion: 1.3.1
 Input:
   NAME: 'ZabbixAgent2SSL'
   NAMEWIDE: 'Zabbix Agent 2 SSL'
-  MAIN_VER: '6.0'
+  MAJOR_VER: '6'
+  MAIN_VER: '%MAJOR_VER%.0'
+  #
+  BUILD_WIDTH: '2'
 
 Process:
 - Processor: URLTextSearcher
   Comment: Get a link to a redirect page from the official download page
   Arguments:
     #https://cdn.zabbix.com/zabbix/binaries/stable/6.0/6.0.31/zabbix_agent2-6.0.31-windows-amd64-openssl.msi
-    re_pattern: (?P<urlpart>%MAIN_VER%\\/[0-9\.]+\\/(?P<urlfile>zabbix_agent2-(?P<version>%MAIN_VER%.3[0-9]+?)-windows-amd64-openssl\.msi))(?!.*(%MAIN_VER%\\/[0-9\.]+\\/zabbix_agent2-%MAIN_VER%.3[0-9]+?-windows-amd64-openssl\.msi))
+    #https://cdn.zabbix.com/zabbix/binaries/stable/7.0/7.0.9/zabbix_agent-7.0.9-windows-amd64-openssl.msi
+    #re_pattern: (?P<urlpart>%MAIN_VER%\\/[0-9\.]+\\/(?P<urlfile>zabbix_agent2-(?P<version>%MAIN_VER%.[0-9]+?)-windows-amd64-openssl\.msi))(?!.*(%MAIN_VER%\\/[0-9\.]+\\/zabbix_agent2-%MAIN_VER%.[0-9]+?-windows-amd64-openssl\.msi))
+    #re_pattern: (?P<urlfile>zabbix_agent2-(?P<version>%MAIN_VER%.\d{1,2}?)-windows-amd64-openssl\.msi)(?!.*zabbix_agent2-%MAIN_VER%.\d{1,2}?-windows-amd64-openssl\.msi)
+    re_pattern: (?P<urlfile>zabbix_agent2-(?P<version>%MAIN_VER%.\d{%BUILD_WIDTH%}?)-windows-amd64-openssl\.msi)(?!.*zabbix_agent2-%MAIN_VER%.\d{%BUILD_WIDTH%}?-windows-amd64-openssl\.msi)
+    
     url: https://www.zabbix.com/download_agents
     re_flags: findall
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%-x64.msi'
-    #url: 'https://cdn.zabbix.com/zabbix/binaries/stable/%match%'
     url: 'https://cdn.zabbix.com/zabbix/binaries/stable/%MAIN_VER%/%version%/%urlfile%'
 
 - Processor: WindowsSignatureVerifier
