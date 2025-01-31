@@ -12,7 +12,8 @@ Input:
   SEARCH_URL_PLUG: 'https://www.techspot.com/downloads/472-irfanview-plugins.html'
   # <a href="https://www.irfanview.info/files/iview466g_x64.zip" class="alt-download">Download von IrfanView-64</a> iview466_x64_setup.exe
   VERSION_URL: (https://www.irfanview.info/files/iview(?P<versionraw>[0-9]+)g_x64_setup\.exe)
-  USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+  #Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0
+  USER_AGENT: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:11.0) like Gecko
 
 Process:
 - Processor: URLTextSearcher
