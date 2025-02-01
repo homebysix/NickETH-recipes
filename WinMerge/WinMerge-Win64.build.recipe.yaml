@@ -17,7 +17,7 @@ Process:
     build_dir: '%BUILD_DIR%'
     folder_list: release:read
     org_ver: '%version%'
-    pkg_dir: '%NAME%%PF_STRING%_%version%_ML'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
     ver_fields: '4'
