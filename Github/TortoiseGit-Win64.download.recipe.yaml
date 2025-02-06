@@ -10,7 +10,7 @@ Input:
   SEARCH_URL: https://tortoisegit.org/download/
   # href="//download.tortoisegit.org/tgit/2.15.0.0/TortoiseGit-2.15.0.0-64bit.msi
   # https://download.tortoisegit.org/tgit/2.15.0.0/TortoiseGit-LanguagePack-2.15.0.0-64bit-de.msi
-  SEARCH_STR: (//download\.tortoisegit\.org/tgit/([0-9]+\.)*[0-9]+/TortoiseGit-(?P<version>([0-9]+\.)*[0-9]+)-64bit.msi)
+  SEARCH_STR: (//download\.tortoisegit\.org/tgit/(?P<major_version>([0-9]+\.)*[0-9]+)/TortoiseGit-(?P<version>([0-9]+\.)*[0-9]+)-64bit.msi)
   USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
 
 Process:
@@ -46,16 +46,16 @@ Process:
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%_de_%PLATFORM%.msi'
-    url: 'https://download.tortoisegit.org/tgit/%version%/TortoiseGit-LanguagePack-%version%-64bit-de.msi'
+    url: 'https://download.tortoisegit.org/tgit/%major_version%/TortoiseGit-LanguagePack-%major_version%-64bit-de.msi'
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%_it_%PLATFORM%.msi'
-    url: 'https://download.tortoisegit.org/tgit/%version%/TortoiseGit-LanguagePack-%version%-64bit-it.msi'
+    url: 'https://download.tortoisegit.org/tgit/%major_version%/TortoiseGit-LanguagePack-%major_version%-64bit-it.msi'
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%_fr_%PLATFORM%.msi'
-    url: 'https://download.tortoisegit.org/tgit/%version%/TortoiseGit-LanguagePack-%version%-64bit-fr.msi'
+    url: 'https://download.tortoisegit.org/tgit/%major_version%/TortoiseGit-LanguagePack-%major_version%-64bit-fr.msi'
 
 - Processor: EndOfCheckPhase
