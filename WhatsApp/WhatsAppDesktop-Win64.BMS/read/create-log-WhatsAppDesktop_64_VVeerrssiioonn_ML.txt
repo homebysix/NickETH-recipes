@@ -1,0 +1,6 @@
+
+200113	Package WhatsApp Desktop x64 for Windows
+	We use the MSIX from the MS store as is.
+
+200113	Version 1.0.0.0, by AutoPkg
+	
