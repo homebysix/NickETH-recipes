@@ -88,7 +88,7 @@ Process:
       $Files2Install = Get-ChildItem $InstallDir -Name -Filter {InstallFilesFilter}
 
       foreach ($f2i in $Files2Install) {
-         Add-AppProvisionedPackage -online -packagepath (Join-Path -Path $InstallDir -ChildPath $f2i) -skiplicense | Out-File $logfile -Append
+         Add-AppProvisionedPackage -online -packagepath (Join-Path -Path $InstallDir -ChildPath $f2i) -skiplicense
          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;Installed [$f2i]&quot;
       }
       &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  END bDS Script [$ScriptName]   ###&quot;
