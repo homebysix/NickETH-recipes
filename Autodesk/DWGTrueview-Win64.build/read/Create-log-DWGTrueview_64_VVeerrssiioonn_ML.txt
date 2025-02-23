@@ -1,0 +1,13 @@
+
+200113	Create DWG Trueview for Windows x64
+	Download DWGTrueview Offline installer
+	From: https://www.autodesk.com/products/dwg-trueview/overview
+	Analyzing the installer package
+	It is no common installer from a well known source.
+	Looks like Autodesk has built its own installer.
+
+	So, we use it with no alterations at all.
+	Options: --silent
+
+
+200113	Version 1.0.0, by AutoPkg

@@ -1,0 +1,86 @@
+Description: Imports Logitech Options+ x64 to BMS
+Identifier: com.github.NickETH.recipes.BMS.LogiOptionsPlus-Win64
+ParentRecipe: com.github.NickETH.recipes.build.LogiOptionsPlus-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: LogiOptionsPlus
+  NAMESHORT: 'Options+'
+  NAMELONG: 'Logi Options+'
+  VENDOR: 'Logitech'
+  PF_STRING: _64
+  PLATFORM: x64
+  LANG_STRING: _ML
+  DIP_NAME: LogiOptionsPlus
+  DIP_SUBDIR: ML
+  PROC_CHAR: '%'
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%version%'
+    pattern_replace:
+    - pattern: \.
+      repl: _
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
+  Comment: Import the Application into Baramundi (BMS)
+  Arguments:
+    bms_CM_entry: AutoPKG-BMSImporter
+    bms_app_category: baramundi Application
+    bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
+    bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
+    bms_app_installparm: '/analytics no /flow no /sso no /update no /logivoice no /aipromptbuilder no /device-recommendation no /quiet'
+    bms_app_integration:
+    - appname: '%NAME%'
+      bundles:
+      - action: exchange
+        name: nV_%NAME%
+      - action: add
+        name: aV_%NAME% Uninstall
+        version: new
+      - action: add
+        name: oV_%NAME% Uninstall
+        version: previous
+      copyfolders: 1
+      currentversion:
+        bundle: nV_%NAME%
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
+        type: bundles
+      platform: (%PLATFORM%)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAMELONG%'
+      versionplatformtag: '%build_ver% ML (x86/x64)'
+    bms_job_kiosk:
+    - jobname: '%NAME%'
+      substring: 'Taskkill'
+      jobdescription: 'Logitech Options+ ist eine Software mit der Logitech Geräte unterstützt, angepasst und konfiguriert werden.'
+      autoenableapp: '%NAME% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAME%'
+    bms_app_iopt_copylocal: 'true'
+    bms_app_iopt_rebootbhv: NoReboot
+    bms_app_iopt_reinstall: 'false'
+    bms_app_iopt_usebbt: true
+    bms_app_name: '%NAMELONG%'
+    bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
+    bms_app_seccont: LocalSystem
+    bms_app_uninstcmd: '{%ProgramW6432%}\LogiOptionsPlus\logioptionsplus_updater.exe'
+    bms_app_uninstparm: '--uninstall --full --shadow'
+    bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
+    bms_app_vendor: '%VENDOR%'
+    bms_app_version: '%build_ver% ML (%PLATFORM%)'
+    bms_serverport: '%BMS_SERVER_PORT%'
+    bms_serverurl: '%BMS_SERVER1%'
+    bms_username: '%BMS_USERNAME1%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+
+- Processor: EndOfCheckPhase

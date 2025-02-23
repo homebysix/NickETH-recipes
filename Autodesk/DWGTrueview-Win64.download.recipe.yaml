@@ -1,0 +1,32 @@
+Description: Downloads the latest DWG Trueview x64 for Windows.
+Identifier: com.github.NickETH.recipes.download.DWGTrueview-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: DWGTrueview
+  NAMESHORT: 'Trueview'
+  VENDOR: 'Autodesk'
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+  DIP_NAME: DWGViewer
+  DIP_SUBDIR: ML
+  MAJORREL: '2025'
+  DOWNLOAD_URL: 'https://upload1.delivery.autodesk.com/PORTAL_DownloadPackage146620325107674.exe?response-content-disposition=attachment;filename="Create_Installer_PLC0000037_%MAJORREL%_English_WIN64.exe"'
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%DOWNLOAD_URL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Autodesk, Inc.", O="Autodesk, Inc.", L=San Francisco, S=California, C=US
+    input_path: '%pathname%'

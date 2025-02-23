@@ -1,0 +1,14 @@
+
+200113	Create Logitech Options+ for Windows x64
+	Download Logitech Options+ Offline installer
+	From: https://download01.logi.com/web/ftp/pub/techsupport/optionsplus/logioptionsplus_installer_offline.exe
+	Analyzing the installer package
+	It is no common installer from a well known source.
+	Looks like Logitech builds it without external help.
+
+	So, we use it with no alterations at all.
+	And try to disable as much BS as possible.
+	Options: /analytics no /flow no /sso no /update no /logivoice no /aipromptbuilder no /device-recommendation no /quiet
+
+
+200113	Version 1.0.0, by AutoPkg
