@@ -1,4 +1,4 @@
-.
+
 190207	Get the installer stub from: https://www.mindmanager.com/mm-win-exe
 	From there, we need to extract installparams.js, which contains the path to
 	the actual installerlistMMDxxx.js on cloudfront.net.

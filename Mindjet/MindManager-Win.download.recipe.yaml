@@ -4,16 +4,18 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: MindManager
-  DOWNLOAD_URL: https://www.mindmanager.com/mm-win-exe
+  #DOWNLOAD_URL: https://www.mindmanager.com/mm-win-exe
+  MAJOR_VERSION: '23'
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
   PLATFORM: Win64
   PF_DIGIT: '32'
+  DOWNLOAD_URL: https://dwnld.mindmanager.com/stubs/Release/MindManager%MAJOR_VERSION%/MindManager%MAJOR_VERSION%_setup.exe
 
 Process:
 - Processor: URLDownloader
   Comment: Get the installer stub.
   Arguments:
-    filename: MindManager_Stub.exe
+    filename: MindManager_Stub_%MAJOR_VERSION%.exe
     url: '%DOWNLOAD_URL%'
 
 - Processor: StopProcessingIf
@@ -36,6 +38,7 @@ Process:
     file_to_open: '%RECIPE_CACHE_DIR%\downloads\installparams.js'
     #"https://dkmivjis4azh9.cloudfront.net/Builds/MindManager231/installerlistMMD231.js"
     re_pattern: https:\/\/.*?\.cloudfront\.net\/Builds\/.*?\.js
+    stubpath: '%pathname%'
 
 - Processor: URLTextSearcher
   Comment: Searches the installerlistMMDxxx.js for the actual download URL of the MSI. We als extract the version
@@ -53,7 +56,7 @@ Process:
 
 - Processor: URLDownloader
   Arguments:
-    filename: MindManager_%PF_DIGIT%_raw.msi
+    filename: MindManager_%MAJOR_VERSION%_%PF_DIGIT%_raw.msi
     request_headers:
       user-agent: '%USER_AGENT%'
     url: '%parsed_string%'
