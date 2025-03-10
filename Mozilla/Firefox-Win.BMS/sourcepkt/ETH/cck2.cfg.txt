@@ -31,6 +31,6 @@ pref("signon.rememberSignons", true);
 pref("datareporting.healthreport.uploadEnabled", false);
 pref("datareporting.policy.dataSubmissionEnabled", false);
 pref("toolkit.telemetry.archive.enabled", false);
-pref("dom.mozApps.signed_apps_installable_from
+// pref("dom.mozApps.signed_apps_installable_from
 pref("loop.enabled", false);
 pref("privacy.webrtc.hideGlobalIndicator", true);
