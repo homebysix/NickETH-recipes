@@ -3,7 +3,7 @@
 <!-- <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"> -->
 	<?include version.wxi?>
     <Product Id="$(var.Productcode)" Language="1033" Manufacturer="mozilla.org" Name="FireFox $(var.version) ML" UpgradeCode="{A86F5A84-7769-4C7A-8011-712499F65F04}" Version="$(var.version)">
-        <Package Comments="FireFox is the No. one competitor to Microsoft's Internet Explorer" Compressed="yes" Description="Web Browser" InstallerVersion="500" Languages="1033" Manufacturer="Nick Heim, ETHZ ID" Platform="x86" />
+        <Package Comments="FireFox is the No. one competitor to Microsoft Edge and Google Chrome" Compressed="yes" Description="Web Browser" InstallerVersion="500" Languages="1033" Manufacturer="Nick Heim, ETHZ ID" Platform="x86" />
         <Binary Id="SC_Scripts" SourceFile="..\sourcepkt\SC_Scripts.vbs" />
 		<Icon Id="FFIcons" SourceFile="..\sourcepkt\Firefox-Icons.exe" />
         <CustomAction Id="AddCombo" BinaryKey="SC_Scripts" VBScriptCall="AddComboTable" />
@@ -59,7 +59,7 @@
                     </Directory>
                     <Directory Id="StartMenuFolder" ShortSourceName="StartM~1" SourceName="Start Menu">
                         <Directory Id="ProgramMenuFolder" SourceName="Programs">
-                            <Directory Id="SHORTCUTDIR" Name="Internet" >
+                            <Directory Id="SHORTCUTDIR" Name="Mozilla" >
 								<Component Id="StartMenu_Shortcut" Guid="{D92BE001-6A4F-4F4D-86CB-3BD21378BCE9}">
 									<RegistryValue Id="regARP1" Root="HKMU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]" Name="ShortcutDirectory" Value="[SHORTCUTDIR]" Type="string" KeyPath="yes" />
 									<Shortcut Id="Mozilla_Firefox" Directory="SHORTCUTDIR" Name="Mozilla Firefox" ShortName="MOZILL~1"  Target="[#firefox.exe]" Hotkey="0" Show="normal" WorkingDirectory="INSTALLDIR" >
@@ -200,7 +200,7 @@
         <Property Id="ARPURLUPDATEINFO" Value="http://studides.ethz.ch" />
         <Property Id="ARPCOMMENTS" Value="Mozilla Firefox" />
         <Property Id="ProfileMigration" Value="true" />
-        <Property Id="MENU_FOLDERID" Value="Internet" />
+        <Property Id="MENU_FOLDERID" Value="Mozilla" />
         <Property Id="INSTALLDIR" Secure="yes" />
         <Property Id="QTPLUGINDIR" Secure="yes" />
         <Property Id="DEFAULTPREFS" Value="1" Secure="yes" />
