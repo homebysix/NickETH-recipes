@@ -1,0 +1,10 @@
+{
+  "policies": {
+    "DisableMasterPasswordCreation": true,
+    "DontCheckDefaultBrowser": true,
+    "DisplayMenuBar": "default-on",
+    "DisableTelemetry": true,
+    "DisableAppUpdate": true,
+    "DisablePocket": true
+  }
+}

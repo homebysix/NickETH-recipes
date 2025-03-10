@@ -11,7 +11,8 @@
 	Configuration:
 	Automatic language switching for th installed languages.
 	Autoupdate disabled.
-	For more infos, see the cck2.cfg file.
+	Configuration is done with preferences and policies.
+	See cck2.cfg and policies.json files.
 
 	MSI-Features:
 	Language_Pack_DEU, Language_Pack_FRA, Language_Pack_ITA, Language_Pack_RUM
@@ -23,83 +24,22 @@
 	DESKTOP_SC=0 (disable the desktop shortcut).
 	
 	Used tools:
-	CCK2 https://github.com/mkaply/cck2wizard
-	GPO module for Mozilla products https://mozillagpo.sourceforge.io/
 	Wix wixtoolset.org/
 	NANT http://nant.sourceforge.net/
 	AutoPkg
 
 	See the project files for more details.
 
+	Noscript default whitelist is stored in storage-sync.sqlite in the users profile
+	Open storage-sync.sqlite offline with SQLiteStudio.
+	Go to table  collection_data-record gehen (double click) and select Data / forms view.
+	Now the content of record can be edited.
+	storage-sync.sqlite will be copied to a new profile with the default profile in Firefox.
+
 	Todo:
-	Use Mozillas own GPO feature.
 	Bring the search tools to the actual level.
 	Migrate NANT to MS Build.
 	Extend the MozillaAddonIntegrator for policy settings and other helper functions.
 
-210101	Released.
 
-
-	cck.cfg.txt mit Byteshift 13 verschlüsseln (BytShifter.ps1-->helperfiles) und cck2.cfg generieren.
-	http://home.comcast.net/~dabbink/dabbink/ByteShifter.htm
-	cck2.cfg in .\Mozilla Firefox\ einfügen.
-
-
-	Die folgenden Zeilen in cck2.cfg.txt einfügen oder kontrollieren:
-	Diese schalten den Firstrun der entsprechenden Extensions ab.
-	lockPref("app.update.auto", false);
-	lockPref("app.update.enabled", false);
-	lockPref("browser.startup.homepage_override.mstone", "ignore");
-	lockPref("extensions.update.enabled", false);
-	lockPref("extensions.shownSelectionUI", true);
-	lockPref("extensions.autoDisableScopes", 11);
-	lockPref("plugins.hide_infobar_for_outdated_plugin", false);
-	lockPref("xpinstall.signatures.required", false);
-	lockPref("app.update.silent", true);
-
-	lockPref("app.update.service.enabled", false);
-
-	defaultPref("intl.locale.requested","");
-	defaultPref("browser.startup.homepage","data:text/plain,browser.startup.homepage=www.ethz.ch");
-
-	pref("browser.search.widget.inNavBar", true);
-	pref("browser.rights.3.shown", true);
-	pref("toolkit.telemetry.enabled", false);
-	pref("toolkit.telemetry.prompted", 2);
-	pref("browser.safebrowsing.appRepURL","");
-	pref("security.tls.version.min", 1);
-	pref("plugin.state.nppdf", 2);
-	pref("plugin.state.np-mswmp", 2);
-	pref("browser.selfsupport.url","");
-	pref("browser.search.widget.inNavBar", true);
-	pref("extensions.adblockplus.currentVersion", "");
-	
-	  "noWelcomePage": true,
-	  "noUpgradePage": true,
-	  "displayMenuBar": true,
-	  "dontCheckDefaultBrowser": true,
-	  "dontUseDownloadDir": false,
-	  "dontRememberPasswords": false,
-	  "noMasterPassword": false,
-	  "disableCrashReporter": true,
-	  "disableTelemetry": true,
-	  "disableFirefoxHealthReportUpload": true,
-	  "disableFirefoxHealthReport": true,
-	  "disableFirefoxUpdates": true,
-	  "disableWebApps": true,
-	  "disableHello": true,
-	  "disableSharePage": true,
-	  "disableHeartbeat": true,
-	  "disablePocket": true,
-
-	Noscript Default Whitelist wird im Profil in storage-sync.sqlite gespeichert.
-	storage-sync.sqlite wird offline in SQLiteStudio geöffnet.
-	Danach auf Tabellen-collection_data-record gehen (Doppelklick) und Data / Formularansicht wählen.
-	Dann kann der Inhalt von record editiert werden.
-	storage-sync.sqlite wird in ein neues Profil mit der Default Profile Funktion von CCK2 kopiert.
-	Diese musste leicht abgeändert werden, da wird das Lookup-Property ("browser.startup.homepage_override.mstone") locken.
-	Deshalb wird das folgende Property für diesen Zweck vewendet: "browser.migration.version"
-
-	WIX-Mondo Dialog eingeschaltet. Die Grafiken von Wise-Neptun-Themes eingebunden.
-
-190423	Released v66.0.2,  Build 1
+250308	Released v135.0.0,  Build 1

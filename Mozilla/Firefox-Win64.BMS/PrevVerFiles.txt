@@ -1,0 +1,12 @@
+FFfiles.wxs
+MozExt_adblock.xpi.wxs
+MozExt_de.xpi.wxs
+MozExt_dict-fr.xpi.wxs
+MozExt_dict-it.xpi.wxs
+MozExt_fr.xpi.wxs
+MozExt_it.xpi.wxs
+MozExt_noscript.xpi.wxs
+MozExt_rm.xpi.wxs
+FFSearchplug-CH.wxs
+FFSearchplug-ETH.wxs
+MozExt_dict-de.xpi.wxs

@@ -1,6 +1,6 @@
 # Mozilla Firefox (x86/x64) AutoPkg recipes
 **download** (get the actual installer)  
-**build** (alter the MSI with all the changes)  
+**build** (create the MSI with all the changes)  
 **BMS** (import the package into baramundi server)
 
 **Features:**  

@@ -14,7 +14,7 @@ Process:
     - --request
     - GET
     re_pattern: '%SOFTWARE_GUID%'
-    url: https://webdownloads5.ts.fujitsu.com/deskupdate_5_1/data/api/v2/update/5.02.0056.0
+    url: https://webdownloads.ts.fujitsu.com/deskupdate_5_1/data/api/v2/update/5.02.0075.0
 
 - Processor: URLDownloader
   Arguments:
