@@ -23,7 +23,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Stichting Blender Foundation, O=Stichting Blender Foundation, L=Amsterdam, S=Noord-Holland, C=NL
+    expected_subject: CN=Blender Foundation, O=Blender Foundation, L=Amsterdam, S=Noord-Holland, C=NL
     input_path: '%pathname%'
 
 - Processor: StopProcessingIf

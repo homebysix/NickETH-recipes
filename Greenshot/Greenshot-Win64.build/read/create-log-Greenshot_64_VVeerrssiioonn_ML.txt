@@ -1,0 +1,11 @@
+200113	Packaging Ghostscript x64
+	As of Aprill 2023, Artifex removed the silent install???
+	See: https://artifex.com/news/ghostscript-10.01.0-disabling-silent-install-option
+	Download the Windows exe package.
+	Extract the exe file.
+	Build it to an MSI.
+	Extract the icon and build an icon-resource-exe.
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0, by AutoPkg

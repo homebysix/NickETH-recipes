@@ -24,7 +24,7 @@ class InnoEditor(Processor):
     description = "Decompiles an Inno-Setup EXE-file, Alters the script and Recompiles it."
     input_variables = {
         "inno_path": {
-            "required": True,
+            "required": False,
             "description": "Path to the Inno-Setup file, required",
         },
         "inno_compiler": {
@@ -55,18 +55,24 @@ class InnoEditor(Processor):
         verbosity = self.env.get('verbose', 1)
         extract_flag = 'l'
         self.output("Working on: %s" % inno_path)
-        innounp_exe = os.path.join(self.env['TOOLS_DIR'], "innounp.exe")
-        cmd_decomp = [innounp_exe, '-x', '-m', '-b', '-q', '-d{}'.format(workfolder), inno_path]
+        # innounp_exe = os.path.join(self.env['TOOLS_DIR'], "innounp.exe")
+        # cmd_decomp = [innounp_exe, '-x', '-m', '-b', '-q', '-d{}'.format(workfolder), inno_path]
 
-        try:
-            if verbosity > 1:
-                #print >> sys.stdout, "verbosity %s" % verbosity
-                Output = subprocess.check_output(cmd_decomp)
-            else:
-                Output = subprocess.check_output(cmd_decomp)
-        except:
-            if ignore_errors != 'True':
-                raise
+        if {"inno_path"}.issubset(self.env):
+            innounp_exe = os.path.join(self.env['TOOLS_DIR'], "innounp.exe")
+            # cmd_comp = [inno_compiler, '-d{}'.format(workfolder), (os.path.join(self.env[workfolder], "install_script.iss"))]
+            # cmd_comp = [inno_compiler, (os.path.join(workfolder, "install_script.iss"))]
+            cmd_decomp = [innounp_exe, '-x', '-m', '-b', '-q', '-d{}'.format(workfolder), inno_path]
+            
+            try:
+                if verbosity > 1:
+                    #print >> sys.stdout, "verbosity %s" % verbosity
+                    Output = subprocess.check_output(cmd_decomp)
+                else:
+                    Output = subprocess.check_output(cmd_decomp)
+            except:
+                if ignore_errors != 'True':
+                    raise
 
         if {"inno_compiler"}.issubset(self.env):
             inno_compiler = self.env.get('inno_compiler')

@@ -1,0 +1,12 @@
+
+200113	Create PyMOL for Windows x64
+	Download PyMOL installer
+	From: https://pymol.org/
+	Analyzing the installer package
+	It is a NSIS installer.
+
+	So, we use it with no alterations at all.
+	Options: ...to come...
+
+
+200113	Version 1.0.0, by AutoPkg

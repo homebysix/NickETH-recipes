@@ -1,0 +1,35 @@
+Description: Downloads latest Freeplane installer for Windows.
+Identifier: com.github.NickETH.recipes.download.Freeplane-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Freeplane
+
+  SEARCH_URL: https://sourceforge.net/projects/freeplane/rss
+  SEARCH_PATTERN: (https://sourceforge.net/.*?/Freeplane-Setup-(?P<version>([0-9]+\.)*[0-9]+).exe)
+  USER_AGENT: AutoPkg/1.0 (Windows NT 10.0; Win64; x64) curl/7.64.1
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Get the download link for the most recent release
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN%'
+    url: '%SEARCH_URL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      
+- Processor: URLDownloader
+  Arguments:
+    curl_opts:
+    - -L
+    filename: '%NAME%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%match%/download'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Open Source Developer, Dimitry Polivaev", O=Open Source Developer, L=München, S=Bayern, C=DE
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
