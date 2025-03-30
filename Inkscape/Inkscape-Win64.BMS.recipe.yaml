@@ -39,7 +39,7 @@ Process:
       - action: exchange
         name: 'nV_%NAME%'
       - action: add
-        name: nV_%NAME% Uninstall
+        name: aV_%NAME% Uninstall
         version: new
       - action: add
         name: oV_%NAME% Uninstall
@@ -60,11 +60,13 @@ Process:
     - jobname: '%NAME%'
       substring: 'Taskkill'
       jobdescription: 'Inkscape ist ein professionelles Programm zur Bearbeitung von Vektorgrafiken. Inkscape nutzt SVG (Scalable Vector Graphics) als Dateiformat.'
+      autoenableapp: 'Inkscape - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_Inkscape'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
     bms_app_iopt_usebbt: true
-    bms_app_name: '%NAME%1'
+    bms_app_name: '%NAME%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: msiexec.exe

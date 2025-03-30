@@ -8,14 +8,15 @@ Input:
   VENDOR: Igor Pavlov
   PLATFORM: x64
   PF_STRING: _64
-  DIP_SUBDIR: ML_x64
-  SEARCH_URL_MSI: (?P<msi_dl_link>https://sourceforge\.net/projects/sevenzip/files/7-Zip/(?P<version>[0-9]+\.[0-9]+)/7z[0-9]+-x64\.msi/download)
+  LANG_STRING: _ML
+  DIP_NAME: 7_Zip
+  DIP_SUBDIR: ML
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Arguments:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
-    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   Arguments:
@@ -31,7 +32,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\7_Zip\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1
     bms_app_integration:
     - appname: '%NAME%'
@@ -52,6 +53,15 @@ Process:
       subspec: ''
       vendor: '%VENDOR%'
       version: '%build_ver% ML' 
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAME%'
+      versionplatformtag: '%build_ver% ML (%PLATFORM%)'
+    bms_job_kiosk:
+    - jobname: '%NAME%'
+      substring: 'Taskkill'
+      jobdescription: '7-Zip ist ein Datenkompressionsprogramm mit einer hohen Kompressionsrate für eine grosse Anzahl von Formaten.'
+      autoenableapp: '7-Zip - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_7-Zip'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
@@ -66,9 +76,10 @@ Process:
     bms_app_version: '%build_ver% ML (%PLATFORM%)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
-    bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.ms?|%BMS_IMPORT_PATH_TST%\7_Zip\%parsed_string%\%DIP_SUBDIR%'
-    json_file_dest: '%BMS_IMPORT_PATH_TST%\7_Zip\bms_app_integration.json'
-    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\7_Zip\%parsed_string%\DEV'
+    bms_username: '%BMS_USERNAME1%'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.ms?|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
 
 - Processor: EndOfCheckPhase

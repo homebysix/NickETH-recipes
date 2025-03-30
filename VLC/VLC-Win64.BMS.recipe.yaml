@@ -5,10 +5,14 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: VLC
+  NAME_LONG: 'VLC media player'
   VENDOR: VideoLAN
   VLCPLATFORM: win64
   PLATFORM: x64
   PF_STRING: _64
+  LANG_STRING: _ML
+  DIPNAME: VLC_MediaPlayer
+  DIP_SUBDIR: ML
   SEARCH_PATTERN: (vlc-(?P<version>[0-9.]+)-win64\.%PKGFORMAT%)
 
 Process:
@@ -33,44 +37,55 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,2,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\VLC_MediaPlayer\%parsed_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1
-    bms_app_integration:
-    - appname: VLC media player
-      bundles:
-      - action: exchange
-        name: nV_VLC media player
-      - action: add
-        name: aV_VLC media player Uninstall
-        version: new
-      - action: add
-        name: oV_VLC media player Uninstall
-        version: previous
-      currentversion:
-        bundle: nV_VLC media player
-        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
-        type: bundles
-      platform: (x64)
-      subspec: ''
-      vendor: '%VENDOR%'
-      version: '%build_ver% ML'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
     bms_app_iopt_usebbt: true
-    bms_app_name: VLC media player
+    bms_app_name: '%NAME_LONG%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: msiexec.exe
     bms_app_uninstparm: /x %msi_value% /qn
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
-    bms_app_version: '%version% ML (x64)'
+    bms_app_version: '%build_ver% ML (x64)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
-    bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi|%BMS_IMPORT_PATH_TST%\VLC_MediaPlayer\%parsed_string%\ML'
-    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-VLC*.txt|%BMS_IMPORT_PATH_TST%\VLC_MediaPlayer\%parsed_string%\DEV'
-    json_file_dest: '%BMS_IMPORT_PATH_TST%\VLC_MediaPlayer\bms_app_integration.json'
+    bms_username: '%BMS_USERNAME1%'
+    bms_app_integration:
+    - appname: '%NAME_LONG%'
+      bundles:
+      - action: exchange
+        name: 'nV_%NAME_LONG%'
+      - action: add
+        name: 'aV_%NAME_LONG% Uninstall'
+        version: new
+      - action: add
+        name: 'oV_%NAME_LONG% Uninstall'
+        version: previous
+      currentversion:
+        bundle: 'nV_%NAME_LONG%'
+        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (x64)'
+        type: bundles
+      platform: (x64)
+      subspec: ''
+      vendor: '%VENDOR%'
+      version: '%build_ver% ML'
+      copyfolders: 1
+    bms_app_sharepoint:
+    - SW-List-Name: '%NAME_LONG%'
+      versionplatformtag: '%build_ver% ML (%PLATFORM%)'
+    bms_job_kiosk:
+    - jobname: '%NAME_LONG%'
+      substring: 'Taskkill'
+      jobdescription: 'Mediaplayer für diverse Audio-, Videocodecs und Dateiformate.'
+      autoenableapp: 'VLC media player - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_VLC media player'
+    json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIPNAME%\bms_app_integration.json'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-VLC*.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\DEV'    
 
 - Processor: EndOfCheckPhase
