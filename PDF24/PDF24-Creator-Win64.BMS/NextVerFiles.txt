@@ -1,0 +1,3 @@
+read\create-log-PDF24-Creator_64_VVeerrssiioonn_ML.txt
+read\readme-PDF24-Creator_64_VVeerrssiioonn_ML.txt
+helpers\*.*

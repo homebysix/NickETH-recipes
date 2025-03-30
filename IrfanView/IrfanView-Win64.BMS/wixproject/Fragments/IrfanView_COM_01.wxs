@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <!-- <Directory Id="TARGETDIR"> -->
+		<DirectoryRef Id="APPLICATIONFOLDER">
+                        <Component Id="IrfanView_COM_01" Guid="{74A912D3-F0B2-4C29-8C37-66879D9D2E17}" Win64="yes">
+                            <ProgId Id="IrfanView.jpg" Description="IrfanView JPG File" Icon="MainIcon.exe" IconIndex="0" Advertise="yes">
+                                <Extension Id="jpg" Advertise="yes">
+                                    <Verb Id="open" Command="open" Argument="&quot;%1&quot;" Sequence="1" />
+                                </Extension>
+                            </ProgId>
+                            <ProgId Id="IrfanView.png" Description="IrfanView PNG File" Icon="MainIcon.exe" IconIndex="0" Advertise="yes">
+                                <Extension Id="png" Advertise="yes">
+                                    <Verb Id="open" Command="open" Argument="&quot;%1&quot;" Sequence="1" />
+                                </Extension>
+                            </ProgId>
+                            <ProgId Id="IrfanView.tif" Description="IrfanView TIF File" Icon="MainIcon.exe" IconIndex="0" Advertise="yes">
+                                <Extension Id="tif" Advertise="yes">
+                                    <Verb Id="open" Command="open" Argument="&quot;%1&quot;" Sequence="1" />
+                                </Extension>
+                            </ProgId>
+                            <RegistryValue Id="Registry_2315A6E7_A49B_4C5F_9C65_DA08F9F5529A_" Root="HKCR" Key="IrfanView.aif\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" KeyPath="yes" />
+                            <RegistryValue Id="Registry_A6D218BC_8F0A_43EF_8457_D4A1A21C2CBB_" Root="HKCR" Key="IrfanView.asf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_C8FFD984_5FB6_4757_AD31_ED401FE3BD92_" Root="HKCR" Key="IrfanView.au\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_341B1D92_00F7_4BC5_9E01_6B498D7A8419_" Root="HKCR" Key="IrfanView.avi\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_B7C6BBEB_B057_49CB_9239_BB89274048EC_" Root="HKCR" Key="IrfanView.b3d\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_38034F6E_B020_471E_BCEA_77EC448CFFBD_" Root="HKCR" Key="IrfanView.bmp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_DF2C9A35_6394_4322_B66A_C9E53BF187A0_" Root="HKCR" Key="IrfanView.clp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_F2F90B13_4D18_4639_BE19_7622AB358D70_" Root="HKCR" Key="IrfanView.cr2\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_8018064E_300D_488A_8B17_6B4656D2D69F_" Root="HKCR" Key="IrfanView.cr3\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_6A222ADA_99E8_4E4B_8FE1_7D82DABFF2D3_" Root="HKCR" Key="IrfanView.crw\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_704D6DE2_528B_418F_A859_2288B2AB59B6_" Root="HKCR" Key="IrfanView.dcm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_BD2E2253_1D26_467A_BA7C_437C47CA0D61_" Root="HKCR" Key="IrfanView.dcx\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_39036A3B_A6EB_4EC6_A0EE_94F0B36E98D8_" Root="HKCR" Key="IrfanView.dds\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_671D9143_B332_4F34_8D3D_F9348FF54C72_" Root="HKCR" Key="IrfanView.djvu\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_A7692CB9_B347_4A0A_9E1E_2CA3F36D9B2F_" Root="HKCR" Key="IrfanView.dxf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_026CE04D_205E_4316_91C2_FD85C16C8E99_" Root="HKCR" Key="IrfanView.ecw\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_DCAC471B_90A1_4D16_B54B_1F8A5A7ECAEF_" Root="HKCR" Key="IrfanView.emf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_28690EBD_138F_4685_BBBC_2A3E68BC4610_" Root="HKCR" Key="IrfanView.eps\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_EB64B198_89B1_4E28_BCE8_7574A72C0F7D_" Root="HKCR" Key="IrfanView.exr\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_BE49E7A9_6669_4E92_93CF_738C9C2FFFA8_" Root="HKCR" Key="IrfanView.flv\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_70875F73_230E_417A_9120_50DEB44E6E81_" Root="HKCR" Key="IrfanView.g3\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_61C29E28_BECB_4467_9C3F_108E6E7B7ED5_" Root="HKCR" Key="IrfanView.gif\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_51FFB0D2_3051_44A4_B9CF_B7BD5752B95E_" Root="HKCR" Key="IrfanView.hdp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_04F2F065_2A04_4BFD_B49F_4AA6EAD97A37_" Root="HKCR" Key="IrfanView.heic\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_29DC115E_ACCB_49C3_B920_442799F50BA8_" Root="HKCR" Key="IrfanView.iff\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_54E3CC4A_F656_4BBE_BF69_521536424BF0_" Root="HKCR" Key="IrfanView.jls\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_9A9EF42B_2B57_42EE_9362_3EE38672F80B_" Root="HKCR" Key="IrfanView.jng\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_94BE1246_74DE_4F76_9FB1_0F0260D9DFBC_" Root="HKCR" Key="IrfanView.jp2\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_35FD21B7_BCE1_4E4A_BAB8_898EE11CAE8A_" Root="HKCR" Key="IrfanView.jpm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_E95D79AC_0753_45BC_9294_37A2FFBE6925_" Root="HKCR" Key="IrfanView.jxl\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_67962840_AD0A_48E4_9304_75D790162C37_" Root="HKCR" Key="IrfanView.mid\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_C6DDD6EF_75BA_4117_B93E_1C168E550974_" Root="HKCR" Key="IrfanView.mng\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_343430D5_9E57_410A_A117_1678639DEABC_" Root="HKCR" Key="IrfanView.mov\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_8AB84492_F129_4DA2_84D6_95C8E49DD6BC_" Root="HKCR" Key="IrfanView.mp3\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_69AA080B_7461_47FC_821B_E63DF68F984B_" Root="HKCR" Key="IrfanView.mpe\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_46EF362C_B876_42A1_9853_CFB2F5BA0149_" Root="HKCR" Key="IrfanView.mpg\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_C944D9B2_384E_4D46_87D2_30815762E1DF_" Root="HKCR" Key="IrfanView.ogg\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_AADBCEFD_902F_495C_B5CA_1D68379AEBC2_" Root="HKCR" Key="IrfanView.pbm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_A3019512_2BD1_48D5_A3C5_5C63073D6284_" Root="HKCR" Key="IrfanView.pcd\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_F54950C1_BAE5_462F_A8B3_6700DEDFE2C7_" Root="HKCR" Key="IrfanView.pcx\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_6469DFBA_0176_464C_949B_FACE22CFC058_" Root="HKCR" Key="IrfanView.pgm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_C1DA9F72_49D8_404C_9228_ABFE5FB6AE40_" Root="HKCR" Key="IrfanView.ppm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_AC25AC52_398D_4C20_B497_EDCCF7A773DF_" Root="HKCR" Key="IrfanView.psd\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_3E7BA171_A0B5_4407_800C_03C930DF6B78_" Root="HKCR" Key="IrfanView.psp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_91BFA35A_5079_44C1_AA5D_CECE22CD1193_" Root="HKCR" Key="IrfanView.qoi\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_02402DF3_8B96_433D_9FDD_136F9CBF82FB_" Root="HKCR" Key="IrfanView.ras\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_FB2EA7C3_CA00_4BEA_A709_63BC329831E6_" Root="HKCR" Key="IrfanView.raw\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_5667C0FB_0A28_474F_9100_DBA642F08DA6_" Root="HKCR" Key="IrfanView.rle\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_EAEB2084_3A36_47CD_AE88_A4FDE664333F_" Root="HKCR" Key="IrfanView.rmi\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_6C5C9EEC_2807_4A4C_A8D0_97647C28EB35_" Root="HKCR" Key="IrfanView.sff\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_9DC84CE1_6C56_409A_8E2C_F19F39F38B9D_" Root="HKCR" Key="IrfanView.sgi\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_34DAF8D4_A5FB_412E_89CC_1F697A530A1E_" Root="HKCR" Key="IrfanView.sid\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_73053D92_341E_4784_A205_4E30110D0B68_" Root="HKCR" Key="IrfanView.swf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_13E2464A_022F_4107_8C51_99429B79A280_" Root="HKCR" Key="IrfanView.tga\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_546D8BCB_0979_4455_8170_D460D4B25283_" Root="HKCR" Key="IrfanView.ttf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_0D62421F_EC20_4670_BB04_BDB03D71E151_" Root="HKCR" Key="IrfanView.wav\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_5DA489F9_C0BE_4D90_A21F_98A1134607E4_" Root="HKCR" Key="IrfanView.wbmp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_B5AA408E_88FE_41FB_A6BA_17FDC2F974DA_" Root="HKCR" Key="IrfanView.webp\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_27E4AA84_F710_43D3_B6DB_E8819A6519D6_" Root="HKCR" Key="IrfanView.wma\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,8" Type="string" />
+                            <RegistryValue Id="Registry_631DF585_E214_40C2_A8DD_CFE1C4A3B0BC_" Root="HKCR" Key="IrfanView.wmf\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_BC1E2667_57AD_49CA_82A6_982B969E608F_" Root="HKCR" Key="IrfanView.wmv\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,9" Type="string" />
+                            <RegistryValue Id="Registry_C8B3F1CB_6DCE_42E8_9ABF_711C4D4A615E_" Root="HKCR" Key="IrfanView.xbm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                            <RegistryValue Id="Registry_D11C38B6_E4D3_4BD1_98C8_BE68374BA64A_" Root="HKCR" Key="IrfanView.xpm\DefaultIcon" Value="[APPLICATIONFOLDER]i_view64.exe,0" Type="string" />
+                        </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="IrfanView_COM">
+            <ComponentRef Id="IrfanView_COM_01" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

@@ -60,12 +60,14 @@ Process:
       vendor: '%VENDOR%'
       version: '%build_ver% ML'
     bms_app_sharepoint:
-    - SW-List-Name: '%NAME%'
+    - SW-List-Name: '%NAMELONG%'
       versionplatformtag: '%build_ver% ML (x86 / x64)'
     bms_job_kiosk:
     - jobname: '%NAMELONG%'
       substring: 'Taskkill'
-      jobdescription: 'Google Chrome ist ein Webbrowser von Google LLC. Er ist seit 2012 der weltweit am weitesten verbreitete Browser..'
+      jobdescription: 'Google Chrome ist ein Webbrowser von Google LLC. Er ist seit 2012 der weltweit am weitesten verbreitete Browser.'
+      autoenableapp: '%NAMESHORT% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAME%'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
@@ -80,10 +82,10 @@ Process:
     bms_app_version: '%build_ver% ML (%PLATFORM%)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
-    bms_username: '%BMS_USERNAME%'
+    bms_username: '%BMS_USERNAME1%'
     inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
-    #icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
     read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
 
 - Processor: EndOfCheckPhase
