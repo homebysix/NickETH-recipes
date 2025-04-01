@@ -47,9 +47,10 @@ Process:
     bms_app_version: '%build_ver% ML (%PLATFORM%)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
-    bms_username: '%BMS_USERNAME%'
+    bms_username: '%BMS_USERNAME1%'
     inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.ms?|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\ML%PF_STRING%'
     read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\DEV'
+    icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%NAME%\bms_app_integration.json'
     bms_app_integration:
     - appname: '%NAME%'
