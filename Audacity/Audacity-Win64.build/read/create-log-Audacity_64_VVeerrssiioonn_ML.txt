@@ -1,0 +1,10 @@
+200113	Packaging Audacity x64
+
+	Download the Windows exe package.
+	Unpack the exe file with innounp.
+	Build it to an MSI.
+	Extract the icon and build an icon-resource-exe.
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0, by AutoPkg

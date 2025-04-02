@@ -1,0 +1,7 @@
+avcodec*.dll
+avformat*.dll
+avutil*.dll
+COPYING
+LICENSE
+LICENSE.md
+NOTICE

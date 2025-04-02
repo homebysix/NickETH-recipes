@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?include $(sys.CURRENTDIR)version.wxi ?>
+	<!-- <?include $(sys.CURRENTDIR)Includes\MainVariables.wxi ?> -->
+    <Fragment>
+        <ComponentGroup Id="AudacityRegGroup">
+            <Component Id="HKCR01" Directory="TARGETDIR" Guid="{1CFEB7B9-3E16-4D64-B647-DA7BF8D07741}" >
+                <RegistryKey Key=".AUP" Root="HKCR">
+                    <RegistryValue Value="Audacity.Project" Type="string" KeyPath="yes" />
+                </RegistryKey>
+                <RegistryKey Key=".AUP3" Root="HKCR">
+                    <RegistryValue Value="Audacity.Project" Type="string" />
+                </RegistryKey>
+                <RegistryKey Key="Audacity.Project" Root="HKCR">
+                    <RegistryValue Value="Audacity Project File" Type="string" />
+                </RegistryKey>
+                <RegistryKey ForceCreateOnInstall="yes" Key="Audacity.Project\OpenWithList" Root="HKCR" />
+                <RegistryKey ForceCreateOnInstall="yes" Key="Audacity.Project\OpenWithList\audacity.exe" Root="HKCR" />
+                <RegistryKey Key="Audacity.Project\shell" Root="HKCR">
+                    <RegistryValue Value="" Type="string" />
+                </RegistryKey>
+                <RegistryKey ForceCreateOnInstall="yes" Key="Audacity.Project\shell\open" Root="HKCR" />
+                <RegistryKey Key="Audacity.Project\shell\open\command" Root="HKCR">
+                    <RegistryValue Value="&quot;[APPLICATIONFOLDER]audacity.exe&quot; &quot;%1&quot;" Type="string" />
+                </RegistryKey>
+                <RegistryKey Key="Audacity" Root="HKCR">
+                    <RegistryValue Value="URL:Audacity Protocol" Type="string" />
+                    <RegistryValue Name="URL Protocol" Value="" Type="string" />
+                </RegistryKey>
+                <RegistryKey Key="Audacity\DefaultIcon" Root="HKCR">
+                    <RegistryValue Value="[APPLICATIONFOLDER]Audacity.exe,1" Type="string" />
+                </RegistryKey>
+                <RegistryKey ForceCreateOnInstall="yes" Key="Audacity\shell" Root="HKCR" />
+                <RegistryKey ForceCreateOnInstall="yes" Key="Audacity\shell\open" Root="HKCR" />
+                <RegistryKey Key="Audacity\shell\open\command" Root="HKCR">
+                    <RegistryValue Value="&quot;[APPLICATIONFOLDER]Audacity.exe&quot; -u &quot;%1&quot;" Type="string" />
+                </RegistryKey>
+            </Component>                                    
+        </ComponentGroup>
+    </Fragment>
+</Wix>

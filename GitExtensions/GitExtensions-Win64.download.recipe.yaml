@@ -1,0 +1,129 @@
+Description: Downloads the latest release of GitExtensions x64 from Github.
+Identifier: com.github.NickETH.recipes.download.GitExtensions-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: GitExtensions
+  # https://github.com/gitextensions/gitextensions/releases
+  # https://github.com/gitextensions/gitextensions/releases/download/v5.2.1/GitExtensions-x64-5.2.1.18061-0d74cfdc3.msi
+  # ASSET_REGEX: 'audacity-win-(?P<version>([0-9]+\.)*[0-9]+)-64bit\.exe'
+  ASSET_REGEX: 'GitExtensions-x64-(?P<version>([0-9]+\.)*[0-9]+)-.*?\.msi'
+  # SEARCH_FIRSTURL: https://lame.buanzo.org/ffmpeg.php
+  # SEARCH_FILE: FFmpeg_(?P<ffmpegver>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe
+  # SEARCH_INT_URL: (FFmpeg_(?P<versionold>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe)
+  # INTERNAL_URL: '\\d\sys\bms_tst\AutoPkg-in\Input\%NAME%'
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    github_repo: gitextensions/gitextensions
+    include_prereleases: false
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.msi'
+    #rawversion: '%rawversion%'
+
+# - Processor: com.github.jazzace.processors/TextSearcher
+  # Arguments:
+    # text_in: '%url%'
+    # #re_pattern: 'audacity-win-(([0-9]+\.)*[0-9]+)-64bit'
+    # re_pattern: 'audacity-win-((?P<MAJOR_VER>[0-9]+)\.(?P<MINOR_VER>[0-9]+)\.(?P<PATCH_VER>[0-9]+))-64bit'
+    # result_output_var_name: version
+    # PATHNAME1: '%pathname%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=SignPath Foundation, O=SignPath Foundation, L=Lewes, S=Delaware, C=US
+    input_path: '%pathname%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+  # Arguments:
+    # browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    # browser_used: Edge
+    # primary_url: '%SEARCH_FIRSTURL%'
+    # re_pattern: '%SEARCH_FILE%'
+    # selenium_commands:
+    # #- browser.get("%SEARCH_FIRSTURL%")
+    # - '%SEARCH_FIRSTURL%'
+    # selenium_options:
+    # #- self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
+    # - self.options.add_argument("--disable-infobars")
+    # - |
+        # self.options.add_experimental_option("prefs", {
+            # "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
+            # "download.prompt_for_download": False,
+            # "download.directory_upgrade": True,
+            # "safebrowsing.enabled": True
+          # })
+    # webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+    # result_output_var_name: ffmpegversion
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: get the filename from internal source
+  # Arguments:
+    # cmdline_args:
+    # - /C
+    # - dir
+    # - /b
+    # - '%INTERNAL_URL%'
+    # - '>'
+    # - '%NAME%_win.txt'
+    # exe_file: 'cmd.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: create a version.txt file, if it does not exist
+  # Arguments:
+    # cmdline_args:
+    # - /C
+    # - type
+    # - nul
+    # - '>>'
+    # - version.txt
+    # exe_file: 'cmd.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_INT_URL%'
+    # url: 'file://%RECIPE_CACHE_DIR%/%NAME%_win.txt'
+    # result_output_var_name: match
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '^(.*)$'
+    # url: file://%RECIPE_CACHE_DIR%/version.txt
+    # NEW_FILENAME: '%match%'
+
+# - Processor: StopProcessingIf
+  # Arguments:
+    # predicate: '%ffmpegver% != %match%'
+
+# - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  # Arguments:
+    # input_string: '%INTERNAL_URL%'
+    # pattern_replace:
+    # - pattern: \\
+      # repl: /
+
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: 'FFMPEG_x64.exe'
+    # url: 'file:%parsed_string%/%NEW_FILENAME%'
+
+# - Processor: FileCreator
+  # Comment: Generate the version.txt file in the cache dir.
+  # Arguments:
+    # file_content: |
+      # %ffmpegver%
+    # file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: EndOfCheckPhase

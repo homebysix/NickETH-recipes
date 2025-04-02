@@ -1,0 +1,11 @@
+read\create-log-Audacity_64_VVeerrssiioonn_ML.txt
+read\readme-Audacity_64_VVeerrssiioonn_ML.txt
+helpers\*.*
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\Audacity.build
+wixproject\version.wxi
+wixproject\Includes\*.*
+wixproject\Resources\*.*
+wixproject\Lang\*.*
+wixproject\Fragments\*.*

@@ -1,0 +1,166 @@
+Description: Buld the latest Audacity x64 Installer for Windows.
+Identifier: com.github.NickETH.recipes.build.Audacity-Win64
+ParentRecipe: com.github.NickETH.recipes.download.Audacity-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Audacity
+  VENDOR: 'Audacity Team'
+  ASSET_REGEX: 'audacity-win.*?64bit\.exe'
+  #ASSET_REGEX: 'audacity-win-(([0-9]+\.)*[0-9]+)-64bit\.exe'
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to build the MSI with Wix
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    create_AS_ver: 'True'
+    folder_list: sourcepkt:sourceunzipped:release:icons:read:helpers:wixproject:wixproject\%NAME%:wixproject\Includes:wixproject\Resources:wixproject\Lang:wixproject\Fragments
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/InnoEditor
+  Comment: Extract the Audacity installer
+  Arguments:
+    inno_path: '%PATHNAME1%'
+    workfolder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    ignore_errors: False
+
+- Processor: Copier
+  Comment: Copy the Audacity installer files to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\{app}\**'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/InnoEditor
+  Comment: Extract the FFMPEG installer
+  Arguments:
+    inno_path: '%pathname%'
+    workfolder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\ffmpeg\'
+    ignore_errors: False
+
+# - Processor: Copier
+  # Comment: Copy the Audacity FFMPEG files to the build dir
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\'
+    # overwrite: 'true'
+    # source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\ffmpeg\{app}\**'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: build the filelist for the FFMPEG files to copy
+  Arguments:
+    cmdline_args:
+    - /C
+    - dir
+    - /b
+    - '%BUILD_DIR%\%pkg_dir%\sourceunzipped\ffmpeg\{app}'
+    - '>'
+    - '%BUILD_DIR%\%pkg_dir%\helpers\ffmpeg-move-files.txt'
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileMoverFromList
+  Comment: Move the FFMPEG files to the build dir
+  Arguments:
+    file_list: '%BUILD_DIR%\%pkg_dir%\helpers\ffmpeg-move-files.txt'
+    source_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\ffmpeg\{app}'
+    target_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
+
+- Processor: PathDeleter
+  Comment: Delete Firsttime.ini from the Audacity installer directory
+  Arguments:
+    path_list:
+    - '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\FirstTime.ini'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\{app}\Audacity.exe'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Extract the Audacity res file
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\{app}\Audacity.exe'
+    output_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    reswork_action: 'extract'
+    reswork_cmd: 'ICONGROUP,,'
+    # ignore_errors: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ResourceWorker
+  Comment: Generate a new Icon.exe file for Audacity
+  Arguments:
+    exe_path: '%BUILD_DIR%\%pkg_dir%\helpers\Icon-Stub-1.exe'
+    input_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\Icon-%NAME%.res'
+    output_file: '%BUILD_DIR%\%pkg_dir%\wixproject\Resources\Main-Icon.exe'
+    reswork_action: 'add'
+    reswork_cmd: 'ICONGROUP,,'
+    # ignore_errors: 'True'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WixSettings
+  Comment: Define variables for the WIX build process to the version.wxi file
+  Arguments:
+    preproc_file: '%BUILD_DIR%\%pkg_dir%\wixproject\version.wxi'
+    # template_file: None
+    new_settings:
+    - define: 'version="%build_ver%"'
+    - define: 'ProductVersion="%build_ver%"'
+    - define: 'MajorVersion="%MAJOR_VER%"'
+    - define: 'MinorVersion="%MINOR_VER%"'
+    - define: 'PatchVersion="%PATCH_VER%"'
+    - define: 'Packagecode="{NNEEWWGGUUIIDD}"'
+    - define: 'Productcode="{NNEEWWGGUUIIDD}"'
+    - define: 'ProductName="!(loc.ProductName)"'
+    - define: 'ProductNameWithVersion="!(loc.ProductName) $(var.version) $(var.Arch)"'
+    - define: 'ProductLanguage="!(loc.ProductLanguage)"'
+    - define: 'AppName="%NAME%"'
+    - define: 'AppFolder="$(var.APInstallFolder)"'
+    - define: 'AppVendor="%VENDOR%"'
+    - define: 'ProductManufacturerShort="%VENDOR%"'
+    - define: 'ProductUpgradeCode="{217CDC8A-A505-40DB-8F07-CEC8898A6A5D}"'
+    - define: 'ProductManufacturerLong="%VENDOR%"'
+    - define: 'RTMProductVersion="0.0.1"'
+  
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSBuildRun
+  Comment: Run the MSBuild script to generate the Audacity MSI installer
+  Arguments:
+    build_file: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%.build'
+    build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
+    build_property: BuildPlatform=%PLATFORM%;BuildName=%NAME%;BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;SourceDir=%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%;version=%build_ver%;Platformstr=%PF_STRING%;LangStr=%LANG_STRING%
+    build_target: WIX
