@@ -118,7 +118,7 @@ Process:
     # composite_uninstall_template: /Users/haircut/Documents/delete.png
     icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
     #source_app: '%BUILD_DIR%\%pkg_dir%\adm\PFiles\VideoLAN\VLC\%NAME%.exe'
-    source_app: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%\%NAME%.exe'
+    source_app: '%BUILD_DIR%\%pkg_dir%\wixproject\vlc-%version%\%NAME%.exe'
     #msi_icon_name: 'MainExecutableIcon.ico'
     composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
     composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'

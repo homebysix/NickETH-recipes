@@ -1,0 +1,34 @@
+Description: Download recipe for KDiff3 x64.
+Identifier: com.github.NickETH.recipes.download.KDiff3-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: KDiff3
+  VENDOR: 'kde.org'
+  DOWN_URL: 'https://mirror.gofoss.xyz/kde-ftp/stable/kdiff3/'
+  SEARCH_URL: 'https://download.kde.org/stable/kdiff3/?C=M;O=D'
+  PLATFORM: x64
+  PF_STRING: _64
+  SEARCH_PATTERN: (kdiff3-(?P<version>[\d.]+)-windows-x86_64.exe)
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-x64.exe'
+    url: '%DOWN_URL%%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=K Desktop Environment e. V., O=K Desktop Environment e. V., S=Berlin, C=DE
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

@@ -8,10 +8,12 @@ Input:
   VENDOR: Mendeley
   PLATFORM: x64
   PF_STRING: _64
-  SEARCH_URL: https://www.mendeley.com/download-reference-manager/windows
-  DOWNLOAD_PART_URL: https://static.mendeley.com/bin/desktop/mendeley-reference-manager
+  # SEARCH_URL: https://www.mendeley.com/download-reference-manager/windows
+  SEARCH_URL: https://static.mendeley.com/bin/desktop/latest.yml
+  DOWNLOAD_PART_URL: https://static.mendeley.com/bin/desktop/
   #                https://static.mendeley.com/bin/desktop/mendeley-reference-manager-2.110.2-x64.exe
-  VERSION_URL: (https://static\.mendeley\.com/bin/desktop/mendeley-reference-manager-(?P<version>([0-9]+\.)*[0-9]+)-x64\.exe)
+  # url: mendeley-reference-manager-2.132.1-x64.exe
+  VERSION_URL: (mendeley-reference-manager-(?P<version>([0-9]+\.)*[0-9]+)-x64\.exe)
   USER_AGENT: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
 
 Process:
@@ -28,7 +30,7 @@ Process:
     filename: '%NAME%.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%match%'
+    url: '%DOWNLOAD_PART_URL%%match%'
 
 - Processor: WindowsSignatureVerifier
   Comment: Check the signature on the downloaded file
