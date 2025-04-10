@@ -5,8 +5,8 @@ MinimumVersion: 1.3.1
 Input:
   NAME: 7-Zip
   VENDOR: Igor Pavlov
-  PLATFORM: x64
-  SEARCH_URL_MSI: (?P<msi_dl_link>https://sourceforge\.net/projects/sevenzip/files/7-Zip/(?P<version>[0-9]+\.[0-9]+)/7z[0-9]+-x64\.msi/download)
+  PF_STR_DL: '-x64'
+  SEARCH_URL_MSI: (?P<msi_dl_link>https://sourceforge\.net/projects/sevenzip/files/7-Zip/(?P<version>[0-9]+\.[0-9]+)/7z[0-9]+%PF_STR_DL%\.msi/download)
   DOWNLOAD_FILE: 7-Zip
 
 Process:

@@ -7,8 +7,8 @@ Input:
   NAME: 7-Zip
   VENDOR: Igor Pavlov
   PLATFORM: x64
+  PF_STR_DL: '-x64'
   PF_STRING: _64
-  SEARCH_URL_MSI: (?P<msi_dl_link>https://sourceforge\.net/projects/sevenzip/files/7-Zip/(?P<version>[0-9]+\.[0-9]+)/7z[0-9]+-x64\.msi/download)
 
 Process:
 - Processor: StopProcessingIf
@@ -20,7 +20,7 @@ Process:
   Arguments:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
-    folder_list: release:read
+    folder_list: release:read:sourceunzipped:helpers
     org_ver: '%version%'
     pkg_dir: '%NAME%_::VVeerrssiioonn::_ML'
     recipe_dir: '%RECIPE_DIR%'
@@ -40,7 +40,7 @@ Process:
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
-    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%_ML.txt'
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
     new_ver: '%build_ver%'
     re_pattern: '[0-9]+\.[0-9]+'
 
@@ -49,6 +49,31 @@ Process:
     destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     overwrite: 'true'
     source_path: '%RECIPE_CACHE_DIR%\downloads\%NAME%.msi'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Comment: Extract the InstantClient odbc zip archive
+  # Arguments:
+    # exe_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    # extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    # extract_file: '_7zG.exe'
+    # ignore_pattern: ''
+    # preserve_paths: 'False'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    # source_app: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\_7zG.exe'
+    source_app: '%BUILD_DIR%\%pkg_dir%\helpers\7-Zip_256.ico'
+    # msi_icon_name: 'ProductIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
 
