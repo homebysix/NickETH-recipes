@@ -18,6 +18,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
+from fake_useragent import UserAgent
 import shutil
 import os
 import re
@@ -174,6 +175,11 @@ class Selenium(Processor):
         # return the last matched group with the dict of named groups
         return (match.group(match.lastindex or 0), match.groupdict())
 
+    def User(self):  
+        ua = UserAgent()
+        self.output("Useragent: {}".format(ua.random), verbose_level=3)
+        return ua.random
+
     def main(self):
 
         # Declare/import variables
@@ -227,7 +233,18 @@ class Selenium(Processor):
             webdriver_engine = webdriver.Chrome
             self.options = webdriver.ChromeOptions()
         elif self.browser_used == 'Edge':
-            s_binary = webdriver.EdgeService(self.webdriver_binary_path)
+            from selenium.webdriver.edge.options import Options
+            from selenium.webdriver.edge.service import Service 
+            options = Options()
+            #options.add_argument("--headless=new")
+            #driver = webdriver.Edge(options = options)
+            s_binary = Service(self.webdriver_binary_path)
+
+
+            #service = Service(service_args=["--verbose"])
+
+            #webdriver_engine = webdriver.Edge(service = s_binary)
+            #s_binary = webdriver.EdgeService(self.webdriver_binary_path)
             webdriver_engine = webdriver.Edge
             self.options = webdriver.EdgeOptions()
 
@@ -312,6 +329,8 @@ class Selenium(Processor):
             verbose_level=3
         )
         self.options.binary_location = self.browser_binary_path
+        # add a random fake user (Chrome or Edge)
+        #self.options.add_argument(f'user-agent={self.User()}')
         # intialize the webdriver variant (Chrome or Edge)
         browser = webdriver_engine(
             service=s_binary,
