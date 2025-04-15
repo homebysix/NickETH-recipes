@@ -181,6 +181,12 @@ Process:
     bms_app_sharepoint:
     - SW-List-Name: '%NAME%'
       versionplatformtag: '%build_ver% ML (%PLATFORM%)'   
+    bms_job_kiosk:
+    - jobname: '%NAME%'
+      substring: 'Taskkill'
+      jobdescription: 'Mit WhatsApp Desktop können alle Funktionen von WhatsApp (Textnachrichten, Bild-, Video- und Ton-Dateien, Dokumente und Kontaktdaten und Video-Telefonie) auf Windows verwendet werden.'
+      autoenableapp: '%NAME% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAME%'
     inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
     icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'

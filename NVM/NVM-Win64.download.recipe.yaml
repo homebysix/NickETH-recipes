@@ -1,0 +1,45 @@
+Description: Download recipe for NVM for Windows x64.
+Identifier: com.github.NickETH.recipes.download.NVM-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: NVMforWindows
+  NAME_LONG: 'NVM for Windows'
+  VENDOR: 'Corey Butler'
+  PLATFORM: x64
+  PF_STRING: _64
+  ASSET_REGEX: 'nvm-setup.exe'
+
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    github_repo: coreybutler/nvm-windows
+    include_prereleases: false
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    #rawversion: '%rawversion%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_PATTERN%'
+    # url: '%SEARCH_URL%'
+
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: '%NAME%-x64.exe'
+    # url: '%DOWN_URL%%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Author Software Inc., O=Author Software Inc., L=Austin, S=Texas, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
