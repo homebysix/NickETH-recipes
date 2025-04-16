@@ -104,6 +104,8 @@ Process:
     reswork_cmd: 'ICONGROUP,,'
     # ignore_errors: 'True'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
     file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%_ML.txt'
