@@ -17,15 +17,26 @@ Input:
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: (?P<DOWNLOAD_URL>download.documentfoundation.org/libreoffice/stable/[\d\.]+/win/x86%DL_PLATFORM%/LibreOffice_(?P<version>[\d\.]+)_Win_x[-864]+\.msi)
+    #     <a class="dl_download_link" href="https://www.libreoffice.org/donate/dl/win-x86_64/25.2.3/as/LibreOffice_25.2.3_Win_x86-64.msi">
+    re_pattern: (?P<DOWNLOAD_URL>www.libreoffice.org/donate/dl/win-x86%DL_PLATFORM%/[\d\.]+/as/LibreOffice_(?P<version>[\d\.]+)_Win_x[-864]+\.msi)
+    #re_pattern: (?P<DOWNLOAD_URL>download.documentfoundation.org/libreoffice/stable/[\d\.]+/win/x86%DL_PLATFORM%/LibreOffice_(?P<version>[\d\.]+)_Win_x[-864]+\.msi)
     request_headers:
-      User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
-    url: https://www.libreoffice.org/download/libreoffice-%RELEASE%/?type=win-x86_64
+      #User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; Trident/7.0; AS; rv:11.0) like Gecko
+    #url: https://www.libreoffice.org/download/libreoffice-%RELEASE%/?type=win-x86_64
+    url: https://www.libreoffice.org/download/download-libreoffice/
 
 - Processor: URLDownloader
   Arguments:
+    #request_headers:
+    #  User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko
+    #curl_opts:
+    #- --location
     filename: '%NAME%.msi'
-    url: https://%DOWNLOAD_URL%
+    # url=https://download.documentfoundation.org/libreoffice/stable/25.2.3/win/x86_64/LibreOffice_25.2.3_Win_x86-64.msi"/>
+    # url: https://%DOWNLOAD_URL%
+    #url: https://download.documentfoundation.org/libreoffice/stable/%version%/win/x86%DL_PLATFORM%/LibreOffice_%version%_Win_x86-64.msi
+    url: https://mirror.init7.net/tdf/libreoffice/stable/%version%/win/x86%DL_PLATFORM%/LibreOffice_%version%_Win_x86-64.msi
 
 - Processor: EndOfCheckPhase
 
