@@ -25,7 +25,7 @@ Process:
 
 - Processor: URLDownloader
   Arguments:
-    filename: '%NAME%-x64.msi'
+    filename: '%NAME%-x64_%MAJOR_VER%.msi'
     url: 'https://cdn.zabbix.com/zabbix/binaries/stable/%MAIN_VER%/%version%/%urlfile%'
 
 - Processor: WindowsSignatureVerifier

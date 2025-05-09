@@ -35,7 +35,7 @@ Process:
     bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
     bms_app_installparm: '/analytics no /flow no /sso no /update no /logivoice no /aipromptbuilder no /device-recommendation no /quiet'
     bms_app_integration:
-    - appname: '%NAME%'
+    - appname: '%NAMELONG%'
       bundles:
       - action: exchange
         name: nV_%NAME%
@@ -61,8 +61,8 @@ Process:
     - jobname: '%NAME%'
       substring: 'Taskkill'
       jobdescription: 'Logitech Options+ ist eine Software mit der Logitech Geräte unterstützt, angepasst und konfiguriert werden.'
-      autoenableapp: '%NAME% - Enable AutoUpdate'
-      autoreleasejob: '@_AU-Rel_%NAME%'
+      autoenableapp: '%NAMELONG% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAMELONG%'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
