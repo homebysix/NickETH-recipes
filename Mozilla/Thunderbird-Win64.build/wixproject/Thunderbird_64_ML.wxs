@@ -88,9 +88,10 @@
 					<ComponentGroupRef Id="ExtlpRMFiles" />
                 </Feature>
 								
-                <Feature Id="TB_Sync" AllowAdvertise="system" Description="This installs the sync manager TBSync and providers for EAS, DAV and Google" Display="expand" Level="3" Title="TBsync + providers">
+                <!-- <Feature Id="TB_Sync" AllowAdvertise="system" Description="This installs the sync manager TBSync and providers for EAS, DAV and Google" Display="expand" Level="3" Title="TBsync + providers"> -->
+                <Feature Id="TB_Sync" AllowAdvertise="system" Description="This installs the sync manager TBSync and providers for EAS Google" Display="expand" Level="3" Title="TBsync + providers">
 					<ComponentGroupRef Id="ExtTBSyncFiles" />
-					<ComponentGroupRef Id="ExtDAV4TBSyncFiles" />
+					<!-- <ComponentGroupRef Id="ExtDAV4TBSyncFiles" /> -->
 					<ComponentGroupRef Id="ExtGoogle4TBSyncFiles" />
 					<ComponentGroupRef Id="ExtEAS4TBSyncFiles" />
 				</Feature>
