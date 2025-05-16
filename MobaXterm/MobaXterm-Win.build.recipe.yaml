@@ -31,6 +31,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'
     msi_path: '%found_filename%'
 
+- Processor: PathDeleter
+  Comment: Delete the MSI file from the CACHE download dir.
+  Arguments:
+    path_list: '%found_filename%'
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Comment: Create a build enviroment to store the package
   Arguments:
@@ -58,22 +63,41 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'True'
 
-- Processor: FileMover
-  Comment: Move the MobaXterm msi file to the release dir
+# - Processor: FileFinder
+  # Comment: Get the the name of the extracted MSI-File.
+  # Arguments:
+    # pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.msi'
+
+- Processor: Copier
+  Comment: Copy the MobaXterm installer msi file to the release dir
   Arguments:
-    target: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.MSI'
-    source: '%found_filename%'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.MSI'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%found_basename%'
+
+# - Processor: FileMover
+  # Comment: Move the MobaXterm msi file to the release dir
+  # Arguments:
+    # target: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.MSI'
+    # source: '%found_filename%'
 
 - Processor: FileFinder
   Comment: Get the the name of the extracted DAT-File
   Arguments:
-    pattern: '%RECIPE_CACHE_DIR%\downloads\*.dat'
+    pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.dat'
 
-- Processor: FileMover
-  Comment: Move the MobaXterm dat file to the release dir
+# - Processor: FileMover
+  # Comment: Move the MobaXterm dat file to the release dir
+  # Arguments:
+    # target: '%BUILD_DIR%\%pkg_dir%\release\%found_basename%'
+    # source: '%found_filename%'
+
+- Processor: Copier
+  Comment: Copy the MobaXterm dat file to the release dir
   Arguments:
-    target: '%BUILD_DIR%\%pkg_dir%\release\%found_basename%'
-    source: '%found_filename%'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%found_basename%'
+    overwrite: 'true'
+    source_path: '%found_filename%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIDbWorker
   Comment: Merges the WixFirewallCA-merge.msi with the main MSI-file
@@ -89,6 +113,8 @@ Process:
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.MSI'
     mst_paths: '%BUILD_DIR%\%pkg_dir%\helpers\MobaXtermFW.mst'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
     file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%version%_ML.txt'
@@ -101,6 +127,19 @@ Process:
     new_ver: '%version%'
     re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
-
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%_ML.MSI'
+    msi_icon_name: 'MobaXterm.ico'
+    composite_uninstall_path: '%ICON_PATH%/Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%/Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%/Icon-Install-%NAME%.png'
+    
 - Processor: EndOfCheckPhase
