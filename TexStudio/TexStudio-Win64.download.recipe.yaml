@@ -8,7 +8,7 @@ Input:
 Process:
 - Processor: GitHubReleasesInfoProvider
   Arguments:
-    asset_regex: texstudio-[0-9\.]+-win-qt6\.exe
+    asset_regex: texstudio-[0-9\.]+-win-qt6-signed\.exe
     github_repo: texstudio-org/texstudio
 
 - Processor: URLDownloader
