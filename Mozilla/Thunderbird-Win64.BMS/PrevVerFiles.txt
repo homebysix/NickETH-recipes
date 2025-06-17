@@ -1,0 +1,15 @@
+TBfiles.wxs
+MozExt_de.xpi.wxs
+MozExt_fr.xpi.wxs
+MozExt_it.xpi.wxs
+MozExt_rm.xpi.wxs
+MozExt_dict-de.xpi.wxs
+MozExt_dict-fr.xpi.wxs
+MozExt_dict-it.xpi.wxs
+MozExt_sieve.xpi.wxs
+MozExt_tbsync.xpi.wxs
+MozExt_dav-4-tbsync.xpi.wxs
+MozExt_google-4-tbsync.xpi.wxs
+MozExt_eas-4-tbsync.xpi.wxs
+MozExt_CompactHeader.xpi.wxs
+MozExt_LookOut.xpi.wxs
