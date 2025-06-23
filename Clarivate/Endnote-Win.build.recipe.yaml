@@ -17,7 +17,7 @@ Input:
   CF_NAME: EndnoteConnectionFiles
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
-  Comment: Get the ProductCode into the  msi_value variable for the BMS uninstall string
+  Comment: Get the ProductVersion into the  msi_value variable
   Arguments:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'
     msi_path: '%pathname%'
@@ -47,6 +47,27 @@ Process:
     destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
     overwrite: 'true'
     source_path: '%pathname%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
+  Comment: Get the Icon name into the  msi_value variable
+  Arguments:
+    SQL_command: SELECT `Name` FROM `Icon`
+    msi_path: '%pathname%'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 1
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    msi_icon_name: '%msi_value%'
+    composite_uninstall_path: '%ICON_PATH%/Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%/Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%/Icon-Install-%NAME%.png'
 
 - Processor: URLDownloader
   Arguments:
