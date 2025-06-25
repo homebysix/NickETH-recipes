@@ -1,3 +1,2 @@
 read\create-log-PrusaSlicerStandalone_64_VVeerrssiioonn_ML.txt
 read\readme-PrusaSlicerStandalone_64_VVeerrssiioonn_ML.txt
-release\PrusaSlicer_NoUp_NoDS.mst

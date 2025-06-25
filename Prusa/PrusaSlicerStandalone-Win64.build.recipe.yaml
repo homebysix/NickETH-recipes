@@ -12,17 +12,17 @@ Input:
   LANG_STRING: _ML
 
 Process:
-- Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
-  Arguments:
-    exe_path: '%pathname%'
-    product_version: 'True'
+# - Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  # Arguments:
+    # exe_path: '%pathname%'
+    # product_version: 'True'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
-  Arguments:
-    input_string: '%version%'
-    pattern_replace:
-    - pattern: ' '
-      repl: ''
+# - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  # Arguments:
+    # input_string: '%version%'
+    # pattern_replace:
+    # - pattern: ' '
+      # repl: ''
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Comment: Create a build enviroment to store the package
@@ -30,11 +30,16 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     folder_list: sourceunzipped:release:read
-    org_ver: '%parsed_string%'
-    pkg_dir: '%NAME%%PF_STRING%_%parsed_string%%LANG_STRING%'
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
     ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%_ML'
+    rename_var: pkg_dir
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
 
@@ -45,19 +50,36 @@ Process:
     overwrite: 'true'
     source_path: '%pathname%'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
-  Comment: run the Prusa Slicer Standalone setup and extract it  to the build dir
-  Arguments:
-    cmdline_args:
-    - /exenoui
-    - /extract
-    - '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
-    exe_file: '%pathname%'
-    exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: run the Prusa Slicer Standalone setup and extract it  to the build dir
+  # Arguments:
+    # cmdline_args:
+    # - /exenoui
+    # - /extract
+    # - '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # exe_file: '%pathname%'
+    # exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # run_elevated: 'true'
 
-- Processor: FileFinder
+# - Processor: FileFinder
+  # Arguments:
+    # pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.msi'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Extract the GIMP icons and generate BMS-Kiosk-Icons
   Arguments:
-    pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.msi'
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
