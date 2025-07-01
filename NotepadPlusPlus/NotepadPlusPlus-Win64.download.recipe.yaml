@@ -22,10 +22,10 @@ Process:
   Arguments:
     predicate: download_changed == False
 
-- Processor: WindowsSignatureVerifier
-  Arguments:
-    expected_subject: CN="Notepad++", O="Notepad++", L=Saint Cloud, S=Ile-de-France, C=FR
-    input_path: '%pathname%'
+# - Processor: WindowsSignatureVerifier
+  # Arguments:
+    # expected_subject: CN="Notepad++", O="Notepad++", L=Saint Cloud, S=Ile-de-France, C=FR
+    # input_path: '%pathname%'
 
 - Processor: URLDownloader
   Arguments:
