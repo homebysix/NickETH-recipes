@@ -58,12 +58,17 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'True'
 
+- Processor: FileFinder
+  Arguments:
+    pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%ALTNAME%*'
+
 - Processor: Copier
   Comment: Copy the FileMaker installer files to the release dir
   Arguments:
     destination_path: '%BUILD_DIR%\%pkg_dir%\release\'
     overwrite: 'true'
-    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%ALTNAME% %short_version%\Files\'
+    #source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%ALTNAME% %short_version%\Files\'
+    source_path: '%found_filename%\Files\'
 
 - Processor: Copier
   Comment: Make a copy from FileMaker MSI to the helpers folder to apply the language transform and additional properties
