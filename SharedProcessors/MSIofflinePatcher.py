@@ -1,4 +1,4 @@
-#!/usr/local/autopkg/python
+#!/usr/bin/python
 #
 # Copyright 2019 Swiss federal institute of technology (ETHZ).
 #
@@ -21,6 +21,7 @@
 # 20210517 Nick Heim: Python v3 changes
 # 20220125 Nick Heim: Added the maxFilesPerCab Option with 'MultiMakeCab.vbs'
 # 20230209 Nick Heim: Added the msi_options Option
+# 20250722 Nick Heim: Added elevation for the patching function, due to Windows hardening by MS.
 
 import os
 import sys
@@ -204,14 +205,36 @@ class MSIofflinePatcher(Processor):
 
         if {"msp_path"}.issubset(self.env):
             msp_file = os.path.join(pkg_dir_abs, self.env.get('msp_path'))
-            cmd_patch = [msiexec, '/p', msp_file, '/a', new_msi_path, target_dir, '/qn',]
+            # cmd_patch = [msiexec, '/p', msp_file, '/a', new_msi_path, target_dir, '/qn',]
+            cmd_args = ['/p', msp_file, '/a', new_msi_path, target_dir, '/qn',]
+            # try:
+                # Output = subprocess.check_output(cmd_patch)
+            # except:
+                # if ignore_errors != 'True':
+                    # raise
 
+            # Run the patch command elevated
             try:
-                Output = subprocess.check_output(cmd_patch)
-            except:
-                if ignore_errors != 'True':
-                    raise
-        
+                comnd_value = ''.join('msiexec.exe') + '~~~' + (' '.join(cmd_args)).lstrip()
+                print("TaskRunnerCommand: %s" % comnd_value)
+                AutopkgTaskrunnerCMDfile = os.path.join(self.env['AUTOPKG_DIR'], "APkgUtils", "AutopkgTaskrunnerCMD.apkcmd")
+                with open(AutopkgTaskrunnerCMDfile, "w") as fileref:
+                   fileref.write(comnd_value)
+            except BaseException as err:
+                raise ProcessorError(
+                    "Can't change file %s: %s" % (AutopkgTaskrunnerCMDfile, err)
+                )
+            while (comnd_value != '0'):
+                try:
+                    with open(AutopkgTaskrunnerCMDfile, "r") as fileref:
+                        comnd_value = fileref.read().replace('\n', '')
+                    #print("comnd_value: %s" % comnd_value)
+                except BaseException as err:
+                    raise ProcessorError(
+                        "Can't read file %s: %s" % (AutopkgTaskrunnerCMDfile, err)
+                    )
+                time.sleep(5)
+                    
         if {"new_msi_path", "cab_file"}.issubset(self.env):
             cab_file = self.env.get('cab_file')
             if ("cab_dir" in self.env):
