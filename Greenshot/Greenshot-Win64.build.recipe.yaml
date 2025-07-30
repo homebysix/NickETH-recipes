@@ -55,14 +55,35 @@ Process:
     exe_folder: '%RECIPE_CACHE_DIR%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
-  Comment: delete run command from the end of the installation
+  Comment: remove "PrivilegesRequired=lowest", because it redirects uninstall info to HKCU! Set "VersionInfoVersion"
   Arguments:
     cmdline_args:
     - '-i'
-    - 's/AppUpdatesURL=https:\/\/getgreenshot.org/VersionInfoVersion=%version%/'
+    - 's/PrivilegesRequired=lowest/VersionInfoVersion=%version%/'
     - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
     exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
     exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: 'corrects an error, when registry lines start with "Root: HKA" and adds the missing strings.'
+  Arguments:
+    cmdline_args:
+    - '-i'
+    - '-e'
+    - '"s/^Subkey:/Root: HKA; &/"'
+    - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+ 
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: delete run command from the end of the installation
+  # Arguments:
+    # cmdline_args:
+    # - '-i'
+    # - 's/AppUpdatesURL=https:\/\/getgreenshot.org/VersionInfoVersion=%version%/'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: append the code block to the iss-file
