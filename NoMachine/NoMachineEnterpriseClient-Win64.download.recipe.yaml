@@ -8,7 +8,8 @@ Input:
   DOWNLOAD_URL: 'https://downloads.nomachine.com/download/?id=6&platform=windows'
   SEARCH_FIRSTURL: 'https://downloads.nomachine.com/download'
   SEARCH_SECONDURL: 'https://downloads.nomachine.com/download/?id=6&platform=windows'
-  RE_PATTERN: (https://download.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*)_x64\.exe)
+  #            https://web9001.nomachine.com/download/9.1/Windows/nomachine-enterprise-client_9.1.24_6_x64.exe
+  RE_PATTERN: (https://web9001.nomachine.com/download/[0-9\.]*/Windows/nomachine-enterprise-client_(?P<version>([0-9]+[\.|_])*[0-9]*)_x64\.exe)
   PLATFORM: x64
   PF_STRING: _64
 
@@ -31,30 +32,39 @@ Process:
     # - -b
     # - '%RECIPE_CACHE_DIR%\cookie.txt'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+# - Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+  # Arguments:
+    # browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    # browser_used: Edge
+    # primary_url: '%SEARCH_FIRSTURL%'
+    # re_pattern: '%RE_PATTERN%'
+    # #re_pattern: '.*'
+    # user_data_dir: '%RECIPE_CACHE_DIR%\Selenium'
+    # selenium_commands:
+    # - browser.get("%SEARCH_FIRSTURL%")
+    # - browser.get("%SEARCH_SECONDURL%")
+    # selenium_options:
+    # #- self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
+    # - self.options.add_argument("--disable-infobars")
+    # #- self.options.add_argument("--disable-extensions")
+    # #- self.options.add_argument("--remote-allow-origins=*")
+    # - |
+        # self.options.add_experimental_option("prefs", {
+            # "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
+            # "download.prompt_for_download": False,
+            # "download.directory_upgrade": True,
+            # "safebrowsing.enabled": True
+          # })
+    # webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
-    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    browser_used: Edge
-    primary_url: '%SEARCH_FIRSTURL%'
     re_pattern: '%RE_PATTERN%'
-    #re_pattern: '.*'
-    user_data_dir: '%RECIPE_CACHE_DIR%\Selenium'
-    selenium_commands:
-    - browser.get("%SEARCH_FIRSTURL%")
-    - browser.get("%SEARCH_SECONDURL%")
-    selenium_options:
-    - self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
-    - self.options.add_argument("--disable-infobars")
-    #- self.options.add_argument("--disable-extensions")
-    #- self.options.add_argument("--remote-allow-origins=*")
-    - |
-        self.options.add_experimental_option("prefs", {
-            "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-          })
-    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+    wait_until: networkidle
+    # "Optional waitUntil option for Playwright (load, domcontentloaded, networkidle). Default: load"
+    request_headers:
+      user-agent: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
+    url: '%SEARCH_SECONDURL%'
 
 - Processor: URLDownloader
   Arguments:

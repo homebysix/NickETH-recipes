@@ -5,26 +5,67 @@ MinimumVersion: 1.3.1
 Input:
   NAME: FileZilla
   USER_AGENT: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
-  # SEARCH_URL: https://filezilla-project.org/download.php?show_all=1
-  SEARCH_URL: https://filezilla-project.org/download.php?type=client
+  SEARCH_URL: https://filezilla-project.org/download.php?show_all=1
+  #SEARCH_URL: https://filezilla-project.org/download.php?type=client
   # https://download.filezilla-project.org/client/FileZilla_3.69.1_win64_sponsored2-setup.exe
   # SEARCH_PATTERN: (https.*client/FileZilla_(?P<version>([0-9]+\.)*[0-9]+)_win64-setup.exe.*)"\srel="nofollow"
-  SEARCH_PATTERN: (https.*client/FileZilla_(?P<version>([0-9]+\.)*[0-9]+)_win64_sponsored2-setup.exe.*)"\srel="nofollow"
+  SEARCH_PATTERN: <a href=\"(?P<url>http[s]?.*?(?P<filename>FileZilla_(?P<version>([0-9]+\.)*[0-9]+)_win64-setup\.exe).*?)\"
+  # SEARCH_PATTERN: (https.*client/FileZilla_(?P<version>([0-9]+\.)*[0-9]+)_win64_sponsored2-setup.exe.*)"\srel="nofollow"
 
 Process:
-- Processor: URLTextSearcher
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_PATTERN%'
+    # result_output_var_name: match
+    # url: '%SEARCH_URL%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_PATTERN%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    # url: '%SEARCH_URL%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+  # Arguments:
+    # browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    # browser_used: Edge
+    # primary_url: '%SEARCH_URL%'
+    # re_pattern: '%SEARCH_PATTERN%'
+    # user_data_dir: '%RECIPE_CACHE_DIR%\Selenium'
+    # selenium_commands:
+    # #- browser.get("%SEARCH_URL%")
+    # #- browser.get("https://filezilla-project.org/download.php?type=client")
+    # - browser.get("https://filezilla-project.org/download.php?show_all=1")
+    # selenium_options:
+    # # - self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
+    # - self.options.add_argument("--disable-infobars")
+    # #- self.options.add_argument("--disable-extensions")
+    # #- self.options.add_argument("--remote-allow-origins=*")
+    # - |
+        # self.options.add_experimental_option("prefs", {
+            # "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
+            # "download.prompt_for_download": False,
+            # "download.directory_upgrade": True,
+            # "safebrowsing.enabled": True
+          # })
+    # webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
     re_pattern: '%SEARCH_PATTERN%'
-    result_output_var_name: match
-    url: '%SEARCH_URL%'
     request_headers:
-      user-agent: '%USER_AGENT%'
+      # user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15
+      user-agent: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
+    url: https://filezilla-project.org/download.php?show_all=1
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.exe'
-    url: '%match%'
-    request_headers:
-      user-agent: '%USER_AGENT%'
+    # url: '%match%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
 
 - Processor: EndOfCheckPhase
