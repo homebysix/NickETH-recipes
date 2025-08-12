@@ -1,0 +1,2 @@
+read\create-log-SumatraPDF_64_VVeerrssiioonn_ML.txt
+read\readme-SumatraPDF_64_VVeerrssiioonn_ML.txt
