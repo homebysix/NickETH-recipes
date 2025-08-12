@@ -1,0 +1,36 @@
+Description: Download recipe for QGIS.
+Identifier: com.github.NickETH.recipes.download.QGIS-Win64
+MinimumVersion: 1.3.1
+
+# Description: |
+  # Downloads the latest version of QGIS.  Requires python.org Python 3 to be pre-installed - other distributions are not supported.
+  
+  # Supports either the latest release or Long Term (support) Release.  Override the key "RELEASE_TYPE" to specify which you need:
+  # Latest Release = "pr"
+  # Long Term (support) Release = "ltr""
+# Identifier: com.github.mlbz521.download.QGIS
+# MinimumVersion: 0.4.0
+
+Input:
+  NAME: QGIS
+  VENDOR: osgeo.org
+  URL: https://qgis.org//downloads/
+  # https://qgis.org/downloads/QGIS-OSGeo4W-3.44.1-1.msi
+  # SEARCH_URL: 'href=/(downloads/QGIS-OSGeo4W-(?P<version>([0-9]+\.)*[0-9]+)-1.msi).onclick.*?Latest Version for Windows'
+  SEARCH_URL: '(?s)(QGIS-OSGeo4W-(?P<version>([0-9]+\.)*[0-9]+)-[0-9]\.msi)(?!.*(QGIS-OSGeo4W-([0-9]+\.)*[0-9]+-[0-9]\.msi))'
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) like Gecko
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL%'
+    url: '%URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%URL%%match%'
+    filename: QGIS.msi
+    request_headers:
+      user-agent: '%USER_AGENT%'
+
+- Processor: EndOfCheckPhase
