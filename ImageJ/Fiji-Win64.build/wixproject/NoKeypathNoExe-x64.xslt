@@ -6,6 +6,8 @@ Main functions:
 -Remove the "ImageJ-win64.exe", it is contained in Fiji.wxs
 -Set the KeyPath attribute to "no" on the file elements.
 Version 1.0, 20200210, Nick Heim, ETHZ, ID-CD
+-Remove explicitly the "fiji-windows-x64.exe", leave other "EXE" files alone.
+Version 2.0, 20250814, Nick Heim, ETHZ, ID-CD
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -23,7 +25,7 @@ Version 1.0, 20200210, Nick Heim, ETHZ, ID-CD
 	</xsl:template>
 
 	<!-- Filter out the exe file -->
-	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'exe')]" use="@Id" />
+	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'fiji_windows_x64.exe')]" use="@Id" />
 	<xsl:template match="wix:Component[key('exe-search', @Id)]" />
 	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" />
 

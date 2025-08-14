@@ -22,7 +22,7 @@ Process:
     pkg_dir: '%NAME%%PF_STRING%_%version%%LANG_STRING%'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
-    ver_fields: '3'
+    ver_fields: '4'
 
 - Processor: Copier
   Comment: Copy the Fiji zip file to the build dir
@@ -40,11 +40,18 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'True'
 
-- Processor: PathDeleter
-  Comment: Delete the expanded files and folders in the cache
+- Processor: FileMover
+  Comment: Rename the Fiji folder to Fiji.app
   Arguments:
-    path_list:
-    - '%BUILD_DIR%\%pkg_dir%\wixproject\Fiji.app\java'
+    overwrite: 'true'
+    source: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
+    target: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%.app'
+
+# - Processor: PathDeleter
+  # Comment: Delete the expanded files and folders in the cache
+  # Arguments:
+    # path_list:
+    # - '%BUILD_DIR%\%pkg_dir%\wixproject\Fiji.app\java'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:
@@ -74,5 +81,6 @@ Process:
   Arguments:
     build_file: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%.build'
     build_folder: '%BUILD_DIR%\%pkg_dir%\wixproject'
-    build_property: BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;FijiDir=%BUILD_DIR%\%pkg_dir%\wixproject\Fiji.App;version=%version%
+    build_property: BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;FijiDir=%BUILD_DIR%\%pkg_dir%\wixproject\Fiji.app;version=%version%
+    # build_property: BuildDir=%BUILD_DIR%\%pkg_dir%\wixproject;FijiDir=%BUILD_DIR%\%pkg_dir%\wixproject\Fiji;version=%version%
     build_target: WIX

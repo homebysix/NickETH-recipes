@@ -31,7 +31,7 @@
         <Directory Id="INSTALLDIR" Name="Fiji.app">
 			<!-- https://docs.microsoft.com/de-de/archive/blogs/alexshev/from-msi-to-wix-part-10-shortcuts -->
             <Component Id="ImageJ_win64_exe" Guid="{D9AED640-73E4-4C80-AF76-10CFA826FBF1}" Win64="yes" >
-                <File Id="ImageJ_win64.exe" Vital="yes" Source="!(wix.APSourceDir)\ImageJ-win64.exe" />
+                <File Id="ImageJ_win64.exe" Vital="yes" Source="!(wix.APSourceDir)\fiji-windows-x64.exe" />
 				<Shortcut Id="Fiji"
 					Directory="ProgramMenuDir"
 					Advertise="no"
@@ -40,7 +40,7 @@
 					Icon="FijiIcon.ico"
 					Target="[!ImageJ_win64.exe]">
 				</Shortcut>
-                <RegistryKey Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ImageJ-win64.exe" Root="HKLM" >
+                <RegistryKey Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\fiji-windows-x64.exe" Root="HKLM" >
 					<RegistryValue Id="regAppPath1" Value="[#ImageJ_win64.exe]" Type="string" KeyPath="yes" />
                 </RegistryKey>
 				<RemoveFolder Id="DeleteShortcutFolder"
