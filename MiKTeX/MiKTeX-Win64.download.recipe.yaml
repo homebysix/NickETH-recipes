@@ -68,7 +68,7 @@ Process:
 - Processor: FileCreator
   Comment: Generate the version.txt in the release dir.
   Arguments:
-    file_content: '%versionsub%'
+    file_content: '%version%'
     file_path: '%RECIPE_CACHE_DIR%\version.txt'
 
 - Processor: URLTextSearcher

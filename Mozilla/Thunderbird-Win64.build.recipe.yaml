@@ -29,6 +29,11 @@ Process:
     recipe_path: '%RECIPE_PATH%'
     ver_fields: '3'
 
+- Processor: FileCreator
+  Arguments:
+    file_content: '%build_ver%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
 - Processor: com.github.sebtomasi.SharedProcessors/RenameVar
   Arguments:
     input_var: Thunderbird_64_%build_ver%_ML

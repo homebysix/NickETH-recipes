@@ -3,7 +3,7 @@
   <?include version.wxi?>
   <?include $(sys.CURRENTDIR)Includes\ElementVariables.wxi ?>
 
-  <Product Id="$(var.Productcode)" Name="$(var.ProductNameWithVersion)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.ProductManufacturerLong)" UpgradeCode="$(var.ProductUpgradeCode)">
+  <Product Id="$(var.Productcode)" Name="$(var.ProductName)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.ProductManufacturerLong)" UpgradeCode="$(var.ProductUpgradeCode)">
     <Package Description="!(loc.PackageDescription)" Manufacturer="$(var.ProductManufacturerLong)" InstallerVersion="500" Compressed="yes" />
     <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
 	<Binary Id="JSONStreamEditor" SourceFile="$(var.SetupResourcesDir)\jj.exe" />
@@ -32,7 +32,8 @@
     <InstallExecuteSequence>
 		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
 		<RemoveExistingProducts Before="InstallInitialize" />
-		<Custom Action="SetDefaultServer" After="InstallFiles"><![CDATA[NOT DEFAULTSERVER="0"]]></Custom>
+		<MoveFiles Sequence="4100" />
+		<Custom Action="SetDefaultServer" After="MoveFiles"><![CDATA[NOT DEFAULTSERVER="0"]]></Custom>
 	</InstallExecuteSequence>
 	<InstallUISequence>
 		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
@@ -41,7 +42,7 @@
     <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFiles64Folder">
-          <Directory Id="APPLICATIONFOLDER" Name="$(var.ProductNameWithVersion)" />
+          <Directory Id="APPLICATIONFOLDER" Name="$(var.ProductName)" />
       </Directory>
       <Directory Id="ProgramMenuFolder" />
       <Directory Id="DesktopFolder" />
@@ -67,7 +68,7 @@
 		<Shortcut Id="AppStartMenuShortcut"
 		  Directory="ProgramMenuFolder"
 		  Advertise="yes"
-		  Name="$(var.ProductNameWithVersion)"
+		  Name="$(var.ProductName)"
 		  WorkingDirectory="APPLICATIONFOLDER"
 		  Icon="ElementIcon.exe">
 		    <!-- <ShortcutProperty Key="System.AppUserModel.ID" Value="3c1b0cac-12aa-54d0-85ac-9a4ca6e1d795" /> -->
@@ -94,7 +95,7 @@
 	  <Condition>DESKTOP_SC=1</Condition>
         <Shortcut Id="AppDesktopShortcut" 
 		  Advertise="no" 
-		  Name="$(var.ProductNameWithVersion)" 
+		  Name="$(var.ProductName)" 
 		  Target="[APPLICATIONFOLDER]Element.exe" 
 		  WorkingDirectory="APPLICATIONFOLDER" 
 		  Directory="DesktopFolder"
