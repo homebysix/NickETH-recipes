@@ -53,6 +53,8 @@ Process:
     destination_path: '%BUILD_DIR%\%pkg_dir%\wixproject\TexStudio\'
     overwrite: 'true'
     source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
   Arguments:

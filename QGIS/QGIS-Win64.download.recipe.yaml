@@ -33,4 +33,8 @@ Process:
     request_headers:
       user-agent: '%USER_AGENT%'
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
 - Processor: EndOfCheckPhase

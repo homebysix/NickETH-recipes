@@ -12,6 +12,8 @@ Process:
 - Processor: URLTextSearcher
   Arguments:
     re_pattern: '%SEARCH_PATTERN%'
+    re_flags:
+    - DOTALL
     result_output_var_name: match
     url: '%SEARCH_URL%'
 
