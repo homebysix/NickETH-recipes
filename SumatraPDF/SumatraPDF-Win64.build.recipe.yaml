@@ -34,7 +34,7 @@ Process:
 - Processor: Copier
   Comment: Copy the SumatraPDF install exe file to the release dir
   Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML.exe'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_ML-install.exe'
     overwrite: 'true'
     source_path: '%pathname%'
 

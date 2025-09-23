@@ -3,6 +3,7 @@
 	We download and use the setup.exe unaltered.
 	Desktop shortcut will not be installed.
 	For the download links, see the recipe.
-	SumatraPDF_64_1.1.1_ML.exe -silent -all-users -with-filter -with-preview
+	SumatraPDF_64_1.1.1_ML-install.exe -silent -all-users -with-filter -with-preview
+	Caution: The setup-file needs the term "-install" in its name!
 
 200113	Version 1.0.0, by AutoPkg
