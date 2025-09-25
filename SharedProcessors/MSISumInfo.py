@@ -56,7 +56,7 @@ class MSISumInfo(Processor):
         extract_flag = 'l'
         msiinfo_exe = os.path.join(self.env['TOOLS_DIR'], "msiinfo.exe")		
 
-        if "cmnds_sinfo" in self.env:
+        if "cmnds_sinfo" in self.env and cmnds_sinfo != '':
             for key, value in list(cmnds_sinfo.items()):
                 cmd = [msiinfo_exe, msi_path, key, value]
                 try:
@@ -79,7 +79,8 @@ class MSISumInfo(Processor):
                     Output = subprocess.check_output(cmd)
                 else:
                     Output = subprocess.check_output(cmd)
-                self.env['SumInfo_Dump'] = Output.decode("utf-8")
+                #self.env['SumInfo_Dump'] = Output.decode("utf-8")
+                self.env['SumInfo_Dump'] = Output.decode("windows-1252")
             except OSError as err:
                 if ignore_errors != 'True':
                     raise ProcessorError(

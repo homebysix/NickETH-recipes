@@ -1,0 +1,3 @@
+helpers\*.*
+read\create-log-AcrobatReaderDC_64_VVeerrssiioonn_deu.txt
+read\readme-AcrobatReaderDC_64_VVeerrssiioonn_deu.txt

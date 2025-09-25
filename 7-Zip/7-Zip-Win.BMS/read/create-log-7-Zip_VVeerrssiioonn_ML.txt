@@ -1,0 +1,4 @@
+190813	7-Zip x86
+	No alterations at all.
+	We use the MSI out of the box here.
+
