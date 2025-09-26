@@ -177,6 +177,8 @@ Process:
     - jobname: '%NAMELONG%'
       substring: 'Taskkill'
       jobdescription: 'Adobe Acrobat Reader DC ist ein Programm von Adobe zum Anzeigen von PDF-Dokumenten, also ein Dateibetrachter. Es ist Teil der Adobe-Acrobat-Produktfamilie.'
+      autoenableapp: '%NAMELONG% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAMELONG%'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
