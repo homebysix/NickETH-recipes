@@ -12,7 +12,7 @@ Input:
   PF_STRING: _64
   LANG_STRING: _deu
   LANG_VERSION: DE-EN
-  DIP_NAME: Adobe_Reader_DC
+  DIP_NAME: Acrobat_Reader_DC
   DIP_SUBDIR: ML_x64
 
 Process:
