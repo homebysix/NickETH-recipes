@@ -8,10 +8,11 @@ Input:
   NAMESHORT: 'Trueview'
   VENDOR: 'Autodesk'
   PF_STRING: _64
-  LANG_STRING: _ML
+  LANG_STRING: _EN
+  LANGUI: EN
   PLATFORM: x64
   DIP_NAME: DWGViewer
-  MAJORREL: '2025'
+  MAJORREL: '2026'
   DOWNLOAD_URL: 'https://upload1.delivery.autodesk.com/PORTAL_DownloadPackage146620325107674.exe?response-content-disposition=attachment;filename="Create_Installer_PLC0000037_%MAJORREL%_English_WIN64.exe"'
   SEARCH_STR: '(https://efulfillment.autodesk.com/NetSWDLD/.+?/(?P<UPI2>[0-9a-fA-F\-]{36})/.+?sfx.exe)'
   #SEARCH_STR: https://efulfillment.autodesk.com/NetSWDLD

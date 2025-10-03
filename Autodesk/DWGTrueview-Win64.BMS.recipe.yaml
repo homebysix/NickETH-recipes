@@ -10,9 +10,10 @@ Input:
   VENDOR: 'Autodesk'
   PF_STRING: _64
   PLATFORM: x64
-  LANG_STRING: _ML
+  LANG_STRING: _EN
+  LANGUI: EN
   DIP_NAME: DWGViewer
-  DIP_SUBDIR: ML
+  DIP_SUBDIR: '%LANGUI%'
   PROC_CHAR: '%'
 
 Process:
@@ -97,7 +98,7 @@ Process:
     bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
     bms_app_installparm: '--silent'
     bms_app_integration:
-    - appname: '%NAME%'
+    - appname: '%NAMELONG%'
       bundles:
       - action: exchange
         name: nV_%NAME%
@@ -110,12 +111,12 @@ Process:
       copyfolders: 1
       currentversion:
         bundle: nV_%NAME%
-        search: '[d]+\.[d]+\.[d]+\.[d]+ ML (%PLATFORM%)'
+        search: '[d]+\.[d]+\.[d]+\.[d]+ %LANGUI% (%PLATFORM%)'
         type: bundles
       platform: (%PLATFORM%)
       subspec: ''
       vendor: '%VENDOR%'
-      version: '%build_ver% ML'
+      version: '%build_ver% %LANGUI%'
       SWDetectionRules:
       - Name: '%DISPLAYNAME%'
         Vendor: 'Autodesk, Inc.'
@@ -128,13 +129,13 @@ Process:
         Comments: ''
     bms_app_sharepoint:
     - SW-List-Name: '%NAMELONG%'
-      versionplatformtag: '%build_ver% ML (x64)'
+      versionplatformtag: '%build_ver% %LANGUI% (x64)'
     bms_job_kiosk:
-    - jobname: '%NAME%'
+    - jobname: '%NAMELONG%'
       substring: 'Taskkill'
       jobdescription: 'DWG Trueview ist eine Software mit der AutoCAD DWG Dateien angezeigt werden können.'
-      autoenableapp: '%NAME% - Enable AutoUpdate'
-      autoreleasejob: '@_AU-Rel_%NAME%'
+      autoenableapp: '%NAMELONG% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAMELONG%'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
@@ -149,13 +150,13 @@ Process:
     bms_app_uninstparm: '-i uninstall --trigger_point system -m {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\bundleManifest.xml -x {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\SetupRes\manifest.xsd --silent'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
-    bms_app_version: '%build_ver% ML (%PLATFORM%)'
+    bms_app_version: '%build_ver% %LANGUI% (%PLATFORM%)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME1%'
     inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
     icon_file_src: '%BUILD_DIR%\%pkg_dir%\icons\*.*'
-    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
 
 - Processor: EndOfCheckPhase

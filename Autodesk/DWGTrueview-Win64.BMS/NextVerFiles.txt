@@ -1,3 +1,3 @@
-read\Create-log-DWGTrueview_64_VVeerrssiioonn_ML.txt
-read\readme-DWGTrueview_64_VVeerrssiioonn_ML.txt
+read\Create-log-DWGTrueview_64_VVeerrssiioonn_EN.txt
+read\readme-DWGTrueview_64_VVeerrssiioonn_EN.txt
 helpers\UnNamed.json
