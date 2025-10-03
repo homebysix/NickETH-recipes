@@ -76,12 +76,11 @@ Process:
     # new_ver: '%version%'
     # old_hex_ver: 15014EA7
 
-# - Processor: Copier
-  # Arguments:
-    # destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.msp'
-    # overwrite: 'true'
-    # source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%NAME%\AcroRdrDCx64Upd%version_string%.msp'
-
+- Processor: Copier
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\AcroRdrDCx64Upd%version_string%.msp'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\%NAME%\AcroRdrDCx64Upd%version_string%.msp'
 
 # - Processor: Copier
   # Arguments:

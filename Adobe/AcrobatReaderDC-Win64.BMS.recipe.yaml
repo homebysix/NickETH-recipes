@@ -186,8 +186,8 @@ Process:
     bms_app_name: '%NAMELONG%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
-    bms_app_uninstcmd: msiexec.exe
-    bms_app_uninstparm: /x %msi_value% /qn
+    bms_app_uninstcmd: cmd.exe
+    bms_app_uninstparm: /c exit 0
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% %LANG_VERSION% (%PLATFORM%)'
