@@ -5,7 +5,6 @@
 # Extended with UseBBT-option and explicit options for uninstall, 20210207, Hm
 # Extended localfilecopy to all options, 20211028, Hm
 # Changed the Credential Manager lookup code. TLS narrowed to Tls11,Tls12, 220131, Hm
-# Extended the dependencies section. 221104, Hm
 
 param(
     [Parameter(mandatory=$true)][string]$bms_serverurl,
@@ -26,6 +25,9 @@ param(
     [Parameter(mandatory=$false)][string]$bms_app_iopt_usebbt,
     [Parameter(mandatory=$false)][string]$bms_app_iopt_reinstall,
     [Parameter(mandatory=$false)][string]$bms_app_iopt_target,
+	[Parameter(mandatory=$false)][string]$bms_app_iusr_script,
+	[Parameter(mandatory=$false)][string]$bms_app_iusr_copyloc,
+	[Parameter(mandatory=$false)][string]$bms_app_iusr_execevery,
     [Parameter(mandatory=$false)][string]$bms_app_comment,
     [Parameter(mandatory=$false)][string]$bms_app_category,
     [Parameter(mandatory=$false)][string]$bms_app_conschecks,
@@ -45,6 +47,8 @@ $logfile = ("C:\Tools\AutoPKG\log\BMSimporter" + $bms_app_name + (Get-Date -Form
 
 echo "----------Start of BMSimporter--------------" | Out-File $logfile -Append
 echo ("bms_server: " + $bms_serverurl + " bms_appname: " + $bms_app_name) | Out-File $logfile -Append
+#Start-Process -FilePath "C:\Windows\System32\whoami.exe" "> test.txt"
+& "C:\Windows\System32\whoami.exe" > test.txt
 # Convert a boolean string to a bool type value.
 function ParseBool{
     [CmdletBinding()]
@@ -97,8 +101,6 @@ echo "bms_app_iopt_rebootbhv: " + $bms_app_iopt_rebootbhv | Out-File $logfile -A
 # We are searching trough all the applications on this server! Eye on perfomance! Alternative: a parameter array with the OU's to search...
 # $All_Apps_in_OU = Get-bConnectApplication -OrgUnitGuid $bms_app_parentid
 $All_Apps_in_BMS = Get-bConnectApplication
-# Check if we have Access here. This needs error handling and a message that we need at least read-access on the root of Applications OU in BMS.
-
 foreach ($Application in $All_Apps_in_BMS) {
     if ($Application.Name -eq $bms_app_name -and $Application.Version -eq $bms_app_version -and $Application.ParentId -eq $bms_app_parentid){
         Remove-bConnectApplication -ApplicationGuid $Application.Id
@@ -128,6 +130,22 @@ if ($bms_app_iopt_rebootbhv -or $bms_app_iopt_copylocal -or $bms_app_iopt_usebbt
     # echo @InstallOptArgs | Out-File $logfile -Append
     # echo "1" | Out-File $logfile -Append
 }
+# Create the user settings hash table for install
+if ($bms_app_iusr_script) {
+    $InstallUsrArgs = @{
+		baramundiDeployScript = $bms_app_iusr_script;
+	}
+    # echo "InstallUsrSet inside If" | Out-File $logfile -Append
+    # echo ("bms_app_iopt_copylocal in If: " + $bms_app_iopt_copylocal) | Out-File $logfile -Append
+
+    # echo @InstallUsrArgs | Out-File $logfile -Append
+    if ($bms_app_iusr_copyloc ) { $InstallUsrArgs['CopyScriptToClient'] = (ParseBool($bms_app_iusr_copyloc)) }
+    if ($bms_app_iusr_execevery ) { $InstallUsrArgs['ExecuteAtEveryLogin'] = (ParseBool($bms_app_iusr_execevery)) }
+
+    # New-bConnectApplicationInstallUserSettings is somehow broken and creates a wrong sub table.
+	# So, we append the hash table as is to $installDataArgs. That seems to work...
+    # $InstallUserSettings = New-bConnectApplicationInstallUserSettings @InstallUsrArgs
+}
 # Create the options hash table for uninstall
 # Special case for reboot behaviour: If it is set on install, we use it also for uninstall as default. But if it set for uninstall explicitley, we take this one.
 if ($bms_app_iopt_rebootbhv -or $bms_app_uopt_rebootbhv -or $bms_app_uopt_usebbt) {
@@ -155,8 +173,11 @@ elseif ($bms_app_installbds) {
 	}
 }
 
+
 if ($bms_app_installparm) { $installDataArgs['Parameter'] = $bms_app_installparm }
 if ($InstallOptions) { $installDataArgs['Options'] = $InstallOptions }
+# if ($InstallUserSettings) { $installDataArgs['UserSettings'] = $InstallUserSettings }
+if ($InstallUsrArgs) { $installDataArgs['UserSettings'] = $InstallUsrArgs }
 $InstallationData = New-bConnectApplicationInstallationData @installDataArgs
 # echo @InstallationData | Out-File $logfile -Append
 # echo "2" | Out-File $logfile -Append

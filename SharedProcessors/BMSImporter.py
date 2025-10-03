@@ -105,6 +105,18 @@ class BMSImporter(Processor):
             "required": False,
             "description": "Application install option <target> in BMS.",
         },
+        "bms_app_iusr_script": {
+            "required": False,
+            "description": "Application install user script <BDS path> in BMS.",
+        },
+        "bms_app_iusr_copyloc": {
+            "required": False,
+            "description": "Application install user script <copy script 2 client> in BMS.",
+		},
+        "bms_app_iusr_execevery": {
+            "required": False,
+            "description": "Application install user script <exec at every login> in BMS.",
+		},
         "bms_app_comment": {
             "required": False,
             "description": "Application comment in BMS.",
@@ -248,6 +260,18 @@ class BMSImporter(Processor):
         if "bms_app_iopt_target" in self.env:
             bms_app_iopt_target = self.env.get('bms_app_iopt_target')
             cmd.extend(['-bms_app_iopt_target', bms_app_iopt_target])
+
+        if "bms_app_iusr_script" in self.env:
+            bms_app_iusr_script = self.env.get('bms_app_iusr_script')
+            cmd.extend(['-bms_app_iusr_script', bms_app_iusr_script])
+
+        if "bms_app_iusr_copyloc" in self.env:
+            bms_app_iusr_copyloc = self.env.get('bms_app_iusr_copyloc')
+            cmd.extend(['-bms_app_iusr_copyloc', str(bms_app_iusr_copyloc)])
+
+        if "bms_app_iusr_execevery" in self.env:
+            bms_app_iusr_execevery = self.env.get('bms_app_iusr_execevery')
+            cmd.extend(['-bms_app_iusr_execevery', str(bms_app_iusr_execevery)])
 
         if "bms_app_comment" in self.env:
             bms_app_comment = self.env.get('bms_app_comment')
