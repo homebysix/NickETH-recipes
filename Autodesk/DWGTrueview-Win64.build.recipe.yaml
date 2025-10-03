@@ -21,26 +21,37 @@ Process:
   Arguments:
     exe_path: '%pathname%'
     extract_dir: '%RECIPE_CACHE_DIR%\downloads'
-    extract_file: collection.xml
+    extract_file: UPI2_BOM.xml
+    recursive: false
+    preserve_paths: false
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Arguments:
+    # exe_path: '%pathname%'
+    # extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    # extract_file: app.dwgviewr.en-US.xml
+    # recursive: true
+    # preserve_paths: false
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Arguments:
     exe_path: '%pathname%'
     extract_dir: '%RECIPE_CACHE_DIR%\downloads'
-    extract_file: app.dwgviewr.en-US.xml
+    extract_file: dwgviewr.ico
     recursive: true
     preserve_paths: false
 
 - Processor: URLTextSearcher
   Arguments:
     re_pattern: '<BuildNumber>(?P<version>([0-9]+[\.|_])*[0-9]*)</BuildNumber>'
-    url: file://%RECIPE_CACHE_DIR%\downloads\app.dwgviewr.en-US.xml
+    #url: file://%RECIPE_CACHE_DIR%\downloads\app.dwgviewr.en-US.xml
+    url: file://%RECIPE_CACHE_DIR%\downloads\UPI2_BOM.xml
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Arguments:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
-    folder_list: release:read
+    folder_list: release:read:helpers
     org_ver: '%version%'
     pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
     recipe_dir: '%RECIPE_DIR%'
@@ -54,46 +65,58 @@ Process:
 
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: '%SEARCH_STR%'
-    url: file://%RECIPE_CACHE_DIR%\downloads\collection.xml
+    re_pattern: '<Upi2>{(?P<UPI2>[0-9a-fA-F\-]{36})}</Upi2>'
+    url: file://%RECIPE_CACHE_DIR%\downloads\UPI2_BOM.xml
 
-- Processor: URLDownloader
+- Processor: URLTextSearcher
   Arguments:
-    filename: '%NAME%2.exe'
-    url: '%match%'
+    re_pattern: '<Name>(?P<DISPLAYNAME>.*?)</Name>'
+    url: file://%RECIPE_CACHE_DIR%\downloads\UPI2_BOM.xml
+
+- Processor: Copier
+  Arguments:
+    overwrite: 'true'
+    source_path: '%EXE_DL%'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.exe'
 
 - Processor: Copier
   Arguments:
     overwrite: 'true'
     source_path: '%pathname%'
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.exe'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.7z'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+- Processor: Copier
   Arguments:
-    exe_path: '%pathname%'
-    extract_dir: '%RECIPE_CACHE_DIR%\downloads'
-    extract_file: 'DWGTrueView*.7z'
+    overwrite: 'true'
+    source_path: '%BUILD_DIR%\%pkg_dir%\helpers\UnNamed.json'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\UnNamed.json'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Arguments:
+    # exe_path: '%pathname%'
+    # extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    # extract_file: 'DWGTrueView*.7z'
  
-- Processor: FileFinder
-  Arguments:
-    pattern: '%RECIPE_CACHE_DIR%\downloads\DWGTrueView*.7z'
+# - Processor: FileFinder
+  # Arguments:
+    # pattern: '%RECIPE_CACHE_DIR%\downloads\DWGTrueView*.7z'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Arguments:
-    exe_path: '%pathname%'
-    extract_dir: '%RECIPE_CACHE_DIR%\downloads'
-    extract_file: 'DWGTrueView*.7z'
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Arguments:
+    # exe_path: '%pathname%'
+    # extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    # extract_file: 'DWGTrueView*.7z'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Arguments:
-    exe_path: '%found_filename%'
-    extract_dir: '%RECIPE_CACHE_DIR%\downloads'
-    extract_file: dwgviewr.ico
-    recursive: true
-    preserve_paths: false
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Arguments:
+    # exe_path: '%found_filename%'
+    # extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    # extract_file: dwgviewr.ico
+    # recursive: true
+    # preserve_paths: false
 
 - Processor: com.github.haircut.processors/AppIconExtractor
-  Comment: Generate Icon files for the Kiosk from Telegraf
+  Comment: Generate Icon files for the Kiosk from DWG TrueView
   Arguments:
     ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
     icon_file_number: 0

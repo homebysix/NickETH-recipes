@@ -1,32 +1,56 @@
-Description: Downloads the latest DWG Trueview x64 for Windows.
+Description: Download recipe for Autodesk DWG Trueview.
 Identifier: com.github.NickETH.recipes.download.DWGTrueview-Win64
 MinimumVersion: 1.3.1
 
 Input:
-  NAME: DWGTrueview
-  NAMESHORT: 'Trueview'
-  VENDOR: 'Autodesk'
-  PLATFORM: x64
-  PF_STRING: _64
-  LANG_STRING: _ML
-  DIP_NAME: DWGViewer
-  DIP_SUBDIR: ML
-  MAJORREL: '2025'
-  DOWNLOAD_URL: 'https://upload1.delivery.autodesk.com/PORTAL_DownloadPackage146620325107674.exe?response-content-disposition=attachment;filename="Create_Installer_PLC0000037_%MAJORREL%_English_WIN64.exe"'
+  NAME: 'DWGTrueview'
+  NAMESHORT: Command_Update
+  MAJORREL: '2026'
+  # SEARCH_FIRSTURL: https://www.autodesk.com/products/dwg-trueview/overview
+  SEARCH_FIRSTURL: https://github.com/andreasmalta/choco_packages/blob/master/dwgtrueview/tools/chocolateyinstall.ps1
+  # https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/2026/PLC0000037/9506362F-6781-39A3-B671-2BDAF86819F8/SFX/DWGTrueView_2026_English_64bit_db_001_002.exe
+  #RE_PATTERN: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/[0-9A-F\-]*?/SFX/DWGTrueView_[0-9]*?_English_64bit_db_001_002.exe
+  RE_PATTERN: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/[0-9A-F\-]*?/SFX/DWGTrueView_[0-9]*?_English_64bit_db
+  RE_PATTERN2: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*/PLC0000037/[0-9A-F\-]*/SFX/DWGTrueView_[0-9]*_English_64bit_db_002_002.7z
+  #_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
 
 Process:
+- Processor: URLTextSearcher
+  Comment: Get the url for the offline installer.
+  Arguments:
+    re_pattern: '%RE_PATTERN%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%SEARCH_FIRSTURL%'
+
 - Processor: URLDownloader
   Arguments:
-    filename: '%NAME%.exe'
-    url: '%DOWNLOAD_URL%'
+    filename: '%NAME%-x64.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%match%_001_002.exe'
 
-- Processor: EndOfCheckPhase
+# - Processor: URLTextSearcher
+  # Comment: Get the url for the payload for the offline installer.
+  # Arguments:
+    # EXE_DL: '%pathname%'
+    # re_pattern: '%RE_PATTERN2%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    # url: '%SEARCH_FIRSTURL%'
 
-- Processor: StopProcessingIf
+- Processor: URLDownloader
   Arguments:
-    predicate: download_changed == False
+    EXE_DL: '%pathname%'
+    filename: '%NAME%-x64.7z'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%match%_002_002.7z'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
     expected_subject: CN="Autodesk, Inc.", O="Autodesk, Inc.", L=San Francisco, S=California, C=US
-    input_path: '%pathname%'
+    input_path: '%EXE_DL%'
+
+- Processor: EndOfCheckPhase
