@@ -46,31 +46,50 @@ Process:
       </ACTION>
       <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
       <DATA>
-      <VALUE>Copy the UnNamed.json file to each user profile</VALUE>
+      <VALUE>Write UnNamed.json file to each user profile</VALUE>
       </DATA>
       </ACTION>
-      <ACTION type="CopyFiles" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      <ACTION type="CreateFile" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
       <DATA>
-      <SOURCE>{DIP}&#92;Apl&#92;SSuubbssttiittuuttee</SOURCE>
-      <DESTINATION>{%AppData%}&#92;Roaming&#92;Autodesk&#92;ADPSDK&#92;UserConsent</DESTINATION>
-      <FILES>UnNamed.json</FILES>
-      <OPTIONS>43</OPTIONS>
+                                                             
+      <FILENAME>{%AppData%}&#92;Roaming&#92;Autodesk&#92;ADPSDK&#92;UserConsent&#92;UnNamed.json<</FILENAME>
+      <ENCODING>1</ENCODING>
+      <CONTENT>{
+      &quot;preferences&quot;: [
+        {
+            &quot;consentId&quot;: &quot;ADSK_PUD_CONTRACTUAL_NECESSITY_DESKTOP&quot;,
+            &quot;optIn&quot;: true
+        },
+        {
+            &quot;consentId&quot;: &quot;ADSK_PUD_OPTIMIZATION_IMPROVEMENT_DESKTOP&quot;,
+            &quot;optIn&quot;: false
+        },
+        {
+            &quot;consentId&quot;: &quot;ADSK_PUD_GO_TO_MARKET_DESKTOP&quot;,
+            &quot;optIn&quot;: false
+        }
+      ],
+      &quot;userActionRequired&quot;: false,
+      &quot;userId&quot;: &quot;UnNamed&quot;
+      }</CONTENT>
+      <OPTIONS>1</OPTIONS>
       </DATA>
       </ACTION>
       </ACTIONS>
       </baramundiDeployScript>
     rename_var: bds_content
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
-  Arguments:
-    input_string: '%bds_content%'
-    pattern_replace:
-    - pattern: SSuubbssttiittuuttee
-      repl: '%DIP_NAME%&#92;%parsed_string%&#92;%DIP_SUBDIR%'
+# - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  # Arguments:
+    # input_string: '%bds_content%'
+    # pattern_replace:
+    # - pattern: SSuubbssttiittuuttee
+      # repl: '%DIP_NAME%&#92;%parsed_string%&#92;%DIP_SUBDIR%'
 
 - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   Arguments:
-    input_string: '%parsed_string%'
+    #input_string: '%parsed_string%'
+    input_string: '%bds_content%'
     pattern_replace:
     - pattern: ddaatteettiimmee
       repl: '%us_date% %time%'
@@ -96,7 +115,7 @@ Process:
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
     bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
-    bms_app_installparm: '--silent'
+    bms_app_installparm: '-q'
     bms_app_integration:
     - appname: '%NAMELONG%'
       bundles:
@@ -147,7 +166,7 @@ Process:
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: '{%ProgramW6432%}\Autodesk\AdODIS\V1\Installer.exe'
-    bms_app_uninstparm: '-i uninstall --trigger_point system -m {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\bundleManifest.xml -x {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\SetupRes\manifest.xsd --silent'
+    bms_app_uninstparm: '-i uninstall -q --trigger_point system -m {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\bundleManifest.xml -x {%PROC_CHAR%ProgramData%PROC_CHAR%}\Autodesk\ODIS\metadata\{%UPI2%}\SetupRes\manifest.xsd'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% %LANGUI% (%PLATFORM%)'
