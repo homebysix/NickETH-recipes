@@ -1,0 +1,48 @@
+
+Description: Downloads the latest Anaconda Python x64 installer package for Windows.
+Identifier: com.github.NickETH.recipes.download.Anaconda-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Anaconda
+  INSTALLER_TYPE: exe
+  PYTHON_MAJOR_VERSION: '3'
+  ARCH: x86_64
+  SEARCH_URL: https://www.anaconda.com/download/success
+  #https://repo.anaconda.com/archive/Anaconda3-2025.06-0-Windows-x86_64.exe
+  SEARCH_PATTERN: (?P<url>https\://repo\.(anaconda\.com|continuum\.io)/archive/Anaconda%PYTHON_MAJOR_VERSION%-(?P<rawversion>[0-9.|-]+)-Windows-%ARCH%\.%INSTALLER_TYPE%)
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: Python (?P<PYTHON_VERSION>%PYTHON_MAJOR_VERSION%\.\d)
+    url: '%SEARCH_URL%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_PATTERN%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%%PYTHON_MAJOR_VERSION%-%ARCH%.%INSTALLER_TYPE%'
+    url: '%url%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  Arguments:
+    input_string: '%rawversion%'
+    pattern_replace:
+    - pattern: \-
+      repl: .
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    version: '%parsed_string%'
+    expected_subject: CN="Anaconda, Inc.", O="Anaconda, Inc.", L=Austin, S=Texas, C=US, SERIALNUMBER=5073497, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
