@@ -102,7 +102,7 @@ Process:
 - Processor: URLTextSearcher
   Arguments:
     re_pattern: AppVerName=(?P<DISPNAME>GIMP.+)
-    url: 'file://D:/AutoPkg/Build/GIMP_64_3.0.2.1_ML/sourceunzipped/install_script.iss'
+    url: 'file://D:/AutoPkg/Build/%NAME%%PF_STRING%_%build_ver%%LANG_STRING%/sourceunzipped/install_script.iss'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)

@@ -4,15 +4,12 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: 'DWGTrueview'
-  NAMESHORT: Command_Update
   MAJORREL: '2026'
   # SEARCH_FIRSTURL: https://www.autodesk.com/products/dwg-trueview/overview
   SEARCH_FIRSTURL: https://github.com/andreasmalta/choco_packages/blob/master/dwgtrueview/tools/chocolateyinstall.ps1
   # https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/2026/PLC0000037/9506362F-6781-39A3-B671-2BDAF86819F8/SFX/DWGTrueView_2026_English_64bit_db_001_002.exe
-  #RE_PATTERN: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/[0-9A-F\-]*?/SFX/DWGTrueView_[0-9]*?_English_64bit_db_001_002.exe
-  RE_PATTERN: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/[0-9A-F\-]*?/SFX/DWGTrueView_[0-9]*?_English_64bit_db
+  RE_PATTERN: (?P<DL_URL>https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/(?P<CHANGE_KEY>[0-9A-F\-]*?)/SFX/DWGTrueView_[0-9]*?_English_64bit_db)
   RE_PATTERN2: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*/PLC0000037/[0-9A-F\-]*/SFX/DWGTrueView_[0-9]*_English_64bit_db_002_002.7z
-  #_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
 
 Process:
@@ -24,21 +21,40 @@ Process:
       user-agent: '%USER_AGENT%'
     url: '%SEARCH_FIRSTURL%'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist (like 'touch').
+  Arguments:
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: URLTextSearcher
+  Comment: read back the previous version from the version.txt file.
+  Arguments:
+    re_pattern: '^(.*)$'
+    url: file://%RECIPE_CACHE_DIR%/version.txt
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%CHANGE_KEY% == %match%'
+
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
+  Arguments:
+    file_content: '%CHANGE_KEY%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%-x64.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%match%_001_002.exe'
-
-# - Processor: URLTextSearcher
-  # Comment: Get the url for the payload for the offline installer.
-  # Arguments:
-    # EXE_DL: '%pathname%'
-    # re_pattern: '%RE_PATTERN2%'
-    # request_headers:
-      # user-agent: '%USER_AGENT%'
-    # url: '%SEARCH_FIRSTURL%'
+    url: '%DL_URL%_001_002.exe'
 
 - Processor: URLDownloader
   Arguments:
@@ -46,7 +62,7 @@ Process:
     filename: '%NAME%-x64.7z'
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%match%_002_002.7z'
+    url: '%DL_URL%_002_002.7z'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
