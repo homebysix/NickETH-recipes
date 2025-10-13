@@ -1,0 +1,11 @@
+
+200113	Packaging XnView full for Windows
+	We download and distribute the package as is.
+	For the download links, see the recipe.
+	Maybe: /MERGETASKS=!desktopicon,quicklaunchicon
+	Command line: /VERYSILENT /LANG=en /TASKS="*!checkdesktopicon,*!checkquicklaunchicon,checkstartmenu"
+
+	Uninstall: "C:\Program Files (x86)\XnView\unins000.exe" /VERYSILENT
+
+
+200113	Version 1.0.0, by AutoPkg
