@@ -97,7 +97,7 @@ Process:
     cab_dir: adm
     cab_file: Data
     embed_cab: 'False'
-    max_files_per_cab: '4000'
+    max_files_per_cab: '3000'
     msi_path: sourceunzipped\AcroPro.msi
     msp_path: sourceunzipped\AdobeAcrobatDCUpd%version_string%.msp
     new_msi_path: adm\AcroProDC_%version_string%_ML.msi
