@@ -126,17 +126,36 @@ Process:
     overwrite: 'true'
     source_path: '%BUILD_DIR%\%pkg_dir%\adm\AcroProDC_%version_string%_ML.msi'
 
-- Processor: Copier
-  Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\Data1.cab'
-    overwrite: 'true'
-    source_path: '%BUILD_DIR%\%pkg_dir%\adm\Data1.cab'
+# - Processor: Copier
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\release\Data1.cab'
+    # overwrite: 'true'
+    # source_path: '%BUILD_DIR%\%pkg_dir%\adm\Data1.cab'
 
-- Processor: Copier
+# - Processor: Copier
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\release\Data2.cab'
+    # overwrite: 'true'
+    # source_path: '%BUILD_DIR%\%pkg_dir%\adm\Data2.cab'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: get the CAB-files
   Arguments:
-    destination_path: '%BUILD_DIR%\%pkg_dir%\release\Data2.cab'
-    overwrite: 'true'
-    source_path: '%BUILD_DIR%\%pkg_dir%\adm\Data2.cab'
+    cmdline_args:
+    - /C
+    - dir
+    - /b
+    - '%BUILD_DIR%\%pkg_dir%\adm\Data*.cab'
+    - '>'
+    - cabfiles.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileMoverFromList
+  Arguments:
+    file_list: '%RECIPE_CACHE_DIR%\cabfiles.txt'
+    source_dir: '%BUILD_DIR%\%pkg_dir%\adm'
+    target_dir: '%BUILD_DIR%\%pkg_dir%\release'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
   Comment: Applies the transforms to the AcroProDC_xx.msi in the release folder
