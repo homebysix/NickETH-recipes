@@ -15,12 +15,11 @@ Process:
     exe_path: '%pathname%'
     product_version: 'True'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: ' '
-      repl: ''
+    find:  
+    replace: ''
 
 - Processor: StopProcessingIf
   Arguments:
@@ -32,7 +31,7 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     folder_list: release:read
-    org_ver: '%parsed_string%'
+    org_ver: '%output_string%'
     pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::_ML'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'

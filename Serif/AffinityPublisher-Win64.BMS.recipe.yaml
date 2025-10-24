@@ -21,12 +21,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\%NAME%_64_%build_ver%_ML\release\%NAME%_64_%build_ver%_ML.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -35,7 +34,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%NAME%\%output_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%version%%LANG_STRING%.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 PRODUCT_KEY_PROPERTY=%PRODUCT_KEY_PROP% EMAIL_PROPERTY=%EMAIL_PROP% NO_UPDATE_CHECK_PROPERTY=#1 NO_EULA_PROPERTY=#1 NO_REGISTRATION_PROPERTY=#1 INSTALL_DESKTOP_SHORTCUT_PROPERTY=#0
     bms_app_integration:
     - appname: '%NAME%'
@@ -76,8 +75,8 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%_64_%build_ver%_ML\release\*.ms?|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%NAME%\%parsed_string%\%DIP_SUBDIR%'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%_64_%build_ver%_ML\release\*.ms?|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%NAME%\%output_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%_64_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%NAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%_64_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%NAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

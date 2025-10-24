@@ -21,13 +21,11 @@ Process:
     re_pattern: '[0-9]{2}'
     result_output_var_name: versionminunist
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
-    version_uninstall: '%versionmajor%.%versionminunist%.%versionbuild%'
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: FileCreator
   Comment: Generate the install.bds in the release dir.
@@ -49,7 +47,7 @@ Process:
       </ACTION>
       <ACTION type="LaunchProcess" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
       <DATA>
-      <COMMAND>{DIP}&#92;Apl&#92;%DIP_NAME%&#92;%parsed_string%&#92;%DIP_SUBDIR%&#92;%NAME%%PF_STRING%_%build_ver%_ML.exe</COMMAND>
+      <COMMAND>{DIP}&#92;Apl&#92;%DIP_NAME%&#92;%output_string%&#92;%DIP_SUBDIR%&#92;%NAME%%PF_STRING%_%build_ver%_ML.exe</COMMAND>
       <PARAM>/S</PARAM>
       <RETURNCODES>0</RETURNCODES>
       <VARNAME></VARNAME>
@@ -78,7 +76,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,1641,3010\r\nDeinstall.CheckAppRC=0,1605,1641,3010"
-    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\i_%NAME%%PF_STRING%_%build_ver%.bds'
+    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\i_%NAME%%PF_STRING%_%build_ver%.bds'
     bms_app_integration:
     - appname: '%NAME%'
       currentversion:
@@ -114,9 +112,9 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME1%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%version%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%version%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\%DIP_SUBDIR%'
     icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%version%_ML\icons\*.*'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%version%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%version%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

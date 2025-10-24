@@ -104,17 +104,16 @@ Process:
   Arguments:
     predicate: '%ffmpegver% != %match%'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%INTERNAL_URL%'
-    pattern_replace:
-    - pattern: \\
-      repl: /
+    find: '\'
+    replace: /
 
 - Processor: URLDownloader
   Arguments:
     filename: 'FFMPEG_x64.exe'
-    url: 'file:%parsed_string%/%NEW_FILENAME%'
+    url: 'file:%output_string%/%NEW_FILENAME%'
 
 - Processor: FileCreator
   Comment: Generate the version.txt file in the cache dir.

@@ -38,12 +38,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\%ALTNAME% %MAJOR_VERSION%.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: FileCreator
   Comment: Generate the firewall install.bds in the release dir.
@@ -114,9 +113,9 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%ALTNAME% %MAJOR_VERSION%.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\%ALTNAME% %MAJOR_VERSION%.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 TRANSFORMS="p%MAJOR_VERSION%_1031.mst"
-    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\i_FM%MAJOR_VERSION%FW.bds'
+    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\i_FM%MAJOR_VERSION%FW.bds'
     bms_app_integration:
     - appname: '%ALTNAME% %MAJOR_VERSION%'
       bundles:
@@ -153,16 +152,16 @@ Process:
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: msiexec.exe
     bms_app_uninstparm: /x %msi_value% /qn
-    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\u_FM%MAJOR_VERSION%FW.bds'
+    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\u_FM%MAJOR_VERSION%FW.bds'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% ML'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
     icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\icons\*.*'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

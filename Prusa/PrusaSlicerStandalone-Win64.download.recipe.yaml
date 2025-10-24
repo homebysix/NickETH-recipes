@@ -24,20 +24,19 @@ Process:
     re_pattern: '\d+\.\d+\.\d+'
     result_output_var_name: 'version'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: '\.'
-      repl: '_'
+    find: .
+    replace: _
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
-    # url: https://cdn.prusa3d.com/downloads/drivers/PrusaSlicer_Win_standalone_%parsed_string%.exe
-    url: https://cdn.prusa3d.com/downloads/drivers/prusa3d_win_%parsed_string%.exe
+    # url: https://cdn.prusa3d.com/downloads/drivers/PrusaSlicer_Win_standalone_%output_string%.exe
+    url: https://cdn.prusa3d.com/downloads/drivers/prusa3d_win_%output_string%.exe
 
 - Processor: WindowsSignatureVerifier
   Arguments:

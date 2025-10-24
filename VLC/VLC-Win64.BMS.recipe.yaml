@@ -22,13 +22,12 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Comment: Exchange "." for "_" on build_ver variable for BMS-DIP-path
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS) QSS
@@ -37,7 +36,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,2,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%output_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
@@ -85,7 +84,7 @@ Process:
       autoreleasejob: '@_AU-Rel_VLC media player'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIPNAME%\bms_app_integration.json'
     icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\icons\*.*'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\%NAME%%PF_STRING%_%build_ver%_ML.msi|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-VLC*.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\DEV'    
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\%NAME%%PF_STRING%_%build_ver%_ML.msi|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\%DIP_SUBDIR%'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-VLC*.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\DEV'    
 
 - Processor: EndOfCheckPhase

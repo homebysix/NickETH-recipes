@@ -15,18 +15,17 @@ Process:
     re_pattern: (?P<filetosearch>gimp-(?P<version>(?P<versionminor>[0-9]+\.[0-9]+)\.[0-9]+)-setup(?P<versionbuild>[-0-9]*)\.exe)
     url: '%URL%'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Comment: If we have a build string, exchange the dash with a period
   Arguments:
     input_string: '%versionbuild%'
-    pattern_replace:
-    - pattern: '-'
-      repl: '.'
+    find: -
+    replace: .
 
 - Processor: URLDownloader
   Comment: rewrite the version variable with the build string, download the installer file.
   Arguments:
-    version: '%version%%parsed_string%'
+    version: '%version%%output_string%'
     filename: '%NAME%%PLATFORM%.exe'
     url: https://download.gimp.org/pub/gimp/v%versionminor%/windows/%filetosearch%
 

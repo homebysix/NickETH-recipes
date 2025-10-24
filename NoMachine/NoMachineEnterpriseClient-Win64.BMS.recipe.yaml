@@ -13,12 +13,11 @@ Input:
   LANG_STRING: _ML
 
 Process:
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -27,7 +26,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0\r\nDeinstall.CheckAppRC=0"
-    bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML_x64\%NAME%%PF_STRING%_%build_ver%_ML.exe'
+    bms_app_installcmd: '{DIP}\Apl\%NAME%\%output_string%\ML_x64\%NAME%%PF_STRING%_%build_ver%_ML.exe'
     bms_app_installparm: /ALLUSERS /TYPE="full" /SP- /SUPPRESSMSGBOXES /MERGETASKS="!desktopicon" /VERYSILENT
     bms_app_integration:
     - appname: '%NAME%'
@@ -68,9 +67,9 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%parsed_string%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\ML_x64'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%output_string%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\ML_x64'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIPNAME%\bms_app_integration.json'
-    icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%parsed_string%_ML\icons\*.*'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%parsed_string%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\DEV'
+    icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%output_string%_ML\icons\*.*'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%output_string%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

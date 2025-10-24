@@ -17,12 +17,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%msi_value%_ML.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%msi_value%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -31,7 +30,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\EdgeChromium\%parsed_string%\ML\%NAME%%PF_STRING%_%msi_value%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\EdgeChromium\%output_string%\ML\%NAME%%PF_STRING%_%msi_value%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1
     bms_app_integration:
     - appname: EdgeChromium
@@ -69,7 +68,7 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%msi_value%_ML.msi|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\ML'
-    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%msi_value%_ML.txt|%BMS_IMPORT_PATH_TST%\EdgeChromium\%parsed_string%\DEV'
+    inst_file_src_dest: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%msi_value%_ML.msi|%BMS_IMPORT_PATH_TST%\EdgeChromium\%output_string%\ML'
+    read_file_src_dest: '%BUILD_DIR%\%pkg_dir%\read\*-%NAME%%PF_STRING%_%msi_value%_ML.txt|%BMS_IMPORT_PATH_TST%\EdgeChromium\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

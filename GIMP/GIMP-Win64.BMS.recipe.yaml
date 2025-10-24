@@ -19,27 +19,24 @@ Process:
     # input_string: '|'
     # pattern_replace:
     # - pattern: SSuubbssttiittuuttee
-      # repl: '%parsed_string%&#92;ML&#92;%NAME%%PF_STRING%_%build_ver%_ML'
+      # repl: '%output_string%&#92;ML&#92;%NAME%%PF_STRING%_%build_ver%_ML'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
-    #input_string: '%parsed_string%'
     input_string: '|'
-    pattern_replace:
-    - pattern: ddaatteettiimmee
-      repl: '%us_date% %time%'
+    find: ddaatteettiimmee
+    replace: '%us_date% %time%'
 
 - Processor: FileCreator
   Comment: Generate the install.bds in the release dir.
   Arguments:
-    file_content: '%parsed_string%'
+    file_content: '%output_string%'
     file_path: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\u_%NAME%%PF_STRING%_%build_ver%.bds'
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: URLTextSearcher
   Arguments:
@@ -53,10 +50,10 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
+    bms_app_installcmd: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
     bms_app_installparm: /ALLUSERS /NORESTART /TYPE="full" /MERGETASKS="!desktopicon" /SP- /SUPPRESSMSGBOXES /VERYSILENT
     bms_app_localfilecopy:
-    - '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\~~~FolderWithSubFolders'
+    - '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\~~~FolderWithSubFolders'
     bms_app_integration:
     - appname: '%NAME%'
       bundles:
@@ -105,16 +102,16 @@ Process:
     bms_app_seccont: LocalSystem
     #bms_app_uninstcmd: '"{%ProgramW6432%}\GIMP 2\uninst\unins000.exe"'
     #bms_app_uninstparm: /VERYSILENT /NORESTART
-    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\u_%NAME%%PF_STRING%_%build_ver%.bds'
+    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%output_string%\%DIP_SUBDIR%\u_%NAME%%PF_STRING%_%build_ver%.bds'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% ML (%PLATFORM%)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME1%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*.*|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIP_NAME%\bms_app_integration.json'
     icon_file_src: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\icons\*.*'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

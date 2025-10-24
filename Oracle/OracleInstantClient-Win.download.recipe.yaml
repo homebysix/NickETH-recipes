@@ -19,17 +19,17 @@ Process:
     re_pattern: '%SEARCH_PATTERN%'
     url: '%SEARCH_URL%'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%match%'
-    pattern_replace:
-    - pattern: '\n'
-      repl: ''
+    find: 
+
+    replace: ''
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.zip'
-    url: 'https:%parsed_string%'
+    url: 'https:%output_string%'
 
 - Processor: EndOfCheckPhase
 

@@ -15,7 +15,7 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     folder_list: release:read
-    org_ver: '%parsed_string%'
+    org_ver: '%output_string%'
     pkg_dir: '%NAME%_%PF_DIGIT%_::VVeerrssiioonn::_ML'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'

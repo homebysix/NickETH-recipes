@@ -29,12 +29,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\release\%FILENAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -43,7 +42,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%\%FILENAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
+    bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%output_string%\%DIP_SUBDIR%\%FILENAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 ADDLOCAL=ALL
     bms_app_integration:
     - appname: '%APPNAME%'
@@ -89,9 +88,9 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME1%'
-    inst_file_src_dest: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%'
+    inst_file_src_dest: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\release\*.*|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\%DIP_SUBDIR%'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%DIPNAME%\bms_app_integration.json'
     icon_file_src: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\icons\*.*'
-    read_file_src_dest: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\read\*-%FILENAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%parsed_string%\DEV'
+    read_file_src_dest: '%BUILD_DIR%\Adoptium_JRE_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\read\*-%FILENAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt|%BMS_IMPORT_PATH_TST%\%DIPNAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase

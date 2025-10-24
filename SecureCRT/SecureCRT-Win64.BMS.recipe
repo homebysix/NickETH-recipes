@@ -21,7 +21,6 @@
     <string>ch.ethz.gitlab.id-cd-win.build.SecureCRT-Win64</string>
     <key>Process</key>
     <array>
-    <!--    -->
         <dict>
             <key>Processor</key>
             <string>com.github.autopkg-win.SharedProcessors/MSIRunSQLget</string>
@@ -30,33 +29,27 @@
                 <key>msi_path</key>
                 <string>%BUILD_DIR%\%pkg_dir%\release\%NAME%_64_%build_ver%_EN.msi</string>
                 <key>SQL_command</key>
-                <string><![CDATA[SELECT `Value` FROM `Property` WHERE `Property`='ProductCode']]></string>
+                <string>SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'</string>
             </dict>
-		</dict>
+        </dict>
         <dict>
             <key>Processor</key>
-			<string>com.github.sebtomasi.SharedProcessors/TextSubstituer</string>
+            <string>com.github.homebysix-recipes.FindAndReplace/FindAndReplace</string>
             <key>Arguments</key>
             <dict>
                 <key>input_string</key>
                 <string>%build_ver%</string>
-                <key>pattern_replace</key>
-				<array>
-                    <dict>
-                        <key>pattern</key>
-                        <string><![CDATA[\.]]></string>
-                        <key>repl</key>
-                        <string><![CDATA[_]]></string>
-                    </dict>
-                </array>
+                <key>find</key>
+                <string>.</string>
+                <key>replace</key>
+                <string>_</string>
             </dict>
         </dict>
         <dict>
-			<!-- SecureCRT (normal, QSS) -->
             <key>Processor</key>
             <string>com.github.autopkg-win.SharedProcessors/BMSImporter</string>
-			<key>Comment</key>
-			<string>Import the Application into Baramundi (BMS) QSS</string>
+            <key>Comment</key>
+            <string>Import the Application into Baramundi (BMS) QSS</string>
             <key>Arguments</key>
             <dict>
                 <key>bms_serverurl</key>
@@ -67,15 +60,15 @@
                 <string>AutoPKG-BMSImporter</string>
                 <key>bms_username</key>
                 <string>D\winpkg</string>
-				<key>bms_app_comment</key>
-				<string>ID-NET: 40 Lizenzen&#13;&#10;Imported by: AutoPkg, %us_date% %time%</string>
+                <key>bms_app_comment</key>
+                <string>ID-NET: 40 Lizenzen
+Imported by: AutoPkg, %us_date% %time%</string>
                 <key>bms_app_name</key>
                 <string>SecureCRT</string>
                 <key>bms_app_vendor</key>
                 <string>VanDyke Software</string>
                 <key>bms_app_parentid</key>
-                <!-- PRD-ID-ITA<string>00F09F1C-ED96-4D43-A43B-1A0FB1E5C8FF</string> -->
-				<string>4F1C2606-53ED-4968-80BC-E5CED0BEF3B3</string>
+                <string>4F1C2606-53ED-4968-80BC-E5CED0BEF3B3</string>
                 <key>bms_app_version</key>
                 <string>%build_ver% EN (x64) (ID-NET)</string>
                 <key>bms_app_valid4os</key>
@@ -83,37 +76,37 @@
                 <key>bms_app_seccont</key>
                 <string>LocalSystem</string>
                 <key>bms_app_installcmd</key>
-                <string>{DIP}\Apl\SecureCRT\%parsed_string%\EN\SecureCRT_64_%build_ver%_EN.msi</string>
+                <string>{DIP}\Apl\SecureCRT\%output_string%\EN\SecureCRT_64_%build_ver%_EN.msi</string>
                 <key>bms_app_installparm</key>
-				<string>/qn /norestart ALLUSERS=1 TRANSFORMS=%LIC_TRANSFORM%</string>
+                <string>/qn /norestart ALLUSERS=1 TRANSFORMS=%LIC_TRANSFORM%</string>
                 <key>bms_app_conschecks</key>
-                <string>CheckAppRC=0,3010&#13;&#10;Deinstall.CheckAppRC=0,1605,3010</string>
-				<key>bms_app_iopt_copylocal</key>
-				<string>true</string>
-				<key>bms_app_iopt_usebbt</key>
-				<true/>
-				<key>bms_app_iopt_reinstall</key>
-				<string>false</string>
-				<key>bms_app_iopt_rebootbhv</key>
-				<string>NoReboot</string>
-				<key>bms_app_category</key>
-				<string>baramundi Application</string>
+                <string>CheckAppRC=0,3010
+Deinstall.CheckAppRC=0,1605,3010</string>
+                <key>bms_app_iopt_copylocal</key>
+                <string>true</string>
+                <key>bms_app_iopt_usebbt</key>
+                <true/>
+                <key>bms_app_iopt_reinstall</key>
+                <string>false</string>
+                <key>bms_app_iopt_rebootbhv</key>
+                <string>NoReboot</string>
+                <key>bms_app_category</key>
+                <string>baramundi Application</string>
                 <key>bms_app_uninstcmd</key>
                 <string>msiexec.exe</string>
                 <key>bms_app_uninstparm</key>
                 <string>/x %msi_value% /qn</string>
                 <key>inst_file_src_dest</key>
-                <string>%BUILD_DIR%\%pkg_dir%\release\*.ms?|\\d\sys\bms_tst\CUSTOMERS\ID-KW\Apl\SecureCRT\%parsed_string%\EN</string>
+                <string>%BUILD_DIR%\%pkg_dir%\release\*.ms?|\\d\sys\bms_tst\CUSTOMERS\ID-KW\Apl\SecureCRT\%output_string%\EN</string>
                 <key>read_file_src_dest</key>
-                <string>%BUILD_DIR%\%pkg_dir%\read\*-SecureCRT_64_%build_ver%_EN.txt|\\d\sys\bms_tst\CUSTOMERS\ID-KW\Apl\SecureCRT\%parsed_string%\DEV</string>
+                <string>%BUILD_DIR%\%pkg_dir%\read\*-SecureCRT_64_%build_ver%_EN.txt|\\d\sys\bms_tst\CUSTOMERS\ID-KW\Apl\SecureCRT\%output_string%\DEV</string>
             </dict>
-		</dict>
+        </dict>
         <dict>
-			<!-- SecureCRT (normal, PRD) -->
             <key>Processor</key>
             <string>com.github.autopkg-win.SharedProcessors/BMSImporter</string>
-			<key>Comment</key>
-			<string>Import the Application into Baramundi (BMS) PRD</string>
+            <key>Comment</key>
+            <string>Import the Application into Baramundi (BMS) PRD</string>
             <key>Arguments</key>
             <dict>
                 <key>bms_serverurl</key>
@@ -124,15 +117,15 @@
                 <string>AutoPKG-BMSImporter</string>
                 <key>bms_username</key>
                 <string>D\winpkg</string>
-				<key>bms_app_comment</key>
-				<string>ID-NET: 40 Lizenzen&#13;&#10;Imported by: AutoPkg, %us_date% %time%</string>
+                <key>bms_app_comment</key>
+                <string>ID-NET: 40 Lizenzen
+Imported by: AutoPkg, %us_date% %time%</string>
                 <key>bms_app_name</key>
                 <string>SecureCRT</string>
                 <key>bms_app_vendor</key>
                 <string>VanDyke Software</string>
                 <key>bms_app_parentid</key>
                 <string>00F09F1C-ED96-4D43-A43B-1A0FB1E5C8FF</string>
-				<!-- QSS-ID-ITA <string>4F1C2606-53ED-4968-80BC-E5CED0BEF3B3</string> -->
                 <key>bms_app_version</key>
                 <string>%build_ver% EN (x64) (ID-NET)</string>
                 <key>bms_app_valid4os</key>
@@ -140,32 +133,30 @@
                 <key>bms_app_seccont</key>
                 <string>LocalSystem</string>
                 <key>bms_app_installcmd</key>
-                <string>{DIP}\Apl\SecureCRT\%parsed_string%\EN\SecureCRT_64_%build_ver%_EN.msi</string>
+                <string>{DIP}\Apl\SecureCRT\%output_string%\EN\SecureCRT_64_%build_ver%_EN.msi</string>
                 <key>bms_app_installparm</key>
                 <string>/qn /norestart ALLUSERS=1 TRANSFORMS=%LIC_TRANSFORM%</string>
                 <key>bms_app_conschecks</key>
-                <string>CheckAppRC=0,3010&#13;&#10;Deinstall.CheckAppRC=0,1605,3010</string>
-				<key>bms_app_iopt_copylocal</key>
-				<string>true</string>
-				<key>bms_app_iopt_usebbt</key>
-				<true/>
-				<key>bms_app_iopt_reinstall</key>
-				<string>false</string>
-				<key>bms_app_iopt_rebootbhv</key>
-				<string>NoReboot</string>
-				<key>bms_app_category</key>
-				<string>baramundi Application</string>
+                <string>CheckAppRC=0,3010
+Deinstall.CheckAppRC=0,1605,3010</string>
+                <key>bms_app_iopt_copylocal</key>
+                <string>true</string>
+                <key>bms_app_iopt_usebbt</key>
+                <true/>
+                <key>bms_app_iopt_reinstall</key>
+                <string>false</string>
+                <key>bms_app_iopt_rebootbhv</key>
+                <string>NoReboot</string>
+                <key>bms_app_category</key>
+                <string>baramundi Application</string>
                 <key>bms_app_uninstcmd</key>
                 <string>msiexec.exe</string>
                 <key>bms_app_uninstparm</key>
                 <string>/x %msi_value% /qn</string>
                 <key>inst_file_src_dest</key>
-                <string>%BUILD_DIR%\%pkg_dir%\release\*.ms?|\\d\sys\bms_prd\CUSTOMERS\ID-KW\Apl\SecureCRT\%parsed_string%\EN</string>
-                <!-- <key>read_file_src_dest</key>
-                <string>%BUILD_DIR%\%pkg_dir%\read\*-SecureCRT_64_%build_ver%_EN.txt|\\d\sys\bms_prd\CUSTOMERS\ID-KW\Apl\SecureCRT\%parsed_string%\DEV</string> -->
+                <string>%BUILD_DIR%\%pkg_dir%\release\*.ms?|\\d\sys\bms_prd\CUSTOMERS\ID-KW\Apl\SecureCRT\%output_string%\EN</string>
             </dict>
-		</dict>
-
+        </dict>
         <dict>
             <key>Processor</key>
             <string>EndOfCheckPhase</string>

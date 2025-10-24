@@ -17,12 +17,11 @@ Process:
     SQL_command: SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'
     msi_path: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\release\%NAME%%PF_STRING%_%build_ver%_ML.msi'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -31,7 +30,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\%NAME%\%parsed_string%\ML%PF_STRING%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
+    bms_app_installcmd: '{DIP}\Apl\%NAME%\%output_string%\ML%PF_STRING%\%NAME%%PF_STRING%_%build_ver%_ML.msi'
     bms_app_installparm: /qn /norestart ALLUSERS=1 ZNoDesktopShortCut="true"
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
@@ -48,8 +47,8 @@ Process:
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME1%'
-    inst_file_src_dest: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\release\*.ms?|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\ML%PF_STRING%'
-    read_file_src_dest: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%NAME%\%parsed_string%\DEV'
+    inst_file_src_dest: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\release\*.ms?|%BMS_IMPORT_PATH_TST%\%NAME%\%output_string%\ML%PF_STRING%'
+    read_file_src_dest: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%NAME%\%output_string%\DEV'
     icon_file_src: '%BUILD_DIR%\ZoomClient%PF_STRING%_%msi_value%_ML\icons\*.*'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\%NAME%\bms_app_integration.json'
     bms_app_integration:

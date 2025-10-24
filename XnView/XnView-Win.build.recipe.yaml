@@ -15,12 +15,11 @@ Process:
     exe_path: '%pathname%'
     product_version: 'True'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: ' '
-      repl: ''
+    find:  
+    replace: ''
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Comment: Create a build enviroment to store the package
@@ -28,10 +27,10 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     folder_list: sourcepkt:sourceunzipped:release:read:helpers
-    org_ver: '%parsed_string%'
-    # pkg_dir: '%NAME%_%parsed_string%_ML'
+    org_ver: '%output_string%'
+    # pkg_dir: '%NAME%_%output_string%_ML'
     pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
-    # pkg_dir: '%NAME%%PF_STRING%_%parsed_string%%LANG_STRING%'
+    # pkg_dir: '%NAME%%PF_STRING%_%output_string%%LANG_STRING%'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
     ver_fields: '3'
@@ -68,7 +67,6 @@ Process:
     destination_path: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\%NAME%_%build_ver%_ML.exe'
     overwrite: 'true'
     source_path: '%pathname%'
-
 
 - Processor: com.github.haircut.processors/AppIconExtractor
   Comment: Extract the XnView icons and generate BMS-Kiosk-Icons

@@ -14,12 +14,11 @@ Process:
     exe_path: '%pathname%'
     product_version: 'True'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: ' '
-      repl: ''
+    find:  
+    replace: ''
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Comment: Create a build enviroment to store the package
@@ -27,8 +26,8 @@ Process:
     BuildFiles: NextVerFiles.txt
     build_dir: '%BUILD_DIR%'
     folder_list: release:read
-    org_ver: '%parsed_string%'
-    pkg_dir: '%NAME%%PF_STRING%_%parsed_string%_EN'
+    org_ver: '%output_string%'
+    pkg_dir: '%NAME%%PF_STRING%_%output_string%_EN'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
     ver_fields: '3'

@@ -16,12 +16,11 @@ Process:
     exe_path: '%pathname%'
     product_version: 'True'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: ' '
-      repl: ''
+    find:  
+    replace: ''
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
   Arguments:

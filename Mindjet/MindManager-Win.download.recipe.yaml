@@ -47,30 +47,28 @@ Process:
     re_pattern: '"url": "(?P<MSI_DL_LINK>https://.*?.cloudfront.net/Builds/MindManager.*?\/(?P<versionraw>[_\d]*)\/%PF_DIGIT%Bit\/.*?\.msi)'
     url: '%match%'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%MSI_DL_LINK%'
-    pattern_replace:
-    - pattern: ' '
-      repl: '%20'
+    find:  
+    replace: '%20'
 
 - Processor: URLDownloader
   Arguments:
     filename: MindManager_%MAJOR_VERSION%_%PF_DIGIT%_raw.msi
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%parsed_string%'
+    url: '%output_string%'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
     expected_subject: OID.1.3.6.1.4.1.311.60.2.1.3=CA, OID.1.3.6.1.4.1.311.60.2.1.2=British Columbia, OID.2.5.4.15=Private Organization, CN=COREL CORPORATION, SERIALNUMBER=101151819, O=Alludo (COREL CORPORATION), L=Ottawa, S=Ontario, C=CA
     input_path: '%pathname%'
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%versionraw%'
-    pattern_replace:
-    - pattern: _
-      repl: .
+    find: _
+    replace: .
 
 - Processor: EndOfCheckPhase

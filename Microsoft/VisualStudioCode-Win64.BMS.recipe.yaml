@@ -11,12 +11,11 @@ Input:
   PF_STRING: _64
 
 Process:
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%build_ver%'
-    pattern_replace:
-    - pattern: \.
-      repl: _
+    find: .
+    replace: _
 
 - Processor: FileCreator
   Comment: Generate the VSCode_SetDisableUpdate.bds in the release dir.
@@ -89,9 +88,9 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installcmd: '{DIP}\Apl\VSCode\%parsed_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.exe'
+    bms_app_installcmd: '{DIP}\Apl\VSCode\%output_string%\ML\%NAME%%PF_STRING%_%build_ver%_ML.exe'
     bms_app_installparm: /VERYSILENT /LOG /MERGETASKS=!runcode,addtopath,addcontextmenufiles
-    bms_app_installbds: '{DIP}\Apl\VSCode\%parsed_string%\ML\VSCode_SetDisableUpdate.bds'
+    bms_app_installbds: '{DIP}\Apl\VSCode\%output_string%\ML\VSCode_SetDisableUpdate.bds'
     bms_app_integration:
     - appname: 'Visual Studio Code'
       bundles:
@@ -112,7 +111,7 @@ Process:
       vendor: '%VENDOR%'
       version: '%build_ver% ML'
     bms_app_localfilecopy:
-    - '{DIP}\Apl\VSCode\%parsed_string%\ML\~~~FolderWithSubFolders'
+    - '{DIP}\Apl\VSCode\%output_string%\ML\~~~FolderWithSubFolders'
     bms_app_iopt_copylocal: 'false'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'true'
@@ -122,15 +121,15 @@ Process:
     bms_app_seccont: LocalSystem
     bms_app_uninstcmd: '"C:\Program Files\Microsoft VS Code\unins000.exe"'
     bms_app_uninstparm: /VERYSILENT
-    bms_app_uninstbds: '{DIP}\Apl\VSCode\%parsed_string%\ML\VSCode_UnsetDisableUpdate.bds'
+    bms_app_uninstbds: '{DIP}\Apl\VSCode\%output_string%\ML\VSCode_UnsetDisableUpdate.bds'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% ML (x64)'
     bms_serverport: '%BMS_SERVER_PORT%'
     bms_serverurl: '%BMS_SERVER1%'
     bms_username: '%BMS_USERNAME%'
-    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*|%BMS_IMPORT_PATH_TST%\VSCode\%parsed_string%\ML'
-    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\VSCode\%parsed_string%\DEV'
+    inst_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\release\*|%BMS_IMPORT_PATH_TST%\VSCode\%output_string%\ML'
+    read_file_src_dest: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%_ML\read\*-%NAME%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\VSCode\%output_string%\DEV'
     json_file_dest: '%BMS_IMPORT_PATH_TST%\VSCode\bms_app_integration.json'
 
 - Processor: EndOfCheckPhase

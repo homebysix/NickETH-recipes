@@ -18,16 +18,15 @@ Process:
     github_repo: jupyterlab/jupyterlab-desktop
     include_prereleases: false
 
-- Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+- Processor: com.github.homebysix-recipes.FindAndReplace/FindAndReplace
   Arguments:
     input_string: '%version%'
-    pattern_replace:
-    - pattern: '-'
-      repl: '.'
+    find: -
+    replace: .
 
 - Processor: URLDownloader
   Arguments:
-    version: '%parsed_string%'
+    version: '%output_string%'
     filename: '%NAME%.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
