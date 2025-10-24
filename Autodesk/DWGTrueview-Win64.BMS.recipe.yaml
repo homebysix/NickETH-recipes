@@ -25,7 +25,6 @@ Process:
     find: .
     replace: _
 
-
 # - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
   # Arguments:
     # input_string: '|'

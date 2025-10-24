@@ -47,7 +47,6 @@ Process:
     ignore_pattern: ''
     preserve_paths: 'True'
 
-
 - Processor: URLTextSearcher
   Arguments:
     # https://download.oracle.com/otn_software/nt/instantclient/1917000/instantclient-odbc-nt-19.17.0.0.0dbru.zip

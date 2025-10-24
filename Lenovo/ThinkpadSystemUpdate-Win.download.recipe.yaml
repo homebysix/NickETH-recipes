@@ -21,7 +21,6 @@ Process:
     url: https://download.lenovo.com/ibmdl/pub/pc/pccbbs/agent/SSClientCommon/UTS/executables.xml
     # url: https://datacentersupport.lenovo.com/us/en/downloads/ds012808
 
-
 - Processor: URLDownloader
   Arguments:
     CHECK_FILESIZE_ONLY: false

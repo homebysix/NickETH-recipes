@@ -76,7 +76,6 @@ Process:
     file_content: '%version%'
     file_path: '%RECIPE_CACHE_DIR%\version.txt'
 
-
 - Processor: EndOfCheckPhase
 
 - Processor: StopProcessingIf

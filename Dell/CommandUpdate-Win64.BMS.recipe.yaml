@@ -26,7 +26,6 @@ Process:
     find: .
     replace: _
 
-
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
   Arguments:
@@ -76,4 +75,3 @@ Process:
     read_file_src_dest: '%BUILD_DIR%\%NAMESHORT%%PF_STRING%_%build_ver%_ML\read\*-%NAMESHORT%%PF_STRING%_%build_ver%_ML.txt|%BMS_IMPORT_PATH_TST%\%DIP_NAME%\%output_string%\DEV'
 
 - Processor: EndOfCheckPhase
-

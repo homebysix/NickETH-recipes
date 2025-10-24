@@ -14,7 +14,6 @@ Input:
   DIP_NAME: Thunderbird
   DIP_SUBDIR: ML_x64
 
-
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
   Arguments:

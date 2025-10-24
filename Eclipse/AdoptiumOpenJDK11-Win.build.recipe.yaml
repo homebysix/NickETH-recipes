@@ -74,7 +74,6 @@ Process:
     source_dir: '%BUILD_DIR%\Adoptium_JDK_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\sourceunzipped\%zuludldir%'
     target_dir: '%BUILD_DIR%\Adoptium_JDK_Hotspot%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%.%ver_build%%LANG_STRING%\wixproject\%ADDON_NAME%'
 
-
 - Processor: com.github.NickETH.recipes.SharedProcessors/WixSettings
   Comment: Define variables for the WIX build process to the version.wxi file
   Arguments:

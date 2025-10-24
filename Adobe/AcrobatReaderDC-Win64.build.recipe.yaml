@@ -105,7 +105,6 @@ Process:
     # - UPDATE `MoveFile` SET `MoveFile`.`SourceName`='%NAME%%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%%LANG_STRING%.msi', `MoveFile`.`DestName`='%NAME%%PF_STRING%_%ver_major%.%ver_majorminor%.%ver_minor%%LANG_STRING%.msi' WHERE `MoveFile`.`FileKey`='CacheSetupFiles_AcroPro.msi'
     # msi_path: '%BUILD_DIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%\adm\AcroRdrDCx64Upd%version_string%.msi'
 
-
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSITransformer
   Comment: Applies the transforms to the AcroPro.msi in the release folder
   Arguments:

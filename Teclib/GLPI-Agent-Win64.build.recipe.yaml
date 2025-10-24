@@ -46,7 +46,6 @@ Process:
     overwrite: 'true'
     source_path: '%pathname%'
 
-
 - Processor: com.github.haircut.processors/AppIconExtractor
   Comment: Extract the GIT icons and generate BMS-Kiosk-Icons
   Arguments:

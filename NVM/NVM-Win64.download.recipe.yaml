@@ -10,7 +10,6 @@ Input:
   PF_STRING: _64
   ASSET_REGEX: 'nvm-setup.exe'
 
-
 Process:
 - Processor: GitHubReleasesInfoProvider
   Arguments:
