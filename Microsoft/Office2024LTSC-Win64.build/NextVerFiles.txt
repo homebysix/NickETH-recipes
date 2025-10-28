@@ -1,0 +1,3 @@
+helpers\CONFIG_2024LTSC_ML_x64.xml
+read\create-log-Office2024LTSC_64_VVeerrssiioonn_ML.txt
+read\readme-Office2024LTSC_64_VVeerrssiioonn_ML.txt

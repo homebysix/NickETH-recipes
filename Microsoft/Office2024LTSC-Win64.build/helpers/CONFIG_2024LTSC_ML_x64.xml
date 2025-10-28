@@ -1,0 +1,23 @@
+﻿<Configuration>
+  
+  <Add OfficeClientEdition="64" Channel="PerpetualVL2024" AllowCdnFallback="True">
+      <Product ID="ProPlus2024Volume" PIDKEY="XJ2XN-FW8RK-P4HMP-DKDBV-GCVGB">
+         <Language ID="en-us" />
+		 <Language ID="de-de" />
+		 <Language ID="fr-fr" />
+		 <Language ID="it-it" />
+	  <ExcludeApp ID = "lync"/>
+      </Product>
+      <Product ID="ProofingTools">
+		<Language ID="en-us" />
+        <Language ID="de-de" />
+		<Language ID="fr-fr" />
+		<Language ID="it-it" />
+      </Product>
+  </Add>
+  <RemoveMSI All="True" />
+  <Updates Enabled="TRUE" />
+  <Display Level="None" AcceptEULA="TRUE" />
+  <Logging Level="Standard" Path="%temp%\i_Office_2024_x64_log" />
+  <Property Name="AUTOACTIVATE" Value="1" />
+</Configuration>
