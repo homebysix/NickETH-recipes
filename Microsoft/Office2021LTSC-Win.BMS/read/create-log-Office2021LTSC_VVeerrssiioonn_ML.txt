@@ -1,0 +1,6 @@
+
+200113	Create Office LTSC 2021 x86 for Windows
+	We download and zip it to transfer it to the clients.
+
+200113	Version 1.0.0.0, by AutoPkg
+	

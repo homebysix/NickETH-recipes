@@ -1,0 +1,75 @@
+Description: Check for the latest Office 2021 LTSC x86 installer for Windows and get the setup tool.
+Identifier: com.github.NickETH.recipes.download.Office2021LTSC-Win
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Office2021LTSC
+  NAME_LONG: 'Office 2021 LTSC'
+  VENDOR: 'Microsoft'
+  MAJORVER: '2108'
+  ASSET_REGEX: '>Version.%MAJORVER%.\(Build.(?P<versionsub>(?P<PATCH_VERSION>[0-9]+)\.(?P<BUILD_VERSION>[0-9]+))\)<'
+  TOOL_REGEX: '(?P<match>https://download.microsoft.com/download/.*?/officedeploymenttool_.*?.exe)'
+  PRODUCTID: '49117'
+  SEARCH_FIRSTURL: https://learn.microsoft.com/en-us/officeupdates/update-history-office-2021
+  # SEARCH_SECONDURL: https://www.microsoft.com/en-us/download/details.aspx?id=49117
+  SEARCH_SECONDURL: https://www.microsoft.com/en-us/download/details.aspx?id=%PRODUCTID%
+  PLATFORM: x86
+  PF_STRING: ''
+  LANG_STRING: _ML
+  # USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%ASSET_REGEX%'
+    # re_flags:
+    # - DOTALL
+    url: '%SEARCH_FIRSTURL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist (like 'touch').
+  Arguments:
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: URLTextSearcher
+  Comment: read back the previous version from the version.txt file.
+  Arguments:
+    re_pattern: '^(.*)$'
+    url: file://%RECIPE_CACHE_DIR%/version.txt
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%versionsub% == %match%'
+
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
+  Arguments:
+    version: '%MAJORVER%.%versionsub%'
+    file_content: '%versionsub%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%TOOL_REGEX%'
+    url: '%SEARCH_SECONDURL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: 'OFFICETOOL_%PLATFORM%.exe'
+    url: '%match%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

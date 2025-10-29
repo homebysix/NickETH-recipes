@@ -1,0 +1,26 @@
+﻿<Configuration>
+  <Add OfficeClientEdition="32" Channel="PerpetualVL2021">
+      <Product ID="ProPlus2021Volume" PIDKEY="FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH">
+         <Language ID="en-us" />
+		 <Language ID="de-de" />
+		 <Language ID="fr-fr" />
+		 <Language ID="it-it" />
+		 <ExcludeApp ID = "OutlookForWindows"/>
+	     <ExcludeApp ID = "OneDrive"/>
+	     <ExcludeApp ID = "Lync"/>
+	     <ExcludeApp ID = "Groove"/>
+	     <ExcludeApp ID = "Teams"/>	
+      </Product>
+      <Product ID="ProofingTools">
+		<Language ID="en-us" />
+        <Language ID="de-de" />
+		<Language ID="fr-fr" />
+		<Language ID="it-it" />
+      </Product>
+  </Add>
+  <RemoveMSI All="True" />
+  <Updates Enabled="TRUE" />
+  <Display Level="None" AcceptEULA="TRUE" />
+  <Logging Level="Standard" Path="%temp%\i_Office_2021_x86_log" />
+  <Property Name="AUTOACTIVATE" Value="1" />
+</Configuration>

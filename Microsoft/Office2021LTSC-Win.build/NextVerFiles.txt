@@ -1,0 +1,3 @@
+helpers\CONFIG_2021LTSC_ML_x86.xml
+read\create-log-Office2021LTSC_VVeerrssiioonn_ML.txt
+read\readme-Office2021LTSC_VVeerrssiioonn_ML.txt
