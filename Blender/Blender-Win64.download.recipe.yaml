@@ -1,25 +1,43 @@
-Description: Downloads the latest Blender. The only supported architecture is (since v2.72) x86_64.
+Description: Downloads the latest Blender for Windows x64 MSI installer.
 Identifier: com.github.NickETH.recipes.download.Blender-Win64
 MinimumVersion: 1.3.1
 
 Input:
   NAME: Blender
+  PLATFORM: x64
+  PF_STRING: _64
 
 Process:
 - Processor: URLTextSearcher
-  Comment: Get a link to a redirect page from the official download page
   Arguments:
-    re_pattern: (?P<url>https://www.blender.org/download/release/Blender[0-9a-zA-Z\.]+/blender-(?P<version>[0-9a-zA-Z\.]+)-windows-x64.msi)
-    url: https://www.blender.org/download/
+    curl_opts:
+    - -fsSL
+    re_pattern: (?s)(Blender(\d+\.\d+)/)(?!.*(Blender(\d+\.\d+)/))
+    url: "https://download.blender.org/release/"
 
 - Processor: URLTextSearcher
-  Comment: Get the page from the previous URLTextSearcher match and find the actual (mirrored) download URL
   Arguments:
-    re_pattern: (?P<url>https://.*?/blender-(?P<version>[0-9a-zA-Z\.]+)-windows-x64.msi)
+    URL_INTER: 'https://download.blender.org/release/%match%'
+    curl_opts:
+    - -fsSL
+    re_pattern: (?s)(blender-(?P<version>\d+\.\d+\.\d+)-windows-x64.msi)(?!.*(blender-(\d+\.\d+\.\d+)-windows-x64.msi))
+    url: "https://download.blender.org/release/%match%"
+
+# - Processor: URLTextSearcher
+  # Comment: Get a link to a redirect page from the official download page
+  # Arguments:
+    # re_pattern: (?P<url>https://www.blender.org/download/release/Blender[0-9a-zA-Z\.]+/blender-(?P<version>[0-9a-zA-Z\.]+)-windows-x64.msi)
+    # url: https://www.blender.org/download/
+
+# - Processor: URLTextSearcher
+  # Comment: Get the page from the previous URLTextSearcher match and find the actual (mirrored) download URL
+  # Arguments:
+    # re_pattern: (?P<url>https://.*?/blender-(?P<version>[0-9a-zA-Z\.]+)-windows-x64.msi)
 
 - Processor: URLDownloader
   Arguments:
-    filename: '%NAME%-x64.msi'
+    filename: '%NAME%-%PLATFORM%.msi'
+    url: '%URL_INTER%%match%'
 
 - Processor: WindowsSignatureVerifier
   Arguments:
