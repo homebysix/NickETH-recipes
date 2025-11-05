@@ -220,10 +220,10 @@ Process:
       versionplatformtag: '%build_ver% ML (%PLATFORM%)'
     bms_job_kiosk:
     - jobname: '%NAME%'
-      # substring: 'Taskkill'
-      # jobdescription: 'XnView is an image organizer and general-purpose file manager used for viewing, converting, organizing and editing raster images.'
-      # autoenableapp: '%NAME% - Enable AutoUpdate'
-      # autoreleasejob: '@_AU-Rel_%NAME%'
+      substring: 'Taskkill'
+      jobdescription: 'XnView is an image organizer and general-purpose file manager used for viewing, converting, organizing and editing raster images.'
+      autoenableapp: '%NAME% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAME%'
     bms_app_iopt_copylocal: 'true'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'false'
@@ -231,7 +231,7 @@ Process:
     bms_app_name: '%NAME%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
-    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\u_%NAME%%PF_STRING%_%build_ver%.bds'
+    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%.bds'
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
     bms_app_version: '%build_ver% ML (%PLATFORM%)'
