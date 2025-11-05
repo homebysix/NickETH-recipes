@@ -1,5 +1,5 @@
 Description: Imports XnView full to BMS
-Identifier: om.github.NickETH.recipes.BMS.XnView-Win
+Identifier: com.github.NickETH.recipes.BMS.XnView-Win
 ParentRecipe: com.github.NickETH.recipes.build.XnView-Win
 MinimumVersion: 1.3.1
 
