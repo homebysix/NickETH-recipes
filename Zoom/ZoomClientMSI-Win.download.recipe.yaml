@@ -15,5 +15,6 @@ Process:
     request_headers:
       user-agent: '%USER_AGENT%'
     url: '%DOWNLOAD_URL%'
+    CHECK_FILESIZE_ONLY: True
 
 - Processor: EndOfCheckPhase
