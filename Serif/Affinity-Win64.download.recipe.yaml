@@ -1,0 +1,39 @@
+Description: Download recipe for Affinity V3+
+Identifier: com.github.NickETH.recipes.download.Affinity-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Affinity
+  PLATFORM: x64
+
+Process:
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_PATTERN_DMG%'
+    # url: '%SEARCH_URL%'
+
+# - Processor: URLDownloader
+  # Arguments:
+    # url: '%DL_URL%/%match%'
+    # filename: '%NAME%_%PLATFORM%.exe'
+    # CHECK_FILESIZE_ONLY: True
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    url: https://downloads.affinity.studio/Affinity%20x64.exe
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  Arguments:
+    exe_path: '%pathname%'
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN=Canva, O=Canva, S=New South Wales, C=AU
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

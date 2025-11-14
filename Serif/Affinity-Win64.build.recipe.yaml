@@ -1,0 +1,91 @@
+Description: Alters latest Affinity V3+ MSI-file for Windows.
+Identifier: com.github.NickETH.recipes.build.Affinity-Win64
+ParentRecipe: com.github.NickETH.recipes.download.Affinity-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Affinity
+  NAMELONG: ''
+  VENDOR: 'Serif'
+  PF_STRING: _64
+  LANG_STRING: _ML
+  PLATFORM: x64
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: sourcepkt:sourceunzipped:release:read
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%%LANG_STRING%'
+    rename_var: pkg_dir
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the MSI file from exe
+  Arguments:
+    archive_type: '#'
+    exe_path: '%pathname%'
+    extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    extract_file: '*.msi'
+    preserve_paths: 'False'
+    recursive: 'True'
+
+- Processor: FileFinder
+  Comment: Get the filename of the extracted MSI file
+  Arguments:
+    pattern: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\*.msi'
+
+- Processor: FileMover
+  Comment: Move the MSI file to the release dir.
+  Arguments:
+    overwrite: 'true'
+    source: '%found_filename%'
+    target: '%BUILD_DIR%\%pkg_dir%\release\%NAME%_64_%build_ver%%LANG_STRING%.msi'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: Copier
+  Comment: Save a copy of the downloaded EXE to the build dir.
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%_64_%build_ver%%LANG_STRING%.exe'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Extract the XnViewMP icons and generate BMS-Kiosk-Icons
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    #source_app: '%BUILD_DIR%\%pkg_dir%\helpers\xnview256.png'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: EndOfCheckPhase

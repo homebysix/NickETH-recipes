@@ -1,0 +1,11 @@
+
+190813	Affinity x64
+	We extract the msi with 7zip.
+	Properties on the command line:
+	Disable updates: NO_UPDATE_CHECK_PROPERTY=#1
+	Disable crash reports: NO_CRASH_REPORTS_PROPERTY=#1
+	Disable registration dialog: NO_REGISTRATION_PROPERTY=#1
+	Disable AI models: NO_ML_MODELS_CONFIG_PROPERTY=#1
+
+
+190813	By AutoPkg

@@ -1,0 +1,2 @@
+read\create-log-Affinity_64_VVeerrssiioonn_ML.txt
+read\readme-Affinity_64_VVeerrssiioonn_ML.txt
