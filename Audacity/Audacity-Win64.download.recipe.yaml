@@ -38,7 +38,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Musecy SM Ltd., O=Musecy SM Ltd., S=Lemesos, C=CY
+    expected_subject: CN=MuseCY SM Ltd, O=MuseCY SM Ltd, S=Lemesos, C=CY, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.3=CY, SERIALNUMBER=HE 411908
     input_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
