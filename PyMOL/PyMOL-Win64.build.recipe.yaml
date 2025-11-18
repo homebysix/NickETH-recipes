@@ -8,7 +8,7 @@ Input:
   VENDOR: 'Schrodinger, Inc.'
   PLATFORM: x64
   PF_STRING: _64
-  LANG_STRING: _ML
+  LANG_STRING: _EN
 
 Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
@@ -25,7 +25,7 @@ Process:
     pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
     recipe_dir: '%RECIPE_DIR%'
     recipe_path: '%RECIPE_PATH%'
-    ver_fields: '3'
+    ver_fields: '4'
 
 - Processor: com.github.sebtomasi.SharedProcessors/RenameVar
   Arguments:
@@ -37,6 +37,40 @@ Process:
     overwrite: 'true'
     source_path: '%pathname%'
     destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.exe'
+ 
+# - Processor: com.github.NickETH.recipes.SharedProcessors/NSISEditor
+  # Comment: Extract the PyMOL installer
+  # Arguments:
+    # nsis_path: '%pathname%'
+    # workfolder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # ignore_errors: False
+
+# - Processor: com.github.sebtomasi.SharedProcessors/TextSubstituer
+  # Arguments:
+    # input_string: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # pattern_replace:
+    # - pattern: \\
+      # repl: /
+ 
+# - Processor: URLTextSearcher
+  # Arguments:
+    # # WriteRegStr SHCTX "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PyMOL 3.0.4 (Python 3.10.14 64-bit)" DisplayName "PyMOL 3.0.4 (Python 3.10.14 64-bit)"
+    # re_pattern: 'WriteRegStr.*?SHCTX.*?SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\(?P<UNINSTKEY>PyMOL.*?)"\sDisplayName\s"(?P<DISPNAME>PyMOL.+?)"'
+    # url: 'file://%parsed_string%/\[NSIS\].nsi'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+
+    # # WriteRegStr SHCTX "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PyMOL 3.0.4 (Python 3.10.14 64-bit)" Publisher "Schrodinger, Inc."
+    # re_pattern: 'WriteRegStr.*?SHCTX.*?SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PyMOL.*?"\sPublisher\s"(?P<PUBLINAME>Sch.+?)"'
+    # url: 'file://%parsed_string%/\[NSIS\].nsi'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+
+    # # WriteRegStr SHCTX "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PyMOL 3.1.6.1 (Python 3.10.18 64-bit)" DisplayVersion 3.1.6.1
+    # re_pattern: 'WriteRegStr.*?SHCTX.*?SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PyMOL.*?"\sDisplayVersion (?P<APPVERSION>([0-9]+\.)*[0-9]+)'
+    # url: 'file://%parsed_string%/\[NSIS\].nsi'
     
 - Processor: com.github.haircut.processors/AppIconExtractor
   Comment: Generate Icon files for the Kiosk from Telegraf

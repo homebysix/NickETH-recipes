@@ -6,7 +6,7 @@
 	It is a NSIS installer.
 
 	So, we use it with no alterations at all.
-	Options: ...to come...
+	Options: /InstallationType=AllUsers /AddtoPath=1 /RegisterPython=1 /S /D=C:\APPS\PyMOL_64_EN
 
 
 200113	Version 1.0.0, by AutoPkg
