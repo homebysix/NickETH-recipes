@@ -13,10 +13,10 @@ Input:
   
 
 Process:
-- Processor: URLTextSearcher
-  Arguments:
-    re_pattern: Python (?P<PYTHON_VERSION>%PYTHON_MAJOR_VERSION%\.\d)
-    url: '%SEARCH_URL%'
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: Python (?P<PYTHON_VERSION>%PYTHON_MAJOR_VERSION%\.\d)
+    # url: '%SEARCH_URL%'
 
 - Processor: URLTextSearcher
   Arguments:
