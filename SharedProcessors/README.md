@@ -337,6 +337,19 @@ build_target, (required: False), Description: "Target to run in NANT-file."
 ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
 ```
 
+NSISEditor
+-------
+Decompiles an NSIS-Setup EXE-file. Recompile to come...  
+Example recipe: PyMOL-Win64.build.recipe.yaml
+```
+Input variables:
+nsis_path, (required: True), Description: "Path to the NSIS-Setup file."
+nsis_compiler, (required: False), Description: "Absolute path to the NSIS compiler (makensis.exe)."
+workfolder, (required: False), Description: "Path to the folder, where the work on the package should be done, defaults to %pathname%."
+script_only, (required: False), Description: "eXtract only the [NSIS].nsi file, defaults to 'True'."
+ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
+```
+
 ResourceWorker
 -----------------
 Edit a resource from a Windows exe using ResourceHacker.
@@ -425,6 +438,17 @@ product_version, (required: False), Description: "Set this flag to get the produ
 ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
 Output variables:
 version, Description: "Version of exe found."
+```
+
+WixExtractor
+----------------
+Extracts a resource from a Wix 6+ based exe using Wix.exe.
+Example recipe: MicrosoftPowerToys-Win64.build.recipe.yaml
+```
+Input variables:
+exe_path, (required: False), Description: "Path to the (setup.)exe, defaults to %pathname%"
+extract_dir, (required: True), Description: "Output path (absolute) for the extracted archive."
+ignore_errors, (required: False), Description: "Ignore any errors during the extraction."
 ```
 
 WixDarkExtractor
