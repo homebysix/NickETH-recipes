@@ -8,6 +8,24 @@
     <Media Id="1" Cabinet="Data1.cab" EmbedCab="yes" CompressionLevel="high" />
 	<Binary Id="JSONStreamEditor" SourceFile="$(var.SetupResourcesDir)\jj.exe" />
 	<CustomAction Id="SetServerPath2" BinaryKey="JSONStreamEditor" ExeCommand="-p -v [INTERNALSERVER] -i &quot;[SetServerPath2]&quot; -o &quot;[SetServerPath2]&quot; global_environment_environment.urls.base" Execute="deferred" Impersonate="no" />
+	<CustomAction Id="SetCopyJsonData" Property="CopyJson" Value="[APPLICATIONFOLDER]¦[Roaming_User]" Execute="immediate" />
+	<CustomAction Id="CopyJson" Script="vbscript" Execute="deferred" Impersonate="yes" Return="check" >
+<![CDATA[
+Set fso = CreateObject("Scripting.FileSystemObject")
+strCL = Session.Property("CustomActionData")
+'MsgBox strCL
+
+arrCL = Split(strCL, "¦", -1, 1)
+Source = arrCL(0) & "data.json"
+Target = arrCL(1) & "data.json"
+If Not fso.FolderExists(arrCL(1)) Then
+  fso.CreateFolder arrCL(1)
+End If
+If Not fso.FileExists(Target) Then
+  fso.CopyFile Source, Target, False
+End If
+]]>
+    </CustomAction>
     <Icon Id="MainIcon.exe" SourceFile="$(var.SetupResourcesDir)\Main-Icon.exe" />
 	<Property Id="DEFAULTCONFIG" Value="1" />
 	<!-- <Property Id="INTERNALSERVER" Value="" /> -->
@@ -38,6 +56,8 @@
 		<!-- <Custom Action="SetServerPath1" After="InstallFiles"><![CDATA[DEFAULTCONFIG="1" AND NOT REMOVE]]></Custom> -->
 		<Custom Action="SetServerPath2" After="InstallFiles"><![CDATA[INTERNALSERVER AND NOT REMOVE]]></Custom>
 		<!-- <Custom Action="InstallServer" After="InstallFiles"><![CDATA[INSTALLSERVER="1" AND NOT REMOVE]]></Custom> -->
+		<Custom Action="SetCopyJsonData" After="InstallValidate">NOT REMOVE</Custom>
+		<Custom Action="CopyJson" After="InstallFiles">NOT REMOVE</Custom>
 	</InstallExecuteSequence>
 	<InstallUISequence>
 		<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
@@ -87,7 +107,8 @@
         <RegistryValue Root="HKLM" Key="Software\$(var.AppVendor)\$(var.AppVendor)" Name="StartMenuShortcutInstalled" Type="integer" Value="1" />
 		<RegistryValue Id="registry1" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\$(var.AppVendor).exe" Value="[APPLICATIONFOLDER]$(var.AppVendor).exe" Type="string" />
 		<RegistryValue Id="registry2" Root="HKLM" Key="Software\173a9bac-6f0d-50c4-8202-4744c69d091a\InstallLocation" Value="[APPLICATIONFOLDER]" Type="string" />
-
+		<RegistryValue Id="RegHKLM4" Root="HKLM" Key="SOFTWARE\Policies\Microsoft\Windows\Installer" Name="SecureRepairPolicy" Type="integer" Value="2" />
+		<RegistryValue Id="RegHKLM5" Root="HKLM" Key="SOFTWARE\Policies\Microsoft\Windows\Installer\SecureRepairWhitelist" Name="$(var.Productcode)" Type="string" Value="" />
 		<RemoveFile Id="PurgeAppFolder" Name="*.*" On="uninstall" />
 	  </Component>
 	  
@@ -101,6 +122,7 @@
 			Name="data.json"
 			Vital="yes"
 			Source="$(var.SetupResourcesDir)\data.json">
+			<!-- <CopyFile Id="DupFile2" DestinationProperty="Roaming_User" DestinationName="data.json" /> -->
 		</File>
 	  </Component>
 	  <Component Id="ActiveSetup64" Guid="{12FF1738-DA12-47D2-8979-4A3F54646573}">
@@ -131,7 +153,7 @@
 			<Component Id="UserSettingsRepair" Guid="{B3C6F8D9-64E6-45C9-8315-D50ABB877539}">
 				<Condition>INTERNALSERVER</Condition>
 				<!-- <CopyFile Id="DupFile1" SourceProperty="APPLICATIONFOLDER" SourceName="settings.json" DestinationProperty="Roaming_User" DestinationName="settings.json" /> -->
-				<CopyFile Id="DupFile2" SourceProperty="APPLICATIONFOLDER" SourceName="data.json" DestinationProperty="Roaming_User" DestinationName="data.json" />
+				<!-- 	 -->
 				<RegistryValue Id="regHKCU2" Root="HKCU" Key="SOFTWARE\Classes\$(var.AppName)" Name="Config_JSON" Value="1" Type="integer" KeyPath="yes" />
 			</Component>
 		</Directory>
