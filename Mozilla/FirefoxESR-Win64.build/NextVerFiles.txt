@@ -1,0 +1,4 @@
+read\create-log-FirefoxESR_64_VVeerrssiioonn_ML.txt
+read\readme-FirefoxESR_64_VVeerrssiioonn_ML.txt
+release\all-l10n.js
+release\policies.json

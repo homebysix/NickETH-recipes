@@ -1,0 +1,7 @@
+200113	Packaging SQLiteStudio x64
+	Download the Windows exe package.
+	Extract the icon.
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0, by AutoPkg

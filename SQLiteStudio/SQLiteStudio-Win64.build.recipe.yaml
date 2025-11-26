@@ -1,0 +1,146 @@
+Description: Alters latest SQLiteStudio installer x64 for Windows.
+Identifier: com.github.NickETH.recipes.build.SQLiteStudio-Win64
+ParentRecipe: com.github.NickETH.recipes.download.SQLiteStudio-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: SQLiteStudio
+  VENDOR: 'sqlitestudio.pl'
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+
+Process:
+# - Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
+  # Arguments:
+    # exe_path: '%pathname%'
+    # product_version: True
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    folder_list: release:read:helpers:sourceunzipped
+    org_ver: '%version%'
+    pkg_dir: '%NAME%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '3'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAME%%PF_STRING%_%build_ver%%LANG_STRING%'
+    rename_var: pkg_dir
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/InnoEditor
+  # Comment: Extract the Greenshot installer
+  # Arguments:
+    # inno_path: '%pathname%'
+    # workfolder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    # ignore_errors: False
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: delete run command from the end of the installation
+  # Arguments:
+    # cmdline_args:
+    # - /C
+    # - findstr
+    # - /v
+    # - /i
+    # - "https://getgreenshot.org/thank-you"
+    # - '%BUILD_DIR%\%pkg_dir%\sourceunzipped\install_script.iss'
+    # - '>'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # exe_file: 'cmd.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: remove "PrivilegesRequired=lowest", because it redirects uninstall info to HKCU! Set "VersionInfoVersion"
+  # Arguments:
+    # cmdline_args:
+    # - '-i'
+    # - 's/PrivilegesRequired=lowest/VersionInfoVersion=%version%/'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: 'corrects an error, when registry lines start with "Root: HKA" and adds the missing strings.'
+  # Arguments:
+    # cmdline_args:
+    # - '-i'
+    # - '-e'
+    # - '"s/^Subkey:/Root: HKA; &/"'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+ 
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: delete run command from the end of the installation
+  # Arguments:
+    # cmdline_args:
+    # - '-i'
+    # - 's/AppUpdatesURL=https:\/\/getgreenshot.org/VersionInfoVersion=%version%/'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # exe_file: 'C:\Program Files\Git\usr\bin\sed.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: append the code block to the iss-file
+  # Arguments:
+    # cmdline_args:
+    # - /C
+    # - copy
+    # - /y
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\install_script.iss'
+    # - /a
+    # - '+'
+    # - '%BUILD_DIR%\%pkg_dir%\helpers\Code.iss'
+    # - /a
+    # - '%BUILD_DIR%\%pkg_dir%\sourceunzipped\install_script.iss'
+    # - /a
+    # exe_file: 'cmd.exe'
+    # exe_folder: '%RECIPE_CACHE_DIR%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/InnoEditor
+  # Comment: Create the new Greenshot installer
+  # Arguments:
+    # inno_compiler: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+    # workfolder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
+    # ignore_errors: False
+
+- Processor: Copier
+  Arguments:
+    overwrite: 'true'
+    source_path: '%pathname%'
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%version%%LANG_STRING%.exe'
+    
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Generate Icon files for the Kiosk from Greenshot
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\Create-log-%NAME%%PF_STRING%_%version%%LANG_STRING%.txt'
+    new_ver: '%version%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAME%%PF_STRING%_%version%%LANG_STRING%.txt'
+    new_ver: '%version%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: EndOfCheckPhase

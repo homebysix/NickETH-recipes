@@ -1,0 +1,18 @@
+
+210101	Repackaging as a WIX-project with AutoPkg.
+	Addons installed as distributed extensions:
+	Language packs for DE, FR, IT, RM
+	Dictionaries for DE, FR, IT
+
+	Configuration:
+	Automatic language switching for th installed languages.
+	Autoupdate disabled.
+	Configuration is done with preferences and policies.
+
+	See the project files for more details.
+
+	Todo:
+	Extend the MozillaAddonIntegrator for policy settings and other helper functions.
+
+
+250308	Released v135.0.0,  Build 1

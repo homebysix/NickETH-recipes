@@ -1,0 +1,35 @@
+{
+  "policies": {
+    "DisableAppUpdate": true,
+    "DisableFirefoxStudies": true,
+    "DisableTelemetry": true,
+    "DontCheckDefaultBrowser": true,
+    "RequestedLocales": "",
+   "EnableTrackingProtection": {
+      "Cryptomining": true,
+      "Fingerprinting": true,
+      "Value": true
+    },
+    "ExtensionUpdate": true,
+    "Homepage": {
+      "StartPage": "homepage",
+      "URL": "https://isg.phys.ethz.ch/"
+    },
+    "OverrideFirstRunPage": "",
+    "OverridePostUpdatePage": "",
+    "SkipTermsOfUse": true,
+    "Preferences": {
+      "browser.search.update": true
+    },
+    "Proxy": {
+      "AutoLogin": true,
+      "Mode": "system",
+      "SOCKSVersion": 4,
+      "UseHTTPProxyForAllProtocols": true,
+      "UseProxyForDNS": false
+    },
+    "DNSOverHTTPS": {
+      "Enabled": false
+    }
+  }
+}
