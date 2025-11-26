@@ -375,8 +375,9 @@ class MozillaAddonIntegrator(Processor):
             "description": "Path to the folder where the application build takes place, absolute",
         },
         "ext_install_xslt": {
+            "default": "none",
             "required": False,
-            "description": "Path to an XSLT file to transform Wix heat output, absolute",
+            "description": "Path to an XSLT file to transform Wix heat output, absolute. Default: none",
         },
         "ignore_errors": {
             "required": False,
@@ -484,7 +485,7 @@ class MozillaAddonIntegrator(Processor):
             # self.output("Full_string_list: %s" % Full_string_list)
             extension_work_name = Full_string_list[0]
             extension_full_url = Full_string_list[1]
-            extension_comp_group = Full_string_list[2]
+            # extension_comp_group = Full_string_list[2]
             extension_work_file = os.path.join(extract_dir, extension_work_name)
             curl_cmd = curl_cmd_basic[:]
             # self.output("curl_cmd_basic: %s" % curl_cmd_basic)
@@ -524,41 +525,45 @@ class MozillaAddonIntegrator(Processor):
                 os.makedirs(install_path)
             extension_install_path = os.path.join(install_path, extension_install_name)
             shutil.copy(extension_work_file, extension_install_path)
-            shutil.copy(os.path.join(build_dir, "Prev_Ver_MozExt_" + extension_work_name + ".wxs"), os.path.join(build_dir, "Snapshot.xml"))
-		# <copy
-			# file="Prev_Ver_FF${SourceFILE}.wxs"
-			# tofile="Snapshot.xml"
-			# overwrite="true"
-		# />
-            heat_cmd = heat_cmd_basic[:]
-            heat_cmd.extend([extension_install_path])
-            heat_cmd.extend([
-                "-gg",
-                "-sfrag",
-                "-srd",
-                "-suid",
-            ])
-            heat_cmd.extend(["-dr", "EXTENSIONS"])
-            heat_cmd.extend(["-cg", extension_comp_group])
-            heat_cmd.extend(["-var", "wix.MozExtDir"])
-            heat_cmd.extend(["-out", os.path.join(build_dir, "MozExt_" + extension_work_name + ".wxs")])
-            if xslt_file != "none":
-                heat_cmd.extend(["-t", os.path.join(build_dir, xslt_file)])
-            # self.output("heat_cmd: %s" % heat_cmd)
-            os.chdir(build_dir)
-            try:
-                result = subprocess.run(
-                    heat_cmd,
-                    shell=False,
-                    bufsize=1,
-                    capture_output=True,
-                    check=True,
-                    text=text,
-                    errors=errors,
-                )
-            except subprocess.CalledProcessError as e:
-                raise ProcessorError(e)
-            #return result.stdout, result.stderr, result.returncode
+            
+            if len(Full_string_list) == 3:
+                extension_comp_group = Full_string_list[2]
+                # shutil.copy(os.path.join(build_dir, "Prev_Ver_MozExt_" + extension_work_name + ".wxs"), os.path.join(build_dir, "Snapshot.xml"))
+        		# <copy
+		        	# file="Prev_Ver_FF${SourceFILE}.wxs"
+    		    	# tofile="Snapshot.xml"
+	        		# overwrite="true"
+		        # />
+                heat_cmd = heat_cmd_basic[:]
+                heat_cmd.extend([extension_install_path])
+                heat_cmd.extend([
+                    "-gg",
+                    "-sfrag",
+                    "-srd",
+                    "-suid",
+                ])
+                heat_cmd.extend(["-dr", "EXTENSIONS"])
+                heat_cmd.extend(["-cg", extension_comp_group])
+                heat_cmd.extend(["-var", "wix.MozExtDir"])
+                heat_cmd.extend(["-out", os.path.join(build_dir, "MozExt_" + extension_work_name + ".wxs")])
+                if xslt_file != "none":
+                    shutil.copy(os.path.join(build_dir, "Prev_Ver_MozExt_" + extension_work_name + ".wxs"), os.path.join(build_dir, "Snapshot.xml"))
+                    heat_cmd.extend(["-t", os.path.join(build_dir, xslt_file)])
+                    # self.output("heat_cmd: %s" % heat_cmd)
+                os.chdir(build_dir)
+                try:
+                    result = subprocess.run(
+                        heat_cmd,
+                        shell=False,
+                        bufsize=1,
+                        capture_output=True,
+                        check=True,
+                        text=text,
+                        errors=errors,
+                    )
+                except subprocess.CalledProcessError as e:
+                    raise ProcessorError(e)
+                #return result.stdout, result.stderr, result.returncode
 
         
 
