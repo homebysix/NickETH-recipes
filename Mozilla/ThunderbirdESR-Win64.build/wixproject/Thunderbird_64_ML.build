@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+<project name="Thunderbird64_latest_ML" default="build-all">
+	<!--
+	Setup the environment.
+	Lot of variables (property).
+	-->
+	<include buildfile="global.prop"/>
+
+	<property name="TBVersion" value="${RealVersion}" />
+	<property name="TBexe" value="Thunderbird Setup ${TBVersion}.exe" />
+	<property name="TBmsi" value="ThunderBird_64_${TBVersion}_ML.msi" />
+	<property name="TBdir" value="Mozilla Thunderbird" />
+
+
+	<property name="current.dir" value="${directory::get-current-directory()}" />
+	<property name="project.dir" value="${directory::get-parent-directory(current.dir)}" />
+	<!-- WiX 3 folder -->
+	<property name="wix.dir" value="${path::combine(environment::get-variable('WIX'), 'bin')}" readonly="true" />
+	<!-- Load the WiX3 tasks -->
+	<loadtasks assembly="${wix.dir}\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll" />
+
+	<!-- Tools folder -->
+	<property name="TOOLS_DIR" value="${arg.ToolsDir}" />
+	<echo message="Tools Dir: ${TOOLS_DIR}" />
+	
+	<!-- 7zip path -->
+	<property name="FULL_7Z_PATH" value="${arg.7ZipCmd}" />
+	<echo message="7zip path: ${FULL_7Z_PATH}" />
+
+    <target name="build-all">
+
+		<call target="instTBmain" />
+		<call target="TBcandle" />
+		<call target="TBlight" />
+		<call target="PostChanges"/>
+		<call target="GenerateMSTs"/>
+		<call target="disable-download"/>
+    </target>
+
+    <target name="clean">
+        <delete>
+            <fileset>
+                <include name="${TBmsi}"/>
+                <include name="*.wixobj"/>
+				<include name="TB*.wxs"/>
+				<include name=".\features\"/>
+				<include name="*.zip"/>
+				</fileset>
+		</delete>
+		<delete dir="${TBdir}" />
+	</target>
+	
+	<target name="instTBmain">
+        <!-- 
+            download the Thunderbird main EXE file.
+        -->
+<!-- 															  
+		<property name="DownloadSRC" value="${ThunderbirdSRC}" />
+		<property name="SourceFILE" value="${TBexe}" />
+		<echo message="${ThunderbirdSRC}"/>
+		<if test="${string::contains(download-component, 'yes')}" >
+			<call target="DL-File" />
+			<move file="..\sourcepkt\${TBexe}" tofile="..\sourcepkt\Thunderbird Setup ${TBVersion}${shortlang}.exe" overwrite = "true"/>
+		</if> -->
+
+        <!-- 
+            unzip, install and harvest the Thunderbird main EXE file.
+        -->
+<!--         <exec program="${FULL_7Z_PATH}">
+			<arg value="x" />
+			<arg value="-y" />
+			<arg file="..\sourcepkt\Thunderbird Setup ${TBVersion}${shortlang}.exe" />
+		</exec> -->
+<!-- 		<move file="core\distribution\extensions\{e2fda1a4-762b-4020-b5ad-a41df1933103}.xpi" tofile=".\lightning-enu.zip" overwrite = "true"/>
+		<exec program="C:\Program Files\7-Zip\7z.exe" failonerror="false">
+			<arg value="x" />
+			<arg value="-y" />
+			<arg value="-tzip" />				
+			<arg value="-o.\lightning" />
+			<arg file=".\lightning-enu.zip" />
+		</exec> -->
+
+		<!--
+		<move todir="lightning">
+			<fileset basedir="core\distribution\extensions">
+				<include name="**/*" />
+			</fileset>
+		</move>
+		
+
+		<move todir="..\sourcepkt\">
+			<fileset basedir=".">
+				<include name="lightning.xpi" />
+			</fileset>
+		</move>		
+
+		<delete dir="lightning" />
+		
+
+		lightning is delivered with thunderbird, but without language packs!
+		We delete this and install the official one from Mozilla Addon...
+		-->
+<!-- 		<delete dir="core\distribution" />
+		<move todir="${TBdir}">
+			<fileset basedir="core">
+				<include name="**/*" />
+			</fileset>
+		</move>
+		<delete dir="core" />
+		<delete file="setup.exe" /> -->
+        <!-- 
+           Add configuration files
+        -->
+		<copy file="..\sourcepkt\ETH\mozilla.cfg" tofile=".\${TBdir}\mozilla.cfg" />
+		<copy file="..\sourcepkt\ETH\local-settings.js" tofile=".\${TBdir}\defaults\pref\local-settings.js" />
+		<copy file="..\sourcepkt\ETH\prefs.js" tofile=".\${TBdir}\defaults\profile\prefs.js" />
+		<copy file="..\sourcepkt\ETH\policies.json" tofile=".\${TBdir}\distribution\policies.json" />
+
+        <!-- 
+		Ab V60.x setzen wir GPO-Extension durch das GPO-Autostart-Modul
+		Ab 139.x nicht mehr verwendet!
+        -->
+		<!-- 
+		<copy todir=".\${TBdir}\gpo">
+			<fileset basedir=".\..\sourcepkt\ETH\gpo">
+				<include name="**/*" />
+			</fileset>
+		</copy> -->
+		<!-- 
+		Ab V78.x müssen wird die omni.ja editieren...
+        -->
+		<!-- <copy file="..\sourcepkt\omni.ja" tofile=".\${TBdir}\omni.ja" overwrite="true"/> -->
+        <!-- 
+			harvest the main TB files.
+        -->
+		<call target="TB-harv" />
+    </target>
+
+	<target name="TB-harv">
+
+		<!-- Exclude the extensions. They are harvested by the "MozillaAddonIntegrator" processor. -->
+		<move todir=".\Extensions\">
+			<fileset basedir=".\${TBdir}\Extensions\">
+				<include name="**/*" />
+			</fileset>
+		</move>
+		<copy
+			file="Prev_Ver_TBfiles.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>
+		<exec program="${wix.dir}\heat.exe" failonerror="false">
+			<arg value="dir" />
+			<arg dir=".\${TBdir}" />
+			<arg value="-gg" />
+			<arg value="-platform" />
+			<arg value="Win64" />			
+			<arg value="-v" />
+			<arg value="-svb6" />
+			<arg value="-sfrag" />
+			<arg value="-sw5150" />
+			<arg value="-srd" />
+			<arg value="-suid" />
+			<arg value="-dr" />
+			<arg value="INSTALLDIR" />
+			<arg value="-cg" />
+			<arg value="ThunderbirdFiles" />
+			<arg value="-var" />
+			<arg value="wix.TBSourceDir" />
+			<arg value="-out" />
+			<arg file="TBfiles.wxs" />
+			<arg value="-t" />
+			<arg file="GUID-Preserve-x64.xslt" />
+		<!--
+		-->
+		</exec>
+		<!-- Move back the excluded extensions to its folder. -->
+		<move todir=".\${TBdir}\Extensions\">
+			<fileset basedir=".\Extensions\">
+				<include name="**/*" />
+			</fileset>
+		</move>
+	</target>
+	<target name="Ext-harv">
+		<!-- 
+		Harvests the files from an Extension to "TB${SourceFILE}.wxs".
+		Preserves the GUID's from the previous version.
+		It decides if the XPI is unpacked or not and behaves acordingly.
+		Properties:
+			IN - SourceFILE
+			IN - xpi-unpack
+			IN - xpi-name
+			IN - CGextXPI
+			IN - wix.TBExtDir			
+		-->
+		<copy
+			file="Prev_Ver_TB${SourceFILE}.wxs"
+			tofile="Snapshot.xml"
+			overwrite="true"
+		/>	
+		<if test="${not string::contains(xpi-unpack, 'true')}" >
+			<exec program="${wix.dir}\heat.exe">
+				<arg value="file" />
+				<arg file=".\${TBdir}\Extensions\${xpi-name}.xpi" />
+				<arg value="-gg" />
+			<arg value="-platform" />
+			<arg value="Win64" />				
+				<arg value="-sfrag" />
+				<arg value="-srd" />
+				<arg value="-suid" />
+				<arg value="-dr" />
+				<arg value="EXTENSIONS" />
+				<arg value="-cg" />
+				<arg value="${CGextXPI}" />
+				<arg value="-var" />
+				<arg value="wix.TBExtDir" />
+				<arg value="-out" />
+				<arg file="TB${SourceFILE}.wxs" />
+				<arg value="-t" />
+				<arg file="GUID-Preserve-x64.xslt" />				
+			</exec>
+		</if>
+
+	</target>
+
+	<target name="DL-File">
+		<!-- 
+			Download a file from the webserver.
+		-->
+		<get src="${DownloadSRC}" dest="..\sourcepkt\${SourceFILE}" />
+	</target>
+	
+	<target name="TBlight">
+        <!-- 
+            Builds (link) the Thunderbird Project
+       -->
+		<property name="quote" value='"' />
+		<property name="Current.Dir" value="${directory::get-current-directory()}" />
+
+		<property name="lightTBSourceDirVAR" value="${'-dTBSourceDir=' + quote + Current.Dir + '\' + TBdir + quote}" />
+		<echo message="${lightTBSourceDirVAR}"/>
+
+		<property name="lightTBExtDirVAR" value="${'-dMozExtDir=' + quote + Current.Dir + '\' + TBdir + '\extensions' + quote}" />
+		<echo message="${lightTBExtDirVAR}"/>
+
+		<property name="lightTBSearchDirVAR" value="${'-dTBSearchDir=' + quote + Current.Dir + '\' + TBdir + '\searchplugins' + quote}" />
+		<echo message="${lightTBSearchDirVAR}"/>
+
+        <!-- 
+			
+		-->
+		<light
+			exedir="${wix.dir}"
+			out="${TBmsi}"
+			warningsaserrors="false"
+			suppressices="ICE43;ICE57;ICE27;ICE64;ICE69;ICE90;ICE91"
+			cultures="en-us"
+			extensions="WixUIExtension"
+			rebuild="true"
+			suppresspdb="true">
+			<!-- Specify additional options -->
+			<arg line="${lightTBSourceDirVAR}" />
+			<arg line="${lightTBExtDirVAR}" />
+			<arg line="-sval" />
+			<!--
+			<arg line="${lightTBSearchDirVAR}" />
+			 -->
+			<arg line="-dWixUIBannerBmp=..\sourcepkt\TopImage.bmp" />
+			<arg line="-dWixUIDialogBmp=..\sourcepkt\SideImage.bmp" />
+			<sources basedir=".\.">
+				<include name="Thunderbird_64_ML.wixobj" />
+				<include name="ThunderbirdReg_64_ML.wixobj" />
+				<include name="TB*.wixobj" />
+				<include name="MozExt_*.wixobj" />
+			</sources>
+		</light>
+    </target>
+	<target name="TBcandle">
+        <!-- 
+            Compiles the Thunderbird Project files
+        -->
+		<candle
+			exedir="${wix.dir}"
+			out=".\"
+			rebuild="true"
+			extensions="WixUIExtension;WixUtilExtension"
+			warningsaserrors="false">
+			<arg line="-sw1044" />
+			<arg line="-arch" />
+			<arg line="x64" />			
+			<sources basedir=".">
+				<include name="Thunderbird_64_ML.wxs" />
+				<include name="ThunderbirdReg_64_ML.wxs" />
+				<include name="TB*.wxs" />
+				<include name="MozExt_*.wxs" />
+			</sources>
+		</candle>
+    </target>
+		<target name="disable-download">
+		<!--
+		Setzt das Attribut "download-component" in "global.prop" auf "no"
+		Damit werden beim naechsten Build keine Files mehr heruntergeladen.
+		Notwendige Properties:
+		keine
+		-->
+		<xmlpoke file="global.prop"
+				xpath="project/property[@name='download-component']/@value"
+                value="no"
+				failonerror = "false">
+		</xmlpoke>
+	</target>
+	<target name="PostChanges">
+        <!-- 
+		Move the MSI File to testmsi
+		Set the readonly attribute on the MSI File
+		Notwendige Properties:
+			IN - FFVersion
+			IN - PackageVersion
+        -->
+		<move file="${TBmsi}" tofile="..\release\Thunderbird_64_${PackageVersion}_ML.msi" overwrite = "true"/>
+		<attrib file="..\release\Thunderbird_64_${PackageVersion}_ML.msi" readonly="true" />
+    </target>
+	<target name="GenerateMSTs">
+        <!-- 
+		Erstellt die Transforms fuer unterschiedliche Beduerfnisse.
+		Notwendige Properties:
+			IN - ShortVersion
+			IN - PackageVersion
+		-->
+		<fileset id="MSTFiles" basedir="..\helpers">
+			<include name="*.mst"/>
+			<exclude name="*GP.mst"/>
+		</fileset>
+		<foreach item="File" property="fullpath">
+			<in>
+				<items refid="MSTFiles" />
+			</in>
+			<do>
+				<property name="MSTFileName" value="${path::get-file-name(fullpath)}" />
+				<echo message="Working on: ${MSTFileName}" />
+				<property name="MSTFileNameShort" value="${string::substring(MSTFileName, 0, (string::get-length(MSTFileName) - 8))}" />
+
+				<copy file="..\release\Thunderbird_64_${PackageVersion}_ML.msi" tofile="..\helpers\Thunderbird_64_${MSTFileNameShort}.msi" overwrite = "true"/>
+				<attrib file="..\helpers\Thunderbird_64_${MSTFileNameShort}.msi" readonly="false" />
+	    
+				<exec program="${TOOLS_DIR}\msitran.exe">
+					<arg value="-a" />
+					<arg file="..\helpers\${MSTFileName}" />
+					<arg file="..\helpers\Thunderbird_64_${MSTFileNameShort}.msi" />
+				</exec>
+				<delete file="..\helpers\${MSTFileName}" />
+				<exec program="${TOOLS_DIR}\msitran.exe">
+					<arg value="-g" />
+					<arg file="..\release\Thunderbird_64_${PackageVersion}_ML.msi" />
+					<arg file="..\helpers\Thunderbird_64_${MSTFileNameShort}.msi" />
+					<arg file="..\release\${MSTFileNameShort}${ShortVersion}.mst" />
+				</exec>
+				<delete file="..\helpers\Thunderbird_64_${MSTFileNameShort}.msi" />
+			</do>
+		</foreach>
+	</target>
+</project>

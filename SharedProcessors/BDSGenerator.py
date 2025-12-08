@@ -17,6 +17,10 @@ Important! You *must* install the lxml library to AutoPkg's Python framework.
 You can do this by running:
 
 pip install lxml
+
+Due to limitiation in YAML, 'PropertyEntry' tags must be provided in XML notation.
+YAML can not work with more than one tag with the same name.
+See example recipes for usage.
 """
 import os
 import sys
