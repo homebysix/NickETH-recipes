@@ -4,22 +4,41 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: 'DWGTrueview'
-  MAJORREL: '2026'
-  # SEARCH_FIRSTURL: https://www.autodesk.com/products/dwg-trueview/overview
-  SEARCH_FIRSTURL: https://github.com/andreasmalta/choco_packages/blob/master/dwgtrueview/tools/chocolateyinstall.ps1
+  # MAJORREL: '2026'
+  # SEARCH_FIRSTURL: https://github.com/andreasmalta/choco_packages/blob/master/dwgtrueview/tools/chocolateyinstall.ps1
   # https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/2026/PLC0000037/9506362F-6781-39A3-B671-2BDAF86819F8/SFX/DWGTrueView_2026_English_64bit_db_001_002.exe
   RE_PATTERN: (?P<DL_URL>https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*?/PLC0000037/(?P<CHANGE_KEY>[0-9A-F\-]*?)/SFX/DWGTrueView_[0-9]*?_English_64bit_db)
-  RE_PATTERN2: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*/PLC0000037/[0-9A-F\-]*/SFX/DWGTrueView_[0-9]*_English_64bit_db_002_002.7z
+  
+  # RE_PATTERN2: https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/[0-9]*/PLC0000037/[0-9A-F\-]*/SFX/DWGTrueView_[0-9]*_English_64bit_db_002_002.7z
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+  UPI2_GUID: '<UPI2>{(?P<CHANGE_KEY>[0-9A-F\-]*?)}</UPI2>'
+  BUILDNR: '<BuildNumber>(?P<version>([0-9]+\.)*[0-9]+)</BuildNumber>'
+  MAJRELPAT: '<Release>(?P<MAJORREL>.*?)</Release>'
 
 Process:
-- Processor: URLTextSearcher
+- Processor: DWGTrueviewDownloader
   Comment: Get the url for the offline installer.
   Arguments:
-    re_pattern: '%RE_PATTERN%'
-    request_headers:
-      user-agent: '%USER_AGENT%'
-    url: '%SEARCH_FIRSTURL%'
+    file_path: '%RECIPE_CACHE_DIR%\downloads\DWGTrueview.exe'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    # url: '%SEARCH_FIRSTURL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the MSI file from exe
+  Arguments:
+    #archive_type: '#'
+    exe_path: '%RECIPE_CACHE_DIR%\downloads\DWGTrueview.exe'
+    extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    extract_file: 'setup.xml'
+    preserve_paths: 'False'
+    recursive: 'True'
+
+- Processor: URLTextSearcher
+  Comment: read back the previous version from the version.txt file.
+  Arguments:
+    re_pattern: '%BUILDNR%'
+    url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: create a version.txt file, if it does not exist (like 'touch').
@@ -41,22 +60,39 @@ Process:
 
 - Processor: StopProcessingIf
   Arguments:
-    predicate: '%CHANGE_KEY% == %match%'
+    predicate: '%version% == %match%'
+
+- Processor: URLTextSearcher
+  Comment: read back the previous version from the version.txt file.
+  Arguments:
+
+    re_pattern: '%UPI2_GUID%'
+    url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
+
+- Processor: URLTextSearcher
+  Comment: read back the previous version from the version.txt file.
+  Arguments:
+
+    re_pattern: '%MAJRELPAT%'
+    url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
 
 - Processor: FileCreator
   Comment: Generate the version.txt in the release dir.
   Arguments:
-    file_content: '%CHANGE_KEY%'
+    file_content: '%version%'
     file_path: '%RECIPE_CACHE_DIR%\version.txt'
 
 - Processor: URLDownloader
+  Comment: Generate the DL_URL variable and download the first part.
   Arguments:
+    DL_URL: 'https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/%MAJORREL%/PLC0000037/%CHANGE_KEY%/SFX/DWGTrueView_%MAJORREL%_English_64bit_db'
     filename: '%NAME%-x64.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
     url: '%DL_URL%_001_002.exe'
 
 - Processor: URLDownloader
+  Comment: Download the second part.
   Arguments:
     EXE_DL: '%pathname%'
     filename: '%NAME%-x64.7z'
