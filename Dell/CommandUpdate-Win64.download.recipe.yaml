@@ -8,48 +8,35 @@ Input:
   VENDOR: DELL
   DOWNLOAD_URL: https://nxlog.co/products/nxlog-community-edition/download
   SEARCH_FIRSTURL: https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update?lwp=rt
-  SEARCH_VER: '^(Dell.*?(?P<version>([0-9]+.)*[0-9]+).*?.exe)$'
-  #SEARCH_VER: '(Dell.*?\.exe)'
+  SEARCH_SECONDURL: href="(https://www.dell.com/support/home/en-us/drivers/driversdetails.driverid=[0-9A-Z]*)" target=._blank..Dell Command | Update Application (Classic)
+  SEARCH_THIRDURL: (https://dl.dell.com/[0-9A-Z]*/[0-9]/Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN64_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
 
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
   PLATFORM: x64
   PF_STRING: _64
 
   INTERNAL_URL: 'put your path here'
 
 
-# The online search on Dell's website was abondoned, because of complexity and constant changing.
-# 
 Process:
-# - Processor: URLTextSearcher
-  # Arguments:
-    # re_pattern: '%SEARCH_VER%'
-    # re_flags:
-    # - DOTALL
-    # url: '%SEARCH_FIRSTURL%'
-
-- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
-  Comment: get the filename from internal source
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
-    cmdline_args:
-    - /C
-    - dir
-    - /b
-    - '%INTERNAL_URL%'
-    - '>'
-    - DELL_CU_win.txt
-    exe_file: 'cmd.exe'
-    exe_folder: '%RECIPE_CACHE_DIR%'
-
-- Processor: URLTextSearcher
+    re_pattern: '%SEARCH_SECONDURL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%SEARCH_FIRSTURL%'
+    
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
-    re_pattern: '%SEARCH_VER%'
-    re_flags:
-     - IGNORECASE
-    url: file://%RECIPE_CACHE_DIR%/DELL_CU_win.txt
+    re_pattern: '%SEARCH_THIRDURL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%match%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: create a version.txt file, if it does not exist
   Arguments:
+    DL_URL: '%match%'
     cmdline_args:
     - /C
     - type
@@ -72,7 +59,7 @@ Process:
 - Processor: URLDownloader
   Arguments:
     filename: '%NAMESHORT%_%PLATFORM%.exe'
-    url: 'file:////d/sys/bms_tst/AutoPkg-in/Input/Dell_Command_Update/%NEW_FILENAME%'
+    url: '%DL_URL%'
     CHECK_FILESIZE_ONLY: True
 
 - Processor: FileCreator
@@ -83,6 +70,6 @@ Process:
 
 - Processor: EndOfCheckPhase
 
-- Processor: StopProcessingIf
-  Arguments:
-    predicate: download_changed == False
+# - Processor: StopProcessingIf
+  # Arguments:
+    # predicate: download_changed == False
