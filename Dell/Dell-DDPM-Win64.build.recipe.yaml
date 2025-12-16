@@ -1,0 +1,93 @@
+Description: Package the current Dell Command Update x64 release to an MSI-package.
+Identifier: com.github.NickETH.recipes.build.Dell-DDPM-Win64
+ParentRecipe: com.github.NickETH.recipes.download.Dell-DDPM-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'Display and Peripheral Manager'
+  NAMESHORT: Dell-DDPM
+  VENDOR: DELL
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+
+Process:
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/CreateNextBuild
+  Comment: Create a build enviroment to package the MSI
+  Arguments:
+    BuildFiles: NextVerFiles.txt
+    build_dir: '%BUILD_DIR%'
+    create_AS_ver: 'True'
+    folder_list: sourcepkt:sourceunzipped:release:read:helpers
+    org_ver: '%version%'
+    pkg_dir: '%NAMESHORT%%PF_STRING%_::VVeerrssiioonn::%LANG_STRING%'
+    recipe_dir: '%RECIPE_DIR%'
+    recipe_path: '%RECIPE_PATH%'
+    ver_fields: '4'
+
+- Processor: com.github.sebtomasi.SharedProcessors/RenameVar
+  Arguments:
+    input_var: '%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%'
+    rename_var: pkg_dir
+
+# - Processor: Copier
+  # Comment: Copy the CommandUpdate installer file to the build dir
+  # Arguments:
+    # destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%_%PLATFORM%.exe'
+    # overwrite: 'true'
+    # source_path: '%pathname%'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  # Comment: Extract the exe-installer from the Universal package
+  # Arguments:
+    # exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%_%PLATFORM%.exe'
+    # extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # extract_file: '*'
+    # ignore_pattern: ''
+    # preserve_paths: 'False'
+
+# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  # Comment: Extract the MSI-installer from the EXE package
+  # Arguments:
+    # exe_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\DellCommandUpdateApp_Setup.exe'
+    # exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
+    # cmdline_args: '/s /x /b"%BUILD_DIR%\%pkg_dir%\sourceunzipped" /v"/qn"'
+    # run_elevated: 'True'
+
+- Processor: Copier
+  Comment: Copy the CommandUpdate installer file to the build dir
+  Arguments:
+    destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
+    overwrite: 'true'
+    source_path: '%pathname%'
+
+- Processor: com.github.haircut.processors/AppIconExtractor
+  Comment: Extract the DDPM icons and generate BMS-Kiosk-Icons
+  Arguments:
+    ICON_PATH: '%BUILD_DIR%\%pkg_dir%\icons'
+    icon_file_number: 0
+    # composite_padding: 20
+    # composite_position: ul
+    # composite_uninstall_path: '%RECIPE_CACHE_DIR%/Icon-Uninstall-%NAME%.png'
+    # composite_uninstall_template: /Users/haircut/Documents/delete.png
+    icon_output_path: '%ICON_PATH%\Icon-%NAME%.png'
+    source_app: '%pathname%'
+    #msi_icon_name: 'MainExecutableIcon.ico'
+    composite_uninstall_path: '%ICON_PATH%\Icon-Uninstall-%NAME%.png'
+    composite_update_path: '%ICON_PATH%\Icon-Update-%NAME%.png'
+    composite_install_path: '%ICON_PATH%\Icon-Install-%NAME%.png'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/DateTimeStamps
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\create-log-%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/FileDateVersionSubst
+  Arguments:
+    file_path: '%BUILD_DIR%\%pkg_dir%\read\readme-%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.txt'
+    new_ver: '%build_ver%'
+    re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'

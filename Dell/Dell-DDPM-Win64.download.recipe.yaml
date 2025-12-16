@@ -1,0 +1,79 @@
+Description: Download recipe for Dell Command Update.
+Identifier: com.github.NickETH.recipes.download.Dell-DDPM-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: 'Display and Peripheral Manager'
+  NAMESHORT: DDPM
+  VENDOR: DELL
+  DOWNLOAD_URL: https://nxlog.co/products/nxlog-community-edition/download
+  SEARCH_FIRSTURL: 'https://www.dell.com/support/product-details/en-us/product/dell-display-peripheral-manager/drivers'
+  # SEARCH_SECONDURL: 'href="(https://dl.dell.com/FOLDER13664507M/1/DDPM-Setup_2.1.2.12.exe)"'
+  SEARCH_SECONDURL: 'href="(https://dl.dell.com/.*?/DDPM-Setup_(?P<version>([0-9]+\.)*[0-9]+).exe)"'
+  SEARCH_THIRDURL: (https://dl.dell.com/[0-9A-Z]*/[0-9]/Dell-Command-Update-Windows-Universal-Application_[0-9A-Z]*_WIN64_(?P<version>([0-9]+\.)*[0-9]+)_A[0-9_]*.EXE)
+
+  #USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
+  PLATFORM: x64
+  PF_STRING: _64
+
+  INTERNAL_URL: 'put your path here'
+
+
+Process:
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_SECONDURL%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    url: '%SEARCH_FIRSTURL%'
+    
+# - Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_THIRDURL%'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    # url: '%match%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
+  Comment: create a version.txt file, if it does not exist
+  Arguments:
+    DL_URL: '%match%'
+    cmdline_args:
+    - /C
+    - type
+    - nul
+    - '>>'
+    - version.txt
+    exe_file: 'cmd.exe'
+    exe_folder: '%RECIPE_CACHE_DIR%'
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '^(.*)$'
+    url: file://%RECIPE_CACHE_DIR%/version.txt
+    NEW_FILENAME: '%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: '%version% == %match%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAMESHORT%_%PLATFORM%.exe'
+    url: '%DL_URL%'
+    #CHECK_FILESIZE_ONLY: True
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      
+- Processor: FileCreator
+  Comment: Generate the version.txt in the release dir.
+  Arguments:
+    file_content: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%\version.txt'
+
+- Processor: EndOfCheckPhase
+
+# - Processor: StopProcessingIf
+  # Arguments:
+    # predicate: download_changed == False

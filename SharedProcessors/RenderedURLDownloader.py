@@ -41,6 +41,11 @@ class RenderedURLDownloader(Processor):
             "required": False,
             "default": "load",
         },
+        "time2load": {
+            "description": "Optional wait time to load the page in milliseconds. Default: 2000",
+            "required": False,
+            "default": 2000,
+        },
         "timeout": {
             "description": "Optional timeout in milliseconds. Default: 30000",
             "required": False,
@@ -64,7 +69,7 @@ class RenderedURLDownloader(Processor):
                 # flag_accumulator |= getattr(re, flag)
         # return flag_accumulator
 
-    async def fetch_page_content(self, url: str, wait_until: str, timeout: int) -> str:
+    async def fetch_page_content(self, url: str, wait_until: str, timeout: int, time2load: int) -> str:
         """Use Playwright to render and extract HTML from the given URL."""
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
@@ -72,13 +77,16 @@ class RenderedURLDownloader(Processor):
             # Ange user-agent manuellt
             user_agent = self.env.get(
                 "user_agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15"
+                #"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15"
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
             )
     
             context = await browser.new_context(user_agent=user_agent)
             page = await context.new_page()
     
             await page.goto(url, wait_until=wait_until, timeout=timeout)
+            self.output(f"Time to load page {time2load}")
+            await page.wait_for_timeout(time2load)
             content = await page.content()
             await browser.close()
             return content
@@ -97,11 +105,12 @@ class RenderedURLDownloader(Processor):
         url = self.env["url"]
         wait_until = self.env.get("wait_until", "load")
         timeout = int(self.env.get("timeout", 30000))
+        time2load = int(self.env.get("time2load", 2000))
         output_var_name = self.env.get("result_output_var_name", "match")
 
         try:
             content = asyncio.run(
-                self.fetch_page_content(url, wait_until=wait_until, timeout=timeout)
+                self.fetch_page_content(url, wait_until=wait_until, timeout=timeout, time2load=time2load)
             )
         except Exception as e:
             raise ProcessorError(f"Playwright error while loading {url}: {e}")
