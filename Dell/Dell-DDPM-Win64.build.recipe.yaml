@@ -1,4 +1,4 @@
-Description: Package the current Dell Command Update x64 release to an MSI-package.
+Description: Package the current Dell DDPM x64 release to an MSI-package.
 Identifier: com.github.NickETH.recipes.build.Dell-DDPM-Win64
 ParentRecipe: com.github.NickETH.recipes.download.Dell-DDPM-Win64
 MinimumVersion: 1.3.1
@@ -32,7 +32,7 @@ Process:
     rename_var: pkg_dir
 
 # - Processor: Copier
-  # Comment: Copy the CommandUpdate installer file to the build dir
+  # Comment: Copy the DDPM installer file to the build dir
   # Arguments:
     # destination_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAMESHORT%_%PLATFORM%.exe'
     # overwrite: 'true'
@@ -47,16 +47,8 @@ Process:
     # ignore_pattern: ''
     # preserve_paths: 'False'
 
-# - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
-  # Comment: Extract the MSI-installer from the EXE package
-  # Arguments:
-    # exe_file: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\DellCommandUpdateApp_Setup.exe'
-    # exe_folder: '%BUILD_DIR%\%pkg_dir%\sourceunzipped'
-    # cmdline_args: '/s /x /b"%BUILD_DIR%\%pkg_dir%\sourceunzipped" /v"/qn"'
-    # run_elevated: 'True'
-
 - Processor: Copier
-  Comment: Copy the CommandUpdate installer file to the build dir
+  Comment: Copy the DDPM installer file to the build dir
   Arguments:
     destination_path: '%BUILD_DIR%\%pkg_dir%\release\%NAMESHORT%%PF_STRING%_%build_ver%%LANG_STRING%.exe'
     overwrite: 'true'

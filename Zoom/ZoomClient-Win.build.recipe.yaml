@@ -16,7 +16,7 @@ Process:
 - Processor: WindowsSignatureVerifier
   Comment: Check the signature on the MSI file
   Arguments:
-    expected_subject: CN="Zoom Communications, Inc.", O="Zoom Communications, Inc.", L=San Jose, S=California, C=US, SERIALNUMBER=4969967, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+    expected_subject: CN="Zoom Video Communications, Inc.", O="Zoom Video Communications, Inc.", L=San Jose, S=California, C=US, SERIALNUMBER=4969967, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
     input_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSIRunSQLget
