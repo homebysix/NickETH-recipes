@@ -8,8 +8,8 @@ Input:
   PF_DIGIT: '64'
   SEARCH_URL: https://inkscape.org
   SEARCH_PATTERN1: (/release/(?P<version>[0-9]{1,3}.[0-9]{0,3}.[0-9]{0,3})/windows/)
-  SEARCH_PATTERN2: (?P<fullurl>\/gallery\/.*\/inkscape-.*-%PLATFORM%.*\.msi)
-
+  SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
+  
 Process:
 - Processor: URLTextSearcher
   Arguments:
@@ -21,9 +21,10 @@ Process:
 
 - Processor: URLTextSearcher
   Arguments:
+    SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
     re_pattern: '%SEARCH_PATTERN2%'
     result_output_var_name: gallery_download_match
-    url: '%SEARCH_URL%%release_page_match%%PF_DIGIT%-bit/msi/dl/'
+    url: '%SEARCH_URL%/release/inkscape-%version%/windows/%PF_DIGIT%-bit/msi/dl/'
 
 - Processor: URLDownloader
   Arguments:
@@ -31,5 +32,6 @@ Process:
     - -L
     filename: '%NAME%.msi'
     url: '%SEARCH_URL%%gallery_download_match%'
+
 
 - Processor: EndOfCheckPhase
