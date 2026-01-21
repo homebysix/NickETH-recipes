@@ -92,14 +92,14 @@ Process:
     new_ver: '%build_ver%'
     re_pattern: '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 
-# - Processor: com.github.NickETH.recipes.SharedProcessors/WixSettings
-  # Comment: Define variables for the WIX build process to the config.wxi file
-  # Arguments:
-    # preproc_file: '%BUILD_DIR%\%pkg_dir%\wixproject\config.wxi'
-    # template_file: '%BUILD_DIR%\%pkg_dir%\wixproject\config.wxi'
-    # new_settings:
-    # - define: 'SourceDir="%NAME%"'
-
+- Processor: com.github.NickETH.recipes.SharedProcessors/WixSettings
+  Comment: Define/change variables for the WIX build process in the config.wxi file
+  Arguments:
+    preproc_file: '%BUILD_DIR%\%pkg_dir%\wixproject\config.wxi'
+    template_file: '%BUILD_DIR%\%pkg_dir%\wixproject\config.wxi'
+    new_settings:
+    - define: 'SourceDir="vlc-%version%"'
+ 
 - Processor: com.github.NickETH.recipes.SharedProcessors/MSBuildRun
   Comment: Run the MSBuild script to generate the IrfanView MSI installer
   Arguments:
