@@ -21,118 +21,90 @@ Process:
     - pattern: \.
       repl: _
 
-- Processor: FileCreator
-  Comment: Generate the (un-)install.bds in the release dir.
+- Processor: com.github.NickETH.recipes.SharedProcessors/BDSGenerator
+  Comment: Create a new baramundi deploy script (BDS) file.
   Arguments:
-    file_content: |
-      <?xml version="1.0" encoding="ISO-8859-1"?>
-      <baramundiDeployScript Version="2420" LastChange="%us_date% %time%">
-      <META>
-      <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>      
-      <STATICVARS LoadInstallIni="1">
-      <BMSVars></BMSVars>
-      </STATICVARS>
-      </META>
-      <ACTIONS>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Define path to BMAcmd.exe</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VARNAME>$var_Path2BMAcmd</VARNAME>
-      <VALUE>{BMAPath}\BMACmd.exe</VALUE>
-      <OPTIONS>0</OPTIONS>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetVar" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VARNAME>InstallFilesFilter</VARNAME>
-      <VALUE>*.???x</VALUE>
-      <OPTIONS>0</OPTIONS>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetX64Mode" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <MODE>1</MODE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>###   INSTALL   ###</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Conditional" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      </DATA>
-      <CONDITION op1="{Mode}" op="MATCHES" op2="Install" options="0"/>
-      </ACTION>
-      <ACTION type="Comment" level="1" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Install the Appx/Msix Files</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="RunEmbeddedScript" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <SCRIPTLANGUAGE>PowerShell</SCRIPTLANGUAGE>
-      <RETURNCODES>0</RETURNCODES>
-      <VARNAME></VARNAME>
-      <SCRIPT>[String]$ScriptPath = &quot;{Script}&quot;
+    BDS_file: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%.bds'
+    new_actions:
+    - ACTION: 'type: Comment |||comment: 1'
+      DATA:
+        VALUE: 'Define path to BMAcmd.exe'
+    - ACTION: 'type: SetVar ||| level: 0'
+      DATA:
+        VARNAME: $var_Path2BMAcmd
+        VALUE: '{BMAPath}\BMACmd.exe'
+        OPTIONS: 0
+    - ACTION: 'type: SetVar ||| level: 0'
+      DATA:
+        VARNAME: InstallFilesFilter
+        VALUE: '*.???x'
+        OPTIONS: 0
+    - ACTION: 'type: SetX64Mode'
+      DATA:
+        MODE: 1      
+    - ACTION: 'type: Comment'
+      DATA:
+        VALUE: '###   INSTALL   ###'
+    - ACTION: 'type: Conditional'
+      DATA: ''
+      CONDITION:
+        op1: "{Mode}"
+        op: "MATCHES"
+        op2: "Install"
+        options: "0"
+    - ACTION: 'type: Comment ||| level: 1 ||| comment: 1'
+      DATA:
+        VALUE: 'Install the Appx/Msix Files'      
+    - ACTION: 'type: RunEmbeddedScript ||| level: 1'
+      DATA:
+        SCRIPTLANGUAGE: PowerShell
+        RETURNCODES: "0"
+        VARNAME: ""
+        SCRIPT:  |
+          [String]$ScriptPath = &quot;{Script}&quot;
 
-      $ScriptName = Split-Path -Path $ScriptPath -Leaf
-      $InstallDir = Split-Path -Path $ScriptPath -Parent
+          $ScriptName = Split-Path -Path $ScriptPath -Leaf
+          $InstallDir = Split-Path -Path $ScriptPath -Parent
 
-      &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  BEGIN bDS Script [$ScriptName]   ###&quot;
+          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  BEGIN bDS Script [$ScriptName]   ###&quot;
 
-      $Files2Install = Get-ChildItem $InstallDir -Name -Filter {InstallFilesFilter}
+          $Files2Install = Get-ChildItem $InstallDir -Name -Filter {InstallFilesFilter}
 
-      foreach ($f2i in $Files2Install) {
-         Add-AppProvisionedPackage -online -packagepath (Join-Path -Path $InstallDir -ChildPath $f2i) -skiplicense
-         &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;Installed [$f2i]&quot;
-      }
-      &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  END bDS Script [$ScriptName]   ###&quot;
-      </SCRIPT>
-      <HIDDENEXECUTION>1</HIDDENEXECUTION>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>###   UNINSTALL   ###</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Conditional" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      </DATA>
-      <CONDITION op1="{Mode}" op="MATCHES" op2="Deinstall" options="0"/>
-      </ACTION>
-      <ACTION type="Comment" level="1" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Remove the Appx/Msix Files</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="RunEmbeddedScript" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <SCRIPTLANGUAGE>PowerShell</SCRIPTLANGUAGE>
-      <RETURNCODES>0</RETURNCODES>
-      <VARNAME></VARNAME>
-      <SCRIPT>[String]$ScriptPath = &quot;{Script}&quot;
-      $ScriptName = Split-Path -Path $ScriptPath -Leaf
+          foreach ($f2i in $Files2Install) {
+             Add-AppProvisionedPackage -online -packagepath (Join-Path -Path $InstallDir -ChildPath $f2i) -skiplicense
+             &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;Installed [$f2i]&quot;
+          }
+          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  END bDS Script [$ScriptName]   ###&quot;
+        HIDDENEXECUTION: "1"      
+    - ACTION: 'type: Comment |||comment: 1'
+      DATA:
+        VALUE: '###   UNINSTALL   ###'
+    - ACTION: 'type: Conditional'
+      DATA: ''
+      CONDITION:
+        op1: "{Mode}"
+        op: "MATCHES"
+        op2: "Deinstall"
+        options: "0"
+    - ACTION: 'type: Comment ||| level: 1 |||comment: 1'
+      DATA:
+        VALUE: 'Remove the Appx/Msix Files'
+    - ACTION: 'type: RunEmbeddedScript ||| level: 1'
+      DATA:
+        SCRIPTLANGUAGE: PowerShell
+        RETURNCODES: "0"
+        VARNAME: ""
+        SCRIPT:  |
+          [String]$ScriptPath = &quot;{Script}&quot;
+          $ScriptName = Split-Path -Path $ScriptPath -Leaf
 
-      &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  BEGIN bDS Script [$ScriptName]   ###&quot;
+          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  BEGIN bDS Script [$ScriptName]   ###&quot;
 
-      get-appxpackage -allusers 5319275A.WhatsAppDesktop | Remove-AppPackage -AllUsers
-      &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;WhatsAppDesktop Removed [WhatsAppDesktop]&quot;
+          get-appxpackage -allusers 5319275A.WhatsAppDesktop | Remove-AppPackage -AllUsers
+          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;WhatsAppDesktop Removed [WhatsAppDesktop]&quot;
 
-      &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  END bDS Script [$ScriptName]   ###&quot;
-
-      </SCRIPT>
-      <HIDDENEXECUTION>1</HIDDENEXECUTION>
-      </DATA>
-      </ACTION>
-      </ACTIONS>
-      </baramundiDeployScript>
-    file_path: '%BUILD_DIR%\%pkg_dir%\release\%NAME%%PF_STRING%_%build_ver%_(Un-)Install.bds'
+          &amp; &quot;{$var_Path2BMAcmd}&quot; /Cmd:Log /Type:/1 /Text:&quot;###  END bDS Script [$ScriptName]   ###&quot;
+        HIDDENEXECUTION: "1" 
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
@@ -141,7 +113,7 @@ Process:
     bms_app_category: baramundi Application
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
-    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_(Un-)Install.bds'
+    bms_app_installbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%.bds'
     bms_app_localfilecopy:
     - '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\~~~FolderWithSubFolders'
     bms_app_iopt_copylocal: 'true'
@@ -151,7 +123,7 @@ Process:
     bms_app_name: '%NAME%'
     bms_app_parentid: '%BMS_IMPORT_OU_GUID%'
     bms_app_seccont: LocalSystem
-    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%_(Un-)Install.bds'
+    bms_app_uninstbds: '{DIP}\Apl\%DIP_NAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%.bds'
     bms_app_uopt_rebootbhv: NoReboot
     bms_app_valid4os: '%BMS_OS4X64%,%BMS_OS4SRV%'
     bms_app_vendor: '%VENDOR%'
