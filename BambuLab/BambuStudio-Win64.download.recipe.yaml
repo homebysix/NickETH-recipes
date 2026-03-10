@@ -1,0 +1,29 @@
+Description: Downloads the latest release of BambuStudio x64 from Github.
+Identifier: com.github.NickETH.recipes.download.BambuStudio-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: BambuStudio
+  # Bambu_Studio_win_public-v02.05.00.66-20260128215914.exe
+  ASSET_REGEX: 'Bambu_Studio_win_public.*?\.exe'
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    # https://github.com/greenshot/greenshot/releases/download/v1.3.277/Greenshot-INSTALLER-1.3.277-UNSTABLE.exe
+    # https://github.com/bambulab/BambuStudio/releases/download/v02.05.00.67/Bambu_Studio_win_public-v02.05.00.66-20260128215914.exe
+    github_repo: bambulab/BambuStudio
+    include_prereleases: false
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

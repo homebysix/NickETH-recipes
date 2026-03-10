@@ -1,0 +1,23 @@
+Description: Downloads the current release version of JetBrains Windows product.
+Identifier: com.github.NickETH.recipes.download.JetBrains-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: JetBrainsProductDownload
+  PROD_CODE: A valid product code can be obtained from https://data.services.jetbrains.com/products
+  FILE_TYPE: zip
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '"%ARCH_TYPE%":{"link":"(https://download.jetbrains.com/.*?(?P<version>([0-9]+\.)*[0-9]+)\.%FILE_TYPE%)"'
+    request_headers:
+      user-agent: Mozilla/5.0 (Windows NT 6.3; Win64, x64; Trident/7.0; rv:11.0) like Gecko
+    url: https://data.services.jetbrains.com/products/releases?code=%PROD_CODE%&latest=true&type=release
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%match%'
+    filename: '%NAME%.%FILE_TYPE%'
+
+- Processor: EndOfCheckPhase
