@@ -30,5 +30,5 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Claris International Inc., O=Claris International Inc., L=Cupertino, S=California, C=US
+    expected_subject: CN=Claris International Inc., OU=management:idms.group.95566, O=Claris International Inc., L=Cupertino, S=California, C=US
     input_path: '%pathname%'
