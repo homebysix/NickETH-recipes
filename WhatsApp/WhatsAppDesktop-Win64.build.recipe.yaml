@@ -39,8 +39,8 @@ Process:
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the WhatsApp msix package to the release dir
   Arguments:
-    #exe_path: '%BUILD_DIR%\%pkg_dir%\release\WhatsApp_%version%_x64.msix'
-    exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\automation_whatsapp_windows_uwp_store_hybrid_production_x64.msix'
+    # exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\automation_whatsapp_windows_uwp_store_hybrid_production_x64.msix'
+    exe_path: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\automation_whatsapp_windows_uwp_store_hybrid_production_WithoutSharesheet_x64.msix'
     extract_dir: '%BUILD_DIR%\%pkg_dir%\sourceunzipped\'
     extract_file: 'AppList.targetsize-256.png'
     recursive: true
