@@ -1,0 +1,7 @@
+200113	Packaging TeraTerm x64
+
+	/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /ALLUSERS
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0.0, by AutoPkg

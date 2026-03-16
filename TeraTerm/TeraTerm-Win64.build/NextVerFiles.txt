@@ -1,0 +1,3 @@
+read\create-log-TeraTerm_64_VVeerrssiioonn_ML.txt
+read\readme-TeraTerm_64_VVeerrssiioonn_ML.txt
+
