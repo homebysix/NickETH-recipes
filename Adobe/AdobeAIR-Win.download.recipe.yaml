@@ -36,7 +36,6 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: E=andrew.frost@harman.com, CN="Harman International Industries, Incorporated", O="Harman International Industries, Incorporated", L=Stamford, S=Connecticut, C=US, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US, SERIALNUMBER=886255, OID.2.5.4.15=Private Organization
-    input_path: '%pathname%'
+    expected_subject: CN="Wipro Connected Services, Inc.", OU=Wipro Engineering - Connected Services, O="Wipro Connected Services, Inc.", STREET=445 Indio Way, L=Sunnyvale, S=California, C=US, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US, SERIALNUMBER=3489342, OID.2.5.4.15=Private Organization   input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
