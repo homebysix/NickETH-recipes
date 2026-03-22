@@ -147,6 +147,8 @@ Process:
     filename: hexeditplugin.zip
     url: '%hexplugin_url%'
 
+- Processor: EndOfCheckPhase
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the Notepad++ installer
   Arguments:

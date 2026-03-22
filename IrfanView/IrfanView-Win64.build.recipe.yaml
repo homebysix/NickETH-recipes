@@ -99,6 +99,8 @@ Process:
     overwrite: 'true'
     source_path: '%RECIPE_CACHE_DIR%\downloads\%NAME%_Italian_Lng.zip'
 
+- Processor: EndOfCheckPhase
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the IrfanView plugins installer to the wixproject dir
   Arguments:

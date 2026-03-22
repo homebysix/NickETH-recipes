@@ -92,6 +92,8 @@ Process:
     filename: 'Swisscovery.enz'
     url: '%SWICOV_URL%'
 
+- Processor: EndOfCheckPhase
+
 - Processor: Copier
   Comment: Copy the Swisscovery connection file for the to the build dir
   Arguments:

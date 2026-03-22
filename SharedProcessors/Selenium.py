@@ -287,7 +287,7 @@ class Selenium(Processor):
         output_var_name = self.env["result_output_var_name"]
 
         # Run Pre-initialization commands.
-        if len(self.selenium_options) > 1:
+        if len(self.selenium_options) > 0:
             self.output(
                 (
                     "Processing {} Selenium option commands before "
@@ -350,7 +350,7 @@ class Selenium(Processor):
             browser.get(self.primary_url)
 
             # Run commands from input_variables
-            if len(self.selenium_commands) > 1:
+            if len(self.selenium_commands) > 0:
                 self.output(
                     "Processing {} Selenium commands."
                     .format(str(len(self.selenium_commands))),

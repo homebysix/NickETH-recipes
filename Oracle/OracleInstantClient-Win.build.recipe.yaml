@@ -43,7 +43,7 @@ Process:
     source_path: '%pathname%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the autopkg zip archive
+  Comment: Extract the InstantClient main zip archive
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%filename%'
     # extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
@@ -66,7 +66,7 @@ Process:
     url: 'https:%match%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the autopkg zip archive
+  Comment: Extract the InstantClient odbc zip archive
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-odbc.zip'
     # extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
@@ -88,7 +88,7 @@ Process:
     url: 'https:%match%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the autopkg zip archive
+  Comment: Extract the InstantClient sqlplus zip archive
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-sqlplus.zip'
     # extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
@@ -109,8 +109,10 @@ Process:
     filename: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-tools.zip'
     url: 'https:%match%'
 
+- Processor: EndOfCheckPhase
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the autopkg zip archive
+  Comment: Extract the InstantClient tools zip archive
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-tools.zip'
     # extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%NAME%'
@@ -132,7 +134,7 @@ Process:
     # source_path: '%BUILD_DIR%\%pkg_dir%\helpers\*.zip'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the autopkg zip archive
+  Comment: Extract the zip archive with the config files.
   Arguments:
     exe_path: '%BUILD_DIR%\%pkg_dir%\helpers\orafiles.zip'
     extract_dir: '%BUILD_DIR%\%pkg_dir%\wixproject\%APPFOLDER%_%MAJOR_VERSION%'

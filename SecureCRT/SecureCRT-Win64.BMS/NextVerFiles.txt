@@ -1,3 +1,0 @@
-read\create-log-SecureCRT_64_VVeerrssiioonn_EN.txt
-read\readme-SecureCRT_64_VVeerrssiioonn_EN.txt
-release\*.mst

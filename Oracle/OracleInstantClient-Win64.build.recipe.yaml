@@ -105,6 +105,8 @@ Process:
     filename: '%BUILD_DIR%\%pkg_dir%\sourcepkt\%NAME%-tools.zip'
     url: 'https:%match%'
 
+- Processor: EndOfCheckPhase
+
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
   Comment: Extract the InstantClient tools zip archive
   Arguments:

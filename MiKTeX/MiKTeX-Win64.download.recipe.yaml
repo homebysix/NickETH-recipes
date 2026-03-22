@@ -21,17 +21,8 @@ Input:
   MIRROR_URL: https://mirror.init7.net/ctan
   #VERSION_URL_MIR: (?P<dl_link_check>http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P<setup_file_check>basic-miktex-(?P<version>([0-9]+\.)*[0-9]+)-x64.exe))
        # <key>SEARCH_URL</key>
-# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;setup-(?P&lt;version&gt;[0-9]+\.[0-9]+\.[0-9]+)-x64.exe))</string> -->
-# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-(?P&lt;version&gt;[0-9]+\.[0-9]+\.[0-9]+)-x64.zip))</string> -->
-# <!-- <string>(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*[0-9]+-x64.zip))</string> -->
-# <!-- https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x64/basic-miktex-22.3-x64.exe -->
-# <!-- <string>(?s)(?P&lt;dl_link&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))(?!.*(http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/miktexsetup-([0-9]+\.)*[0-9]+.*-x64.zip))</string> -->
-# <!-- <string>(?P&lt;dl_link&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))(?!.*(http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))</string> -->
-# <!-- <string>http:\/\/mirrors\.ctan\.org\/systems\/win32\/miktex\/setup\/windows-x64\/miktexsetup-([0-9]+?\.)*?[0-9]+?.*?-x64\.zip(?!.*(?P&lt;dl_link&gt;http:\/\/mirrors\.ctan\.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+?\.)*?[0-9]+?.*?-x64\.zip)))</string> -->
+
 # <string>(miktexsetup-([0-9]+\.)*?[0-9]+?.*?x64.zip)(?!.*(miktexsetup-([0-9]+\.)*?[0-9]+?.*?x64.zip))</string>
-# <!-- <string>(?P&lt;dl_link&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file&gt;miktexsetup-([0-9]+\.)*?[0-9]+.*?-x64.zip))</string> -->
-# <key>VERSION_URL</key>
-# <!-- <string>(?P&lt;dl_link_check&gt;http://mirrors.ctan.org/systems/win32/miktex/setup/windows-x64/(?P&lt;setup_file_check&gt;basic-miktex-(?P&lt;version&gt;([0-9]+\.)*[0-9]+)-x64.exe))</string> -->
 # <string>(?P&lt;dl_link_check&gt;http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/(?P&lt;setup_file_check&gt;basic-miktex-(?P&lt;version&gt;([0-9]+\.)*[0-9]+)-x64.exe))(?!.*(http:\/\/mirrors.ctan.org\/systems\/win32\/miktex\/setup\/windows-x64\/basic-miktex-([0-9]+\.)*[0-9]+-x64.exe))</string>
 
 Process:

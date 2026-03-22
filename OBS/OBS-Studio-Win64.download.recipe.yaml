@@ -27,3 +27,5 @@ Process:
 - Processor: StopProcessingIf
   Arguments:
     predicate: download_changed == False
+
+- Processor: EndOfCheckPhase

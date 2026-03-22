@@ -6,10 +6,12 @@ Input:
   NAME: SqlDeveloper
   #SEARCH_FIRSTURL: https://www.oracle.com/tools/downloads/sqldev-downloads.html
   SEARCH_FIRSTURL: https://www.oracle.com/database/sqldeveloper/technologies/download/
+  # href="https://download.oracle.com/otn_software/java/sqldeveloper/sqldeveloper-24.3.1.347.1826-x64.zip" class=
   SEARCH_SECONDURL: https://login.oracle.com
   #SEARCH_SECONDURL: https://www.oracle.com/webapps/redirect/signon?nexturl=https%3A%2F%2Fwww.oracle.com%2Ftools%2Fdownloads%2Fsqldev-downloads.html
   INTERNAL_URL: 'put your path here'
   SEARCH_STR: '(sqldeveloper-(?P<versionlong>(?P<MAJOR_VERSION>[0-9]+)\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+\.)*[0-9]+)-x64.zip)'
+  SEARCH_DLURL: 'href="(?P<downurl>https://download.oracle.com/otn_software/java/sqldeveloper/sqldeveloper-(?P<version>([0-9]+)\.([0-9]+)\.([0-9]+)\.[0-9]+)\.[0-9]+-x64.zip)".class='
   SEARCH_VER: '<p align="top">Version.*?(?P<version>(?P<MAJOR_VERSION>[0-9]+)\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+)\.[0-9]+).*?</p>'
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
   ORACLE_USR: Test
@@ -20,15 +22,16 @@ Input:
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: 'Windows 64-bit with JDK 17 included.*?SHA1: ([a-z0-9]+)</li>'
+    #sqldeveloper-24.3.1.347.1826-x64.zip</p>
+    re_pattern: 'Windows.\(64-bit\).\(includes JDK 17\).*?sqldeveloper-(?P<versionlong>(?P<MAJOR_VERSION>[0-9]+)\.(?P<MINOR_VERSION>[0-9]+)\.([0-9]+)\.[0-9]+).*?-x64.zip.*?SHA256&nbsp;(?P<NEW_CHECKSUM>[a-z0-9]+)</p>'
     re_flags:
     - DOTALL
     url: '%SEARCH_FIRSTURL%'
 
 - Processor: URLTextSearcher
   Arguments:
-    NEW_CHECKSUM: '%match%'
-    re_pattern: '%SEARCH_VER%'
+    #NEW_CHECKSUM: '%match%'
+    re_pattern: '%SEARCH_DLURL%'
     re_flags:
     - DOTALL
     url: '%SEARCH_FIRSTURL%'
@@ -79,13 +82,13 @@ Process:
   Arguments:
     predicate: '%version% == %match%'
 
-- Processor: com.github.n8felton.shared/SHA1Checksum
+- Processor: com.github.n8felton.shared/SHA256Checksum
   Arguments:
     pathname: '%INTERNAL_URL%\%NEW_FILENAME%'
 
-- Processor: StopProcessingIf
-  Arguments:
-    predicate: '%sha1checksum% != %NEW_CHECKSUM%'
+# - Processor: StopProcessingIf
+  # Arguments:
+    # predicate: '%sha256checksum% != %NEW_CHECKSUM%'
 
 # - Processor: Copier
   # Comment: Copy the newl file from internal sourche to "sqldeveloper-no-jre.zip"
@@ -97,7 +100,8 @@ Process:
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.zip'
-    url: 'file:////d/sys/bms_tst/AutoPkg-in/Input/SQL-Developer/%NEW_FILENAME%'
+    #url: '%INTERNAL_URL%'
+    url: '%downurl%'
 
 - Processor: FileCreator
   Comment: Generate the version.txt in the release dir.

@@ -65,8 +65,6 @@ Process:
     filename: 'OFFICETOOL_%PLATFORM%.exe'
     url: '%match%'
 
-- Processor: EndOfCheckPhase
-
 - Processor: WindowsSignatureVerifier
   Arguments:
     expected_subject: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
