@@ -1,0 +1,13 @@
+
+200113	Create Fusion for Windows x64
+	Download Fusion Offline installer
+	From: https://dl.appstreaming.autodesk.com/production/installers/Fusion%20Admin%20Install.exe
+	Analyzing the installer package
+	It is no common installer from a well known source.
+	Looks like Autodesk has built its own installer.
+
+	So, we use it with no alterations at all.
+	Options: --globalinstall --quiet
+
+
+200113	Version 1.0.0.0, by AutoPkg

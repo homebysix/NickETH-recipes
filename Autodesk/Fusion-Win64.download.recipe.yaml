@@ -1,0 +1,42 @@
+Description: Downloads the latest Fusion x64 for Windows.
+Identifier: com.github.NickETH.recipes.download.Fusion-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Fusion
+  NAMESHORT: 'Fusion'
+  VENDOR: 'Autodesk'
+  PLATFORM: x64
+  PF_STRING: _64
+  LANG_STRING: _ML
+  DIP_NAME: DWGViewer
+  DIP_SUBDIR: ML
+  MAJORREL: '2025'
+  DOWNLOAD_URL: https://dl.appstreaming.autodesk.com/production/installers/Fusion%20Admin%20Install.exe
+  SEARCH_URL: https://dl.appstreaming.autodesk.com/production/67316f5e79bc48318aa5f7b6bb58243d/73e72ada57b7480280f7a6f4a289729f/full.json
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    #sqldeveloper-24.3.1.347.1826-x64.zip</p>
+    # "build-version": "2701.1.27",
+    re_pattern: '"build-version": "(?P<version>([0-9]+\.)*[0-9]+)"'
+    re_flags:
+    - DOTALL
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%DOWNLOAD_URL%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Autodesk, Inc.", O="Autodesk, Inc.", L=San Francisco, S=California, C=US
+    input_path: '%pathname%'
