@@ -14,7 +14,8 @@ Input:
   UPI2_GUID: '<UPI2>{(?P<CHANGE_KEY>[0-9A-F\-]*?)}</UPI2>'
   BUILDNR: '<BuildNumber>(?P<version>([0-9]+\.)*[0-9]+)</BuildNumber>'
   MAJRELPAT: '<Release>(?P<MAJORREL>.*?)</Release>'
-
+  DL_PATTERN: '<BrowserImageUrl>(?P<DL_FILES01>.*?)</BrowserImageUrl>'
+  
 Process:
 - Processor: DWGTrueviewDownloader
   Comment: Get the url for the offline installer.
@@ -25,7 +26,7 @@ Process:
     # url: '%SEARCH_FIRSTURL%'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
-  Comment: Extract the MSI file from exe
+  Comment: Extract the setup.xml file from downloader exe
   Arguments:
     #archive_type: '#'
     exe_path: '%RECIPE_CACHE_DIR%\downloads\DWGTrueview.exe'
@@ -63,18 +64,18 @@ Process:
     predicate: '%version% == %match%'
 
 - Processor: URLTextSearcher
-  Comment: read back the previous version from the version.txt file.
+  Comment: read the UPI2 GUID from the setup.xml file.
   Arguments:
 
     re_pattern: '%UPI2_GUID%'
     url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
 
-- Processor: URLTextSearcher
-  Comment: read back the previous version from the version.txt file.
-  Arguments:
+# - Processor: URLTextSearcher
+  # Comment: read back the previous version from the version.txt file.
+  # Arguments:
 
-    re_pattern: '%MAJRELPAT%'
-    url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
+    # re_pattern: '%MAJRELPAT%'
+    # url: 'file://%RECIPE_CACHE_DIR%/downloads/setup.xml'
 
 - Processor: FileCreator
   Comment: Generate the version.txt in the release dir.
@@ -82,14 +83,44 @@ Process:
     file_content: '%version%'
     file_path: '%RECIPE_CACHE_DIR%\version.txt'
 
+- Processor: com.github.NickETH.recipes.SharedProcessors/SevenZipExtractor
+  Comment: Extract the collection.xml file from downloader exe
+  Arguments:
+    #archive_type: '#'
+    exe_path: '%RECIPE_CACHE_DIR%\downloads\DWGTrueview.exe'
+    extract_dir: '%RECIPE_CACHE_DIR%\downloads'
+    extract_file: 'collection.xml'
+    preserve_paths: 'False'
+    recursive: 'True'
+
+- Processor: URLTextSearcher
+  Comment: read the download URL's from the collection.xml file.
+  Arguments:
+    re_pattern: '%DL_PATTERN%'
+    url: 'file://%RECIPE_CACHE_DIR%/downloads/collection.xml'
+
+- Processor: com.github.jazzace.processors/TextSearcher
+  Comment: read the EXE URL from the URL string.
+  Arguments:
+    text_in: '%DL_FILES01%'
+    re_pattern: ';(https://efulfillment.autodesk.com.*?db_001_002.exe)'
+    result_output_var_name: 'DL_FILE'
+    
 - Processor: URLDownloader
   Comment: Generate the DL_URL variable and download the first part.
   Arguments:
-    DL_URL: 'https://efulfillment.autodesk.com/NetSWDLD/ODIS/prd/%MAJORREL%/PLC0000037/%CHANGE_KEY%/SFX/DWGTrueView_%MAJORREL%_English_64bit_db'
     filename: '%NAME%-x64.exe'
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%DL_URL%_001_002.exe'
+    #url: '%DL_URL%_001_002.exe'
+    url: '%DL_FILE%'
+
+- Processor: com.github.jazzace.processors/TextSearcher
+  Comment: read the 7z URL from the URL string.
+  Arguments:
+    text_in: '%DL_FILES01%'
+    re_pattern: '(https://efulfillment.autodesk.com.*?db_002_002.7z);'
+    result_output_var_name: 'DL_FILE'
 
 - Processor: URLDownloader
   Comment: Download the second part.
@@ -98,7 +129,8 @@ Process:
     filename: '%NAME%-x64.7z'
     request_headers:
       user-agent: '%USER_AGENT%'
-    url: '%DL_URL%_002_002.7z'
+    #url: '%DL_URL%_002_002.7z'
+    url: '%DL_FILE%'
 
 - Processor: WindowsSignatureVerifier
   Arguments:

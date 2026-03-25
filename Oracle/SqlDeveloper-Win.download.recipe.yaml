@@ -6,7 +6,6 @@ Input:
   NAME: SqlDeveloper
   #SEARCH_FIRSTURL: https://www.oracle.com/tools/downloads/sqldev-downloads.html
   SEARCH_FIRSTURL: https://www.oracle.com/database/sqldeveloper/technologies/download/
-  # href="https://download.oracle.com/otn_software/java/sqldeveloper/sqldeveloper-24.3.1.347.1826-x64.zip" class=
   SEARCH_SECONDURL: https://login.oracle.com
   #SEARCH_SECONDURL: https://www.oracle.com/webapps/redirect/signon?nexturl=https%3A%2F%2Fwww.oracle.com%2Ftools%2Fdownloads%2Fsqldev-downloads.html
   INTERNAL_URL: 'put your path here'
@@ -18,7 +17,8 @@ Input:
   ORACLE_PWD: Test
 
 # The online search on Oracles website was abondoned, because of complexity and constant changing.
-# 
+# We try it again as of 20260325. Seems to work for now again...
+
 Process:
 - Processor: URLTextSearcher
   Arguments:
@@ -72,11 +72,6 @@ Process:
     #url: '%RECIPE_CACHE_DIR%\version.txt'
     url: file://%RECIPE_CACHE_DIR%/version.txt
     NEW_FILENAME: '%match%'
-
-# - Processor: com.github.n8felton.shared/SHA1Checksum
-  # Arguments:
-    # pathname: '%INTERNAL_URL%\%match%'
-    # NEW_FILENAME: '%match%'
 
 - Processor: StopProcessingIf
   Arguments:
