@@ -1,0 +1,29 @@
+Description: Downloads the latest release of OpenWhispr x64 from Github.
+Identifier: com.github.NickETH.recipes.download.OpenWhispr-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: OpenWhispr
+  ASSET_REGEX: 'OpenWhispr-.*?\.exe'
+  PLATFORM: x64
+  PF_STRING: _64
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    # https://github.com/OpenWhispr/openwhispr
+    # https://github.com/OpenWhispr/openwhispr/releases/download/v1.6.6/OpenWhispr-Setup-1.6.6.exe
+    github_repo: OpenWhispr/openwhispr
+    include_prereleases: false
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+    
+- Processor: EndOfCheckPhase
+

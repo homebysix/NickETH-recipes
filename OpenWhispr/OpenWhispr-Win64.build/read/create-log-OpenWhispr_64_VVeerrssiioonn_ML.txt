@@ -1,0 +1,9 @@
+
+200113	Packaging OpenWhispr x64
+
+	NSIS Setup
+	Options: /S /allusers
+
+	For the download links, see the recipe.
+
+200113	Version 1.0.0.0, by AutoPkg

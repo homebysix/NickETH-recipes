@@ -1,0 +1,2 @@
+read\create-log-OpenWhispr_64_VVeerrssiioonn_ML.txt
+read\readme-OpenWhispr_64_VVeerrssiioonn_ML.txt
