@@ -26,137 +26,234 @@ Process:
     input_var: '%parsed_string%%LANG_STRING%'
     rename_var: ver_int_dir
 
-- Processor: FileCreator
-  Comment: Generate the install.bds in the release dir.
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/BDSGenerator
+  Comment: Create a new baramundi deploy script (BDS) file.
   Arguments:
-    file_content: |
-      <?xml version="1.0" encoding="ISO-8859-1"?>
-      <baramundiDeployScript Version="2420" LastChange="%us_date% %time%">
-      <META>
-      <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>  
-      <STATICVARS LoadInstallIni="1">
-      <BMSVars></BMSVars>
-      </STATICVARS>
-      </META>
-      <RUNOPTIONS HideProgress="1"/>
-      <ACTIONS>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>******************************</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Microsoft Office 2021 LTSC</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>******************************</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Version: 251028</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>**********</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>ChangeLog:</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>20251028 - Hm: inital creation</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>******************************</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>set variable</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetX64Mode" level="1" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <MODE>1</MODE>
-      </DATA>
-      </ACTION>
-      <ACTION type="EvalVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VARNAME>isOfficeInstalled</VARNAME>
-      <SOURCE>Registry</SOURCE>
-      <OPTIONS>0</OPTIONS>
-      <Properties><PropertyEntry><Param>Key</Param><Value>SOFTWARE\Microsoft\Office\ClickToRun\Configuration</Value></PropertyEntry><PropertyEntry><Param>Registry</Param><Value>HKEY_LOCAL_MACHINE</Value></PropertyEntry><PropertyEntry><Param>Value</Param><Value>AudienceData</Value></PropertyEntry></Properties></DATA>
-      </ACTION>
-      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VARNAME>VerSubDir</VARNAME>
-      <VALUE>%ver_int_dir%</VALUE>
-      <OPTIONS>0</OPTIONS>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <VARNAME>officeVersion</VARNAME>
-      <VALUE>%versionint%</VALUE>
-      <OPTIONS>0</OPTIONS>
-      </DATA>
-      </ACTION>
-      <ACTION type="SetX64Mode" level="1" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <MODE>0</MODE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Install</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Conditional" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      </DATA>
-      <CONDITION op1="{isOfficeInstalled}" op="MATCHES" op2="NOTFOUND" options="0"/>
-      </ACTION>
-      <ACTION type="IncludeBDS" level="2" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <FILENAME>..\global\install.bds</FILENAME>
-      <DATERESOLVED>0</DATERESOLVED>
-      <FILENAMERESOLVED></FILENAMERESOLVED>
-      <RESOLVINGMACHINE></RESOLVINGMACHINE>
-      <RESOLVEERROR></RESOLVEERROR>
-      </DATA>
-      </ACTION>
-      <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
-      <DATA>
-      <VALUE>Update</VALUE>
-      </DATA>
-      </ACTION>
-      <ACTION type="Conditional" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      </DATA>
-      <CONDITION op1="{isOfficeInstalled}" op="DOESNOTMATCH" op2="NOTFOUND" options="0"/>
-      </ACTION>
-      <ACTION type="IncludeBDS" level="2" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
-      <DATA>
-      <FILENAME>..\global\update.bds</FILENAME>
-      <DATERESOLVED>0</DATERESOLVED>
-      <FILENAMERESOLVED></FILENAMERESOLVED>
-      <RESOLVINGMACHINE></RESOLVINGMACHINE>
-      <RESOLVEERROR></RESOLVEERROR>
-      </DATA>
-      </ACTION>
-      </ACTIONS>
-      </baramundiDeployScript>
-    file_path: '%BUILD_DIR%\%pkg_dir%\release\install.bds'
+    BDS_file: '%BUILD_DIR%\%pkg_dir%\release\install.bds'
+    new_actions:
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: '******************************'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: 'Microsoft Office 2021 LTSC'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: 'Install-/Uninstall-Script for %NAME%'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: '******************************'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: 'Version: 251028'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: '**********'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: 'ChangeLog:'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: '20260401 - Hm: Bugfix (x64 mode is needed here too)'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: '******************************'
+    - ACTION: 'type: Comment |||comment: 0'
+      DATA:
+        VALUE: 'set variable'
+    - ACTION: 'type: SetX64Mode ||| level: 1'
+      DATA:
+        MODE: 1
+    - ACTION: 'type: EvalVar ||| level: 1'
+      DATA:
+        VARNAME: isOfficeInstalled
+        SOURCE: Registry
+        OPTIONS: 0      
+        Properties: |
+            <PropertyEntry><Param>Key</Param><Value>SOFTWARE\Microsoft\Office\ClickToRun\Configuration</Value></PropertyEntry>
+            <PropertyEntry><Param>Registry</Param><Value>HKEY_LOCAL_MACHINE</Value></PropertyEntry>
+            <PropertyEntry><Param>Value</Param><Value>AudienceData</Value></PropertyEntry>
+    - ACTION: 'type: SetVar ||| level: 1'
+      DATA:
+        VARNAME: VerSubDir
+        VALUE: '%ver_int_dir%'
+        OPTIONS: 0
+    - ACTION: 'type: SetVar ||| level: 1'
+      DATA:
+        VARNAME: officeVersion
+        VALUE: '%versionint%'
+        OPTIONS: 0        
+    - ACTION: 'type: SetX64Mode ||| level: 1'
+      DATA:
+        MODE: 0
+    - ACTION: 'type: Comment'
+      DATA:
+        VALUE: '###   INSTALL   ###'
+    - ACTION: 'type: Conditional ||| level: 1'
+      DATA: ''
+      CONDITION:
+        op1: "{isOfficeInstalled}"
+        op: "MATCHES"
+        op2: "NOTFOUND"
+        options: "0"
+    - ACTION: 'type: IncludeBDS ||| level: 2'
+      DATA:
+        FILENAME: '..\global\install.bds'
+        DATERESOLVED: 0
+        FILENAMERESOLVED: ""
+        RESOLVINGMACHINE: ""
+        RESOLVEERROR: ""
+    - ACTION: 'type: Comment'
+      DATA:
+        VALUE: '###   Update   ###'
+    - ACTION: 'type: Conditional ||| level: 1'
+      DATA: ''
+      CONDITION:
+        op1: "{isOfficeInstalled}"
+        op: "DOESNOTMATCH"
+        op2: "NOTFOUND"
+        options: "0"
+    - ACTION: 'type: IncludeBDS ||| level: 2'
+      DATA:
+        FILENAME: '..\global\update.bds'
+        DATERESOLVED: 0
+        FILENAMERESOLVED: ""
+        RESOLVINGMACHINE: ""
+        RESOLVEERROR: ""
+
+
+# - Processor: FileCreator
+  # Comment: Generate the install.bds in the release dir.
+  # Arguments:
+    # file_content: |
+      # <?xml version="1.0" encoding="ISO-8859-1"?>
+      # <baramundiDeployScript Version="2420" LastChange="%us_date% %time%">
+      # <META>
+      # <INFO Vendor="" Name="" Version="" Author="Autopkg" Comment=""/>  
+      # <STATICVARS LoadInstallIni="1">
+      # <BMSVars></BMSVars>
+      # </STATICVARS>
+      # </META>
+      # <RUNOPTIONS HideProgress="1"/>
+      # <ACTIONS>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>******************************</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>Microsoft Office 2021 LTSC</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>******************************</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>Version: 251028</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>**********</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>ChangeLog:</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>20251028 - Hm: inital creation</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>******************************</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>set variable</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="SetX64Mode" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <MODE>1</MODE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="EvalVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VARNAME>isOfficeInstalled</VARNAME>
+      # <SOURCE>Registry</SOURCE>
+      # <OPTIONS>0</OPTIONS>
+      # <Properties><PropertyEntry><Param>Key</Param><Value>SOFTWARE\Microsoft\Office\ClickToRun\Configuration</Value></PropertyEntry><PropertyEntry><Param>Registry</Param><Value>HKEY_LOCAL_MACHINE</Value></PropertyEntry><PropertyEntry><Param>Value</Param><Value>AudienceData</Value></PropertyEntry></Properties></DATA>
+      # </ACTION>
+      # <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VARNAME>VerSubDir</VARNAME>
+      # <VALUE>%ver_int_dir%</VALUE>
+      # <OPTIONS>0</OPTIONS>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="SetVar" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VARNAME>officeVersion</VARNAME>
+      # <VALUE>%versionint%</VALUE>
+      # <OPTIONS>0</OPTIONS>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="SetX64Mode" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <MODE>0</MODE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>Install</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Conditional" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # </DATA>
+      # <CONDITION op1="{isOfficeInstalled}" op="MATCHES" op2="NOTFOUND" options="0"/>
+      # </ACTION>
+      # <ACTION type="IncludeBDS" level="2" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <FILENAME>..\global\install.bds</FILENAME>
+      # <DATERESOLVED>0</DATERESOLVED>
+      # <FILENAMERESOLVED></FILENAMERESOLVED>
+      # <RESOLVINGMACHINE></RESOLVINGMACHINE>
+      # <RESOLVEERROR></RESOLVEERROR>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Comment" level="0" breakpoint="0" ignore_error="0" comment="1" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <VALUE>Update</VALUE>
+      # </DATA>
+      # </ACTION>
+      # <ACTION type="Conditional" level="1" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # </DATA>
+      # <CONDITION op1="{isOfficeInstalled}" op="DOESNOTMATCH" op2="NOTFOUND" options="0"/>
+      # </ACTION>
+      # <ACTION type="IncludeBDS" level="2" breakpoint="0" ignore_error="0" comment="0" is_included="0" logging_enabled="1">
+      # <DATA>
+      # <FILENAME>..\global\update.bds</FILENAME>
+      # <DATERESOLVED>0</DATERESOLVED>
+      # <FILENAMERESOLVED></FILENAMERESOLVED>
+      # <RESOLVINGMACHINE></RESOLVINGMACHINE>
+      # <RESOLVEERROR></RESOLVEERROR>
+      # </DATA>
+      # </ACTION>
+      # </ACTIONS>
+      # </baramundiDeployScript>
+    # file_path: '%BUILD_DIR%\%pkg_dir%\release\install.bds'
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
