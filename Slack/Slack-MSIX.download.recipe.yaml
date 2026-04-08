@@ -1,0 +1,42 @@
+Description: Downloads latest Slack MSIX-file for Windows.
+Identifier: com.github.NickETH.recipes.download.Slack-MSIX-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: Slack
+  PLATFORM: x64
+  # Considering to switch back to this link. https://slack.com/ssb/download-win64-msi RSS feed is getting unreliable...
+  #https://downloads.slack-edge.com/desktop-releases/windows/x64/4.39.88/SlackSetup.exe
+  #SEARCH_URL_MSI: (?P<msi_dl_link>https://downloads\.slack-edge\.com/releases/windows/(?P<ver3digit>[0-9]+\.[0-9]+\.[0-9]+)/prod/x64/slack-standalone-(?P<version>[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)\.msi)
+  SEARCH_URL_MSI: https://downloads\.slack-edge\.com/desktop-releases/windows/x64/(?P<ver3digit>[0-9]+\.[0-9]+\.[0-9]+)/SlackSetup.exe
+  # https://downloads.slack-edge.com/desktop-releases/windows/arm64/4.49.81/Slack.msix
+  SEARCH_URL_MSIX: https://downloads\.slack-edge\.com/desktop-releases/windows/arm64/(?P<ver3digit>[0-9]+\.[0-9]+\.[0-9]+)/Slack.msix
+
+  DOWNLOAD_FILE: Slack
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '%SEARCH_URL_MSIX%'
+    url: https://slack.com/intl/en-ch/release-notes/windows/rss
+
+- Processor: URLDownloader
+  Arguments:
+    version: '%ver3digit%.0'
+    CHECK_FILESIZE_ONLY: false
+    filename: '%NAME%_%PLATFORM%.msix'
+    #https://downloads.slack-edge.com/desktop-releases/windows/x64/4.39.88/slack-standalone-4.39.87.0.msi
+    #url: https://downloads.slack-edge.com/releases/windows/%ver3digit%/prod/x64/slack-standalone-%version%.msi
+    url: https://downloads.slack-edge.com/desktop-releases/windows/x64/%ver3digit%/Slack.msix
+    
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Arguments:
+    expected_subject: CN="Slack Technologies, LLC", O="Slack Technologies, LLC", L=San Francisco, S=California, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
