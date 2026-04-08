@@ -11,17 +11,26 @@ Input:
   PF_STRING: _64
   # https://kicad-downloads.s3.cern.ch/windows/stable/kicad-9.0.7-x86_64.exe
   SEARCH_PATTERN: (https://kicad-downloads.s3.cern.ch/windows/stable/kicad-(?P<version>[\d.]+)-x86_64.exe)
+  
+  ASSET_REGEX: 'kicad-.*?-x86_64\.exe'
 
 Process:
-- Processor: URLTextSearcher
-  Arguments:
-    re_pattern: '%SEARCH_PATTERN%'
-    url: '%SEARCH_URL%'
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_PATTERN%'
+    # url: '%SEARCH_URL%'
 
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    # https://github.com/KiCad/kicad-source-mirror/releases/download/10.0.0/kicad-10.0.0-1-x86_64.exe
+    github_repo: KiCad/kicad-source-mirror
+    include_prereleases: false
+    
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%-x64.exe'
-    url: '%match%'
+    #url: '%match%'
 
 - Processor: StopProcessingIf
   Arguments:
