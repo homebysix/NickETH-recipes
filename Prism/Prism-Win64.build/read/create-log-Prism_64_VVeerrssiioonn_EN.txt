@@ -1,0 +1,9 @@
+
+200113	Packaging Prism x64 for Windows
+	We download and use the installer msi unaltered.
+	Desktop shortcut will not be installed.
+	For the download links, see the recipe.
+	Prism_64_1.1.1_EN.exe /qn /norestart ALLUSERS=1 TRANSFORMS="prism10_noDTSC.mst"
+
+
+200113	Version 1.0.0, by AutoPkg
