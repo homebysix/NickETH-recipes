@@ -9,13 +9,27 @@ Input:
   SEARCH_PATTERN: href="(/files/[0-9]+/)".*Windows MSI
 
 Process:
-- Processor: URLTextSearcher
+# - Processor: URLTextSearcher
+  # Arguments:
+    # request_headers:
+    # user-agent: '%USER_AGENT%'
+    # re_pattern: '%SEARCH_PATTERN%'
+    # re_flags:
+    # - DOTALL
+    # result_output_var_name: match
+    # url: '%SEARCH_URL%'
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
     re_pattern: '%SEARCH_PATTERN%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
     re_flags:
     - DOTALL
-    result_output_var_name: match
     url: '%SEARCH_URL%'
+    time2load: 10000
+    wait_until: domcontentloaded
+    #headless: False
 
 - Processor: URLDownloader
   Arguments:
