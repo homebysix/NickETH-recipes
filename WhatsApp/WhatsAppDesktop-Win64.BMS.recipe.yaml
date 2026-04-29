@@ -74,8 +74,16 @@ Process:
              Add-AppProvisionedPackage -online -packagepath (Join-Path -Path $InstallDir -ChildPath $f2i) -skiplicense
              & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"Installed [$f2i]"
           }
-          & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"###  END bDS Script [$ScriptName]  ###"
+          & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"###  END bDS Script [$ScriptName]  ###"      
         HIDDENEXECUTION: "1"      
+    - ACTION: 'type: SetRegValue ||| level: 1'
+      DATA:
+        REGISTRY: '2147483650'
+        REGKEY: 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{19B609D6-8F96-407A-94E4-17D6101A58D9}'
+        REGVALUENAME: "WhatsAppUpdate"
+        VALUE: 'MSIX'
+        REGVALUETYPE: "1"
+        OPTIONS: "1"
     - ACTION: 'type: Comment |||comment: 1'
       DATA:
         VALUE: '###   UNINSTALL   ###'
@@ -89,6 +97,21 @@ Process:
     - ACTION: 'type: Comment ||| level: 1 |||comment: 1'
       DATA:
         VALUE: 'Remove the Appx/Msix Files'
+    - ACTION: 'type: SetVar ||| level: 1'
+      DATA:
+        VARNAME: WhatsAppUpdate
+        VALUE: 0
+        OPTIONS: 0
+    - ACTION: 'type: EvalVar ||| level: 1'
+      DATA:
+        VARNAME: WhatsAppUpdate
+        SOURCE: Registry
+        VALUE: 0
+        OPTIONS: 0      
+        Properties: |
+            <PropertyEntry><Param>Key</Param><Value>SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{19B609D6-8F96-407A-94E4-17D6101A58D9}</Value></PropertyEntry>
+            <PropertyEntry><Param>Registry</Param><Value>HKEY_LOCAL_MACHINE</Value></PropertyEntry>
+            <PropertyEntry><Param>Value</Param><Value>WhatsAppUpdate</Value></PropertyEntry>
     - ACTION: 'type: RunEmbeddedScript ||| level: 1'
       DATA:
         SCRIPTLANGUAGE: PowerShell
@@ -102,10 +125,35 @@ Process:
           & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"###  BEGIN bDS Script [$ScriptName]  ###"
 
           get-appxpackage -allusers 5319275A.WhatsAppDesktop | Remove-AppPackage -AllUsers
-          & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"WhatsAppDesktop Removed [WhatsAppDesktop]"
+          & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"WhatsAppDesktop Removed"
 
           & "{$var_Path2BMAcmd}" /Cmd:Log /Type:/1 /Text:"###  END bDS Script [$ScriptName]  ###"
         HIDDENEXECUTION: "1" 
+      CONDITION:
+        op1: "{WhatsAppUpdate}"
+        op: "DOESNOTMATCH"
+        op2: "MSIX"
+        options: "0"
+    - ACTION: 'type: Conditional ||| level: 1'
+      DATA: ''
+      CONDITION:
+        op1: "{WhatsAppUpdate}"
+        op: "MATCHES"
+        op2: "MSIX"
+        options: "0"
+    - ACTION: 'type: LaunchProcess ||| level: 2'
+      DATA:
+        COMMAND: "c:\windows\system32\rundll32.exe"
+        PARAM: "AppxDeploymentClient.dll,AppxCleanupOrphanPackages"
+        RETURNCODES: "0"
+        VARNAME: ""
+        PIDVARNAME: ""
+        OPTIONS: "3"
+    - ACTION: 'type: DeleteRegValue ||| level: 2'
+      DATA:
+        REGISTRY: '2147483650'
+        REGKEY: 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{19B609D6-8F96-407A-94E4-17D6101A58D9}'
+        REGVALUENAME: "WhatsAppUpdate"
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/BMSImporter
   Comment: Import the Application into Baramundi (BMS)
