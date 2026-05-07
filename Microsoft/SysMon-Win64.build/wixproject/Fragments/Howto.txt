@@ -1,0 +1,1 @@
+For an example with fragments see the Irfanview recipe

@@ -1,0 +1,10 @@
+read\create-log-SysMon_64_VVeerrssiioonn_ML.txt
+read\readme-SysMon_64_VVeerrssiioonn_ML.txt
+helpers\*.*
+wixproject\Main.wxs
+wixproject\NoExe.xslt
+wixproject\SysMon.build
+wixproject\version.wxi
+wixproject\Resources\*.*
+wixproject\Lang\*.*
+

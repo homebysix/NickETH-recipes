@@ -1,0 +1,14 @@
+
+200113	Create SysMon x64 for Windows
+	Download https://download.sysinternals.com/files/Sysmon.zip
+	Get SwiftOnSecurity.xml from: https://github.com/swiftonsecurity/sysmon-config
+
+	Copy everything to a WiX project.
+	Build it to an MSI.
+	We create an advertised shortcut.
+	We create an Icon resource file for the MSI ARP.
+	We use the Icon file to generate the baramundi Kiosk Icons with AutoPkg.
+
+
+200113	Version 1.0.0, by AutoPkg
+	
