@@ -25,7 +25,8 @@ Process:
     request_headers:
       user-agent: '%USER_AGENT%'
     url: '%SEARCH_FIRSTURL%'
-    
+    headless: False
+        
 - Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
     re_pattern: '%SEARCH_THIRDURL%'
