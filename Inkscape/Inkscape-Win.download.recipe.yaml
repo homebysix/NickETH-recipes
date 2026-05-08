@@ -7,8 +7,11 @@ Input:
   PLATFORM: x64
   PF_DIGIT: '64'
   SEARCH_URL: https://inkscape.org
-  SEARCH_PATTERN1: (/release/(?P<version>[0-9]{1,3}.[0-9]{0,3}.[0-9]{0,3})/windows/)
-  SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
+  #SEARCH_PATTERN1: (/release/(?P<version>[0-9]{1,3}.[0-9]{0,3}.[0-9]{0,3})/windows/)
+  SEARCH_PATTERN1: (/release/inkscape-(?P<version>[0-9]{1,3}.[0-9]{0,3}.[0-9]{0,3})/)
+  #SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
+  # https://inkscape.org/gallery/item/59504/inkscape-1.4.4_2026-05-05_dcaf3e7-x64.signed_xMx7DJV.msi
+  SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.*?.msi'
   
 Process:
 - Processor: URLTextSearcher
@@ -17,11 +20,13 @@ Process:
     - -L
     re_pattern: '%SEARCH_PATTERN1%'
     result_output_var_name: release_page_match
-    url: '%SEARCH_URL%/release'
+    #url: '%SEARCH_URL%/release'
+    url: '%SEARCH_URL%'
 
 - Processor: URLTextSearcher
   Arguments:
-    SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
+    #SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.msi'
+    SEARCH_PATTERN2: '/gallery/item/[0-9]*?/inkscape-%version%.*?.msi'
     re_pattern: '%SEARCH_PATTERN2%'
     result_output_var_name: gallery_download_match
     url: '%SEARCH_URL%/release/inkscape-%version%/windows/%PF_DIGIT%-bit/msi/dl/'
