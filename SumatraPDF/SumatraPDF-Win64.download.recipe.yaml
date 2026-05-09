@@ -4,8 +4,11 @@ MinimumVersion: 1.3.1
 
 Input:
   NAME: SumatraPDF
-  URL: https://www.sumatrapdfreader.org/update-check-rel.txt
-  SEARCH_REGEX: 'Latest.(?P<version>([0-9]+\.)*[0-9]+)'
+  #URL: https://www.sumatrapdfreader.org/update-check-rel.txt
+  BASE_URL: https://www.sumatrapdfreader.org
+  #<a href="/dl/rel/3.6.1/SumatraPDF-3.6.1-64-install.exe"
+  #SEARCH_REGEX: 'Latest.(?P<version>([0-9]+\.)*[0-9]+)'
+  SEARCH_REGEX: 'href="(/dl/rel/[0-9\.]+/SumatraPDF-(?P<version>([0-9]+\.)*[0-9]+)-64-install\.exe)"'
   PLATFORM: x64
   PF_STRING: _64
 
@@ -14,14 +17,16 @@ Process:
   Comment: Determine the latest version from the download site.
   Arguments:
     re_pattern: '%SEARCH_REGEX%'
-    url: '%URL%'
+    #url: '%URL%'
+    url: '%BASE_URL%/download-free-pdf-viewer'
 
 - Processor: URLDownloader
   Comment: rewrite the version variable with the build string, download the installer file.
   Arguments:
     #version: '%version%%parsed_string%'
     filename: '%NAME%%PLATFORM%.exe'
-    url: https://www.sumatrapdfreader.org/dl/rel/%version%/SumatraPDF-%version%-64-install.exe
+    #url: https://www.sumatrapdfreader.org/dl/rel/%version%/SumatraPDF-%version%-64-install.exe
+    url: '%BASE_URL%%match%'
 
 - Processor: StopProcessingIf
   Arguments:
@@ -29,7 +34,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Krzysztof Kowalczyk, O=Krzysztof Kowalczyk, L=Krak¾w, S=malopolskie, C=PL
+    expected_subject: CN=Krzysztof Kowalczyk, O=Krzysztof Kowalczyk, L=Kraków, S=malopolskie, C=PL
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
