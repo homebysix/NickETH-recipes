@@ -29,7 +29,7 @@ Process:
 
 - Processor: WindowsSignatureVerifier
   Arguments:
-    expected_subject: CN=Krzysztof Kowalczyk, O=Krzysztof Kowalczyk, L=San Diego, S=California, C=US
+    expected_subject: CN=Krzysztof Kowalczyk, O=Krzysztof Kowalczyk, L=Krak¾w, S=malopolskie, C=PL
     input_path: '%pathname%'
 
 - Processor: EndOfCheckPhase
