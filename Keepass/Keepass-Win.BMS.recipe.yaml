@@ -35,7 +35,7 @@ Process:
     bms_app_comment: 'Imported by: AutoPkg, %us_date% %time%'
     bms_app_conschecks: "CheckAppRC=0,3010\r\nDeinstall.CheckAppRC=0,1605,3010"
     bms_app_installcmd: '{DIP}\Apl\%DIPNAME%\%parsed_string%\%DIP_SUBDIR%\%NAME%%PF_STRING%_%build_ver%%LANG_STRING%.msi'
-    bms_app_installparm: /qn /norestart ALLUSERS=1
+    bms_app_installparm: '/qn /norestart ALLUSERS=1 KPS_OPTIONS="!DesktopIcon,!PreLoad"'
     bms_app_integration:
     - appname: '%NAME%'
       bundles:
