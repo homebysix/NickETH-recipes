@@ -1,0 +1,3 @@
+read\create-log-BrightAuthorConnected_64_VVeerrssiioonn_ML.txt
+read\readme-BrightAuthorConnected_64_VVeerrssiioonn_ML.txt
+helpers\*.*
