@@ -1,0 +1,51 @@
+Description: Downloads the latest version of Nvidia RTX Studio Drivers x64 for Windows.
+# This recipe is inspired by the work of https://github.com/ZenitH-AT/nvidia-data
+# And https://github.com/ElPumpo/TinyNvidiaUpdateChecker
+Identifier: com.github.NickETH.recipes.download.RTX-Studio-Drivers-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: RTX-Studio-Drivers
+  VENDOR: 'Nvidia'
+  PLATFORM: x64
+  PF_STRING: _64
+  # For the values below, see: https://github.com/ElPumpo/TinyNvidiaUpdateChecker/blob/master/TinyNvidiaUpdateChecker/MainConsole.cs#L469
+  # And: https://github.com/ZenitH-AT/nvidia-data
+  NV_PFID: '1008'
+  NV_OSID: '135'
+  NV_STUD: '1'
+  SEARCH_URL: "https://gfwsl.geforce.com/services_toolkit/services/com/nvidia/services/AjaxDriverService.php?func=DriverManualLookup&pfid=%NV_PFID%&osID=%NV_OSID%&upCRD=%NV_STUD%&dch=1"
+  DOWNL_URL: '"DownloadURL" : "(https:\/\/.*?\.nvidia\.com\/Windows\/(?P<version>([0-9]+\.)*[0-9]+)\/.*?dch-whql\.exe)"'
+  
+  # From FF: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) like Gecko
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Get the exact path from the download page.
+  Arguments:
+    re_pattern: '%DOWNL_URL%'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      referer: '%match%'
+    url: '%match%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+    
+- Processor: WindowsSignatureVerifier
+  Comment: Check the signature on the downloaded file
+  Arguments:
+    MAIN_PATH: '%pathname%'
+    expected_subject: CN=NVIDIA Corporation, OU=2008B9F, O=NVIDIA Corporation, L=Santa Clara, S=California, C=US
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase

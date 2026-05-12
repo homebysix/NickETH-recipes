@@ -1,0 +1,8 @@
+
+200113	Create Nvidia RTX Studio Drivers x64 for Windows
+	Download the exe installer
+
+	We get the Icon file to generate the baramundi Kiosk Icons with AutoPkg.
+
+200113	Version 1.0.0, by AutoPkg
+	
