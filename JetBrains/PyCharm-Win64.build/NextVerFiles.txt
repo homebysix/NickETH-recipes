@@ -1,2 +1,3 @@
-read\create-log-PyCharm_64_VVeerrssiioonn_ML.txt
-read\readme-PyCharm_64_VVeerrssiioonn_ML.txt
+read\create-log-PyCharm_64_VVeerrssiioonn_EN.txt
+read\readme-PyCharm_64_VVeerrssiioonn_EN.txt
+release\*.*

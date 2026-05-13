@@ -35,8 +35,8 @@ Process:
     curl_opts:
     - --cookie
     - '%RECIPE_CACHE_DIR%\%NAME%.txt'
-    # Location: https://dl.enpass.io/stable/windows/setup/6.9.5.1639/Enpass-setup.exe
-    re_pattern: (?P<url>https:\/\/dl\.enpass\.io\/stable\/windows\/setup\/(?P<version>([0-9]+\.)*[0-9]+)\/Enpass-setup\.exe?)
+    # Location: https://dl.enpass.io/stable/windows/setup/x64/6.12.0.2413/Enpass-setup.exe
+    re_pattern: (?P<url>https:\/\/dl\.enpass\.io\/stable\/windows\/setup\/x64\/(?P<version>([0-9]+\.)*[0-9]+)\/Enpass-setup\.exe?)
     url: 'file://%RECIPE_CACHE_DIR%/%NAME%-Header.txt'
 
 - Processor: URLDownloader
