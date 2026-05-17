@@ -1,0 +1,51 @@
+Description: Downloads the latest release of IdeaShare x64 from Huawei.
+Identifier: com.github.NickETH.recipes.download.IdeaShare-Win64
+MinimumVersion: 1.3.1
+
+Input:
+  NAME: IdeaShare
+  VENDOR: 'Huawei'
+  PLATFORM: x64
+  PF_STRING: _64
+  SEARCH_URL: https://www.huaweicloud.com/intl/en-us/product/ideashare.html
+  #"href":"https://downloads.bsn.cloud/BA+connected+Setup+1.85.0.exe"
+  REGEX: 'versionDict.*?windowVersion.*?V(?P<version>([0-9]+\.)*[0-9]+).*?const windowsUrl.*?(?P<URLPART1>https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/prudout/ec/share).*?(?P<URLPART2>IdeaShare_Setup\.exe)`;'
+  # From FF: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) like Gecko
+
+Process:
+- Processor: URLTextSearcher
+  Comment: Get the exact path from the download page.
+  Arguments:
+    re_pattern: '%REGEX%'
+    re_flags:
+    - DOTALL
+    # curl_opts:
+    # - --location
+    # - -D
+    # - '%RECIPE_CACHE_DIR%\%NAME%-Header.txt'
+    # request_headers:
+      # user-agent: '%USER_AGENT%'
+    url: '%SEARCH_URL%'
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%_%PLATFORM%.exe'
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      #referer: '%match%'
+    url: '%URLPART1%/V%version%/%URLPART2%'
+
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: download_changed == False
+
+- Processor: WindowsSignatureVerifier
+  Comment: Check the signature on the downloaded file
+  Arguments:
+    MAIN_PATH: '%pathname%'
+    expected_subject: CN="Huawei Technologies Co., Ltd.", OU=IT, O="Huawei Technologies Co., Ltd.", L=Shenzhen, S=Guangdong, C=CN
+    input_path: '%pathname%'
+
+- Processor: EndOfCheckPhase
