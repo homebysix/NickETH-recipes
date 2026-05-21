@@ -3,7 +3,7 @@
 Transform to alter the output from heat.exe for GitHub Desktop
 Main functions:
 -Remove the "SysMon.exe", it is contained in Main.wxs
-Version 1.0, 20260507, Nick Heim, ETHZ, ID-CD
+Version 1.1, 20260521, Nick Heim, ETHZ, ID-CD
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -21,7 +21,7 @@ Version 1.0, 20260507, Nick Heim, ETHZ, ID-CD
 	</xsl:template>
 
 	<!-- Filter out the exe file -->
-	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'SysMon.exe')]" use="@Id" />
+	<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Id, 'Sysmon64.exe')]" use="@Id" />
 	<xsl:template match="wix:Component[key('exe-search', @Id)]" />
 	<xsl:template match="wix:ComponentRef[key('exe-search', @Id)]" />
 
