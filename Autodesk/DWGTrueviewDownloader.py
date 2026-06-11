@@ -96,7 +96,8 @@ class DWGTrueviewDownloader(Processor):
             await page.wait_for_timeout(2000)
 
             async with page.expect_download() as download_info:
-                await page.locator("li.instant-access-mfe-MuiMenuItem-root", has_text="Download").click()
+                #await page.locator("li.instant-access-mfe-MuiMenuItem-root", has_text="Download").click()
+                await page.locator("li.MuiButtonBase-root.MuiMenuItem-root", has_text="Download").click()
         
             await page.wait_for_timeout(15000)
 
