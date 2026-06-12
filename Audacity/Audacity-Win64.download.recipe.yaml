@@ -9,7 +9,7 @@ Input:
   SEARCH_FILE: FFmpeg_(?P<ffmpegver>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe
   SEARCH_INT_URL: (FFmpeg_(?P<versionold>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe)
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
-  INTERNAL_URL: '\\d\sys\bms_tst\AutoPkg-in\Input\%NAME%'
+  INTERNAL_URL: 'put_your_own_internal_url_here'
   PLATFORM: x64
   PF_STRING: _64
 
@@ -75,6 +75,7 @@ Process:
     time2load: 10000
     wait_until: domcontentloaded
     #headless: False
+    result_output_var_name: ffmpegver
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: get the filename from internal source
