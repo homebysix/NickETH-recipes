@@ -8,6 +8,7 @@ Input:
   SEARCH_FIRSTURL: https://lame.buanzo.org/ffmpeg.php
   SEARCH_FILE: FFmpeg_(?P<ffmpegver>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe
   SEARCH_INT_URL: (FFmpeg_(?P<versionold>([0-9]+\.)*[0-9]+)_for_Audacity_on_Windows_x86_64.exe)
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
   INTERNAL_URL: '\\d\sys\bms_tst\AutoPkg-in\Input\%NAME%'
   PLATFORM: x64
   PF_STRING: _64
@@ -41,27 +42,39 @@ Process:
     expected_subject: CN=MuseCY SM Ltd, O=MuseCY SM Ltd, S=Lemesos, C=CY, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.3=CY, SERIALNUMBER=HE 411908
     input_path: '%pathname%'
 
-- Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+# - Processor: com.github.NickETH.recipes.SharedProcessors/Selenium
+  # Arguments:
+    # browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    # browser_used: Edge
+    # primary_url: '%SEARCH_FIRSTURL%'
+    # re_pattern: '%SEARCH_FILE%'
+    # selenium_commands:
+    # #- browser.get("%SEARCH_FIRSTURL%")
+    # - '%SEARCH_FIRSTURL%'
+    # selenium_options:
+    # #- self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
+    # - self.options.add_argument("--disable-infobars")
+    # - |
+        # self.options.add_experimental_option("prefs", {
+            # "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
+            # "download.prompt_for_download": False,
+            # "download.directory_upgrade": True,
+            # "safebrowsing.enabled": True
+          # })
+    # webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
+    # result_output_var_name: ffmpegversion
+
+- Processor: com.github.NickETH.recipes.SharedProcessors/RenderedURLTextSearcher
   Arguments:
-    browser_binary_path: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    browser_used: Edge
-    primary_url: '%SEARCH_FIRSTURL%'
     re_pattern: '%SEARCH_FILE%'
-    selenium_commands:
-    #- browser.get("%SEARCH_FIRSTURL%")
-    - '%SEARCH_FIRSTURL%'
-    selenium_options:
-    #- self.options.add_argument("--headless=new") # See: https://github.com/SeleniumHQ/selenium/issues/11634
-    - self.options.add_argument("--disable-infobars")
-    - |
-        self.options.add_experimental_option("prefs", {
-            "download.default_directory": '%RECIPE_CACHE_DIR%\\downloads',
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True
-          })
-    webdriver_binary_path: '%TOOLS_DIR%\msedgedriver.exe'
-    result_output_var_name: ffmpegversion
+    request_headers:
+      user-agent: '%USER_AGENT%'
+    re_flags:
+    - DOTALL
+    url: '%SEARCH_FIRSTURL%'
+    time2load: 10000
+    wait_until: domcontentloaded
+    #headless: False
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/ExecuteFile
   Comment: get the filename from internal source
