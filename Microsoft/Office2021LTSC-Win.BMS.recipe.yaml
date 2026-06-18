@@ -290,8 +290,8 @@ Process:
     - jobname: '%NAME_LONG%'
       substring: 'Taskkill'
       jobdescription: 'Microsoft Office 2021 LTSC x86 is meant for systems which do not have internet access.'
-      autoenableapp: '%NAME_LONG% - Enable AutoUpdate'
-      autoreleasejob: '@_AU-Rel_%NAME_LONG%'
+      autoenableapp: '%NAME_LONG% %PLATFORM% - Enable AutoUpdate'
+      autoreleasejob: '@_AU-Rel_%NAME_LONG% %PLATFORM%'
     bms_app_iopt_copylocal: 'false'
     bms_app_iopt_rebootbhv: NoReboot
     bms_app_iopt_reinstall: 'true'

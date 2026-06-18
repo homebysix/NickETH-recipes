@@ -5,6 +5,7 @@
 # Extended with UseBBT-option and explicit options for uninstall, 20210207, Hm
 # Extended localfilecopy to all options, 20211028, Hm
 # Changed the Credential Manager lookup code. TLS narrowed to Tls11,Tls12, 220131, Hm
+# Extended with RemoveUnknownSoftware-option 20260617, Hm
 
 param(
     [Parameter(mandatory=$true)][string]$bms_serverurl,
@@ -36,6 +37,7 @@ param(
     [Parameter(mandatory=$false)][string]$bms_app_uninstparm,
     [Parameter(mandatory=$false)][string]$bms_app_uopt_rebootbhv,
     [Parameter(mandatory=$false)][string]$bms_app_uopt_usebbt,
+	[Parameter(mandatory=$false)][string]$bms_app_uopt_remunknownsw,
 	[Parameter(mandatory=$false)][string]$bms_app_localfilecopy,
     [Parameter(mandatory=$false)][string]$bms_app_dependencies,
     [Parameter(mandatory=$false)][string]$inst_file_src_dest,
@@ -146,14 +148,15 @@ if ($bms_app_iusr_script) {
 	# So, we append the hash table as is to $installDataArgs. That seems to work...
     # $InstallUserSettings = New-bConnectApplicationInstallUserSettings @InstallUsrArgs
 }
-# Create the options hash table for uninstall
+# Create the options hash table for uninstall 
 # Special case for reboot behaviour: If it is set on install, we use it also for uninstall as default. But if it set for uninstall explicitley, we take this one.
-if ($bms_app_iopt_rebootbhv -or $bms_app_uopt_rebootbhv -or $bms_app_uopt_usebbt) {
+if ($bms_app_iopt_rebootbhv -or $bms_app_uopt_rebootbhv -or $bms_app_uopt_usebbt -or $bms_app_uopt_remunknownsw) {
 	$UnInstallOptArgs = @{ }
 	if ($bms_app_iopt_rebootbhv) { $UnInstallOptArgs['RebootBehaviour'] = $bms_app_iopt_rebootbhv}
 	if ($bms_app_uopt_rebootbhv) { $UnInstallOptArgs['RebootBehaviour'] = $bms_app_uopt_rebootbhv}
 	if ($bms_app_uopt_usebbt) { $UnInstallOptArgs['UsebBT'] = (ParseBool($bms_app_uopt_usebbt)) }
-	$UnInstallOptions = New-bConnectApplicationInstallOptions @UnInstallOptArgs
+	if ($bms_app_uopt_remunknownsw) { $UnInstallOptArgs['RemoveUnknownSoftware'] = (ParseBool($bms_app_uopt_remunknownsw)) }
+	$UnInstallOptions = New-bConnectApplicationUninstallOptions @UnInstallOptArgs
 }
 
 if ($bms_app_installbds -and $bms_app_installcmd) {

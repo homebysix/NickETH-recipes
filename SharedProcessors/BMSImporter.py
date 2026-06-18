@@ -17,6 +17,7 @@
 # Changed subprocess.run(cmd), added capture_output=True. Sometimes, it hangs without it. 20220726, Hm
 # Extended JSON file with sharepoint and kiosk sections. Added icon copy function. 20221123, Hm
 # Extended icon copy function to work with existing JSON files. 20241031, Hm
+# Extended with RemoveUnknownSoftware-option 20260617, Hm
 # Todo: Generic read function for optional parameter processing with for statement and value types
 
 import os
@@ -144,6 +145,10 @@ class BMSImporter(Processor):
         "bms_app_uopt_usebbt": {
             "required": False,
             "description": "Application uninstall option <support bbt> in BMS.",
+		},
+        "bms_app_uopt_remunknownsw": {
+            "required": False,
+            "description": "Application uninstall option <Uninstall unknown Software> in BMS.",
 		},
         "bms_app_localfilecopy": {
             "required": False,
@@ -304,6 +309,10 @@ class BMSImporter(Processor):
         if "bms_app_uopt_usebbt" in self.env:
             bms_app_uopt_usebbt = self.env.get('bms_app_uopt_usebbt')
             cmd.extend(['-bms_app_uopt_usebbt', str(bms_app_uopt_usebbt)])
+
+        if "bms_app_uopt_remunknownsw" in self.env:
+            bms_app_uopt_remunknownsw = self.env.get('bms_app_uopt_remunknownsw')
+            cmd.extend(['-bms_app_uopt_remunknownsw', str(bms_app_uopt_remunknownsw)])
 
         if "bms_app_localfilecopy" in self.env:
             bms_app_localfilecopy = self.env.get('bms_app_localfilecopy')
