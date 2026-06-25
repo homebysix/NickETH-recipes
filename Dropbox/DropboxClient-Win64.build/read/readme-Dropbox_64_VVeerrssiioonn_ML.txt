@@ -1,8 +1,8 @@
 Dropbox Client 32.0.0.142 ML
 
 Client Software, um den Dropbox Cloud-Service zu benutzen.
+Dropbox Client software to integrate the Dropbox Cloud service into Windows.
 
-Orginalversion des Dropbox Offline Installers, aber ohne Auto-Updater-Komponente.
-Ist nur sinnvoll, wenn mit Deployment-System verwendet.
+Enterprise version, which installs per computer
 
 20190216 Nick Heim

@@ -1,15 +1,14 @@
-.
-190319	Download von:
-	https://www.dropbox.com/downloading?build=68.4.102.0&plat=win&type=full
-	Analyse des Dropbox Offline Installers
-	Der Installer ist ein NSIS Paket
-	Darin enthalten sind der Autoupdater und der eigentlich Client-Installer. Neben anderen Dingen...
-	Um den Autoupdater loszuwerden, ist ziemlich Aufwand notwendig...
-	Der Installationsablauf wurde mit Process Explorer verfolgt und nach dem Starten eines neuen Prozesses, 
-	dieser jeweils auf Suspend gesetzt, damit in Ruhe die Command line analysiert werden konnte.
-	Install: Dropbox_68.4.102.0_ML.exe /S /InstallType:MACHINE
-	Uninstall: DropboxUninstaller.exe /S /InstallType:MACHINE _?=C:\Program Files (x86)\Dropbox\Client\
 
-	Was noch offen ist: Ob der Client einen Autoupdate selber anstossen kann ?
+190319	Download from:
+	https://help.dropbox.com/installs/enterprise-installer#use-dropbox-enterprise-installer-windows-10-11
 
-	https://www.dropboxforum.com/t5/Desktop-client-builds/bd-p/101003016
+	We use the enterprise MSI-installer.
+	It looks like, it is more or less a 1:1 copy of the Chromium based Omaha-project.
+	This is also used on Google Chrome and Microsoft Edge browsers.
+	Not the best thing in the world, but at least it can be configured by GPO.
+
+	So, we disable the automatic updater by GPO registry entries.
+	We distribute those with additional keys, set by MSI-Transform.
+	See the transform for exact infos.
+
+200113	Version 1.0.0.0, by AutoPkg
