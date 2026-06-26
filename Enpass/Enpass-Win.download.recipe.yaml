@@ -7,10 +7,14 @@ Input:
   URL: https://www.enpass.io/downloads/
   PLATFORM: x86
   PF_STRING: ''
-
+  USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) like Gecko
+  
 Process:
 - Processor: URLTextSearcher
   Arguments:
+    request_headers:
+      user-agent: '%USER_AGENT%'
+      referer: '%URL%'
     curl_opts:
     - --cookie-jar
     - '%RECIPE_CACHE_DIR%\%NAME%.txt'
@@ -20,6 +24,8 @@ Process:
 - Processor: URLTextSearcher
   Comment: We do this search only to dump the header, which contains the real download location.
   Arguments:
+    request_headers:
+      user-agent: '%USER_AGENT%'
     curl_opts:
     - --location
     - --cookie
@@ -32,6 +38,8 @@ Process:
 - Processor: URLTextSearcher
   Comment: Get the real download location from the header.
   Arguments:
+    request_headers:
+      user-agent: '%USER_AGENT%'
     curl_opts:
     - --cookie
     - '%RECIPE_CACHE_DIR%\%NAME%.txt'
@@ -41,6 +49,8 @@ Process:
 
 - Processor: URLDownloader
   Arguments:
+    request_headers:
+      user-agent: '%USER_AGENT%'
     CHECK_FILESIZE_ONLY: true
     curl_opts:
     - --location
