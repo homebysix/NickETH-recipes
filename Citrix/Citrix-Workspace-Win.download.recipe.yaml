@@ -10,26 +10,33 @@ Input:
   SEARCH_EXE: (<DownloadURL>(?P<winexepath>.*?)</DownloadURL>)
 
 Process:
-# - Processor: URLTextSearcher
-  # Arguments:
-    # re_pattern: (?P<DYNAMIC_URL>//downloads.citrix.com/[\d]+/CitrixWorkspaceApp\.exe\?__gda__\=[\w]+\=[\w]+\~[\w]+\=/\*\~[\w]+\=[\w]+)
-    # url: https://www.citrix.com/downloads/workspace-app/windows/workspace-app-for-windows-latest.html
-
 - Processor: URLTextSearcher
   Arguments:
-    re_pattern: '%SEARCH_VER%'
-    url: '%SEARCH_URL%'
-
-- Processor: URLTextSearcher
-  Arguments:
-    re_pattern: '%SEARCH_EXE%'
-    url: '%SEARCH_URL%'
+    re_pattern: (?P<DYNAMIC_URL>//downloads.citrix.com/[\d]+/CitrixWorkspaceApp\.exe\?__gda__\=[\w]+\=[\w]+\~[\w]+\=/\*\~[\w]+\=[\w]+)
+    # https://www.citrix.com/downloads/workspace-app/windows/workspace-app-for-windows-latest1.html
+    url: https://www.citrix.com/downloads/workspace-app/windows/workspace-app-for-windows-latest1.html
 
 - Processor: URLDownloader
   Arguments:
     filename: '%NAME%.exe'
-    #url: https:%DYNAMIC_URL%
-    url: '%DOWNLOAD_URL%%winexepath%'
+    url: https:%DYNAMIC_URL%
+    #url: '%DOWNLOAD_URL%%winexepath%'
+    
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_VER%'
+    # url: '%SEARCH_URL%'
+
+# - Processor: URLTextSearcher
+  # Arguments:
+    # re_pattern: '%SEARCH_EXE%'
+    # url: '%SEARCH_URL%'
+
+# - Processor: URLDownloader
+  # Arguments:
+    # filename: '%NAME%.exe'
+    # #url: https:%DYNAMIC_URL%
+    # url: '%DOWNLOAD_URL%%winexepath%'
 
 - Processor: EndOfCheckPhase
 
