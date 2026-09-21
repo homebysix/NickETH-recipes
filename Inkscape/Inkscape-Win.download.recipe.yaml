@@ -16,8 +16,9 @@ Input:
 Process:
 - Processor: URLTextSearcher
   Arguments:
-    curl_opts:
-    - -L
+    # curl_opts:
+    # - --max-time 300
+    # - --connect-timeout 60
     re_pattern: '%SEARCH_PATTERN1%'
     result_output_var_name: release_page_match
     #url: '%SEARCH_URL%/release'

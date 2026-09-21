@@ -8,9 +8,8 @@ Input:
   PLATFORM: x64
   PF_STRING: _64
   SEARCH_URL: https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local
-  # https://developer.download.nvidia.com/compute/cuda/13.2.1/local_installers/cuda_13.2.1_windows.exe
-  VERSION_URL: (https:\/\/developer\.download\.nvidia\.com\/compute\/cuda\/(([0-9]+\.)*[0-9]+)\/local_installers\/cuda_(?P<version>([0-9]+\.)*[0-9]+)_windows\.exe)
-  # VERSION_URL: (https://developer.download.nvidia.com/compute/cuda/13.2.1/local_installers/cuda_13.2.1_windows.exe)
+  # https://developer.download.nvidia.com/compute/cuda/13.4.2/local_installers/cuda_13.4.2_windows_x86_64.exe
+  VERSION_URL: (https:\/\/developer\.download\.nvidia\.com\/compute\/cuda\/(([0-9]+\.)*[0-9]+)\/local_installers\/cuda_(?P<version>([0-9]+\.)*[0-9]+)_windows_x86_64\.exe)
  
   # From FF: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0
   USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) like Gecko
@@ -42,11 +41,5 @@ Process:
     MAIN_PATH: '%pathname%'
     expected_subject: CN=NVIDIA Corporation, OU=2008B9F, O=NVIDIA Corporation, L=Santa Clara, S=California, C=US
     input_path: '%pathname%'
-
-# - Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
-  # Arguments:
-    # exe_file: '%filename%'
-    # exe_path: '%pathname%'
-    # product_version: 'True'
 
 - Processor: EndOfCheckPhase

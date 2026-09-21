@@ -85,7 +85,7 @@ Process:
   Comment: Check the signature on the downloaded file
   Arguments:
     input_path: '%RECIPE_CACHE_DIR%\downloads\IrfanView_%PLATFORM%.exe'
-    expected_subject: CN=Irfan Skiljan, O=Irfan Skiljan, S=Lower Austria, C=AT
+    expected_subject: CN=Irfan Skiljan, O=Irfan Skiljan, L=Muthmannsdorf, S=Lower Austria, C=AT
 
 - Processor: com.github.NickETH.recipes.SharedProcessors/WinPEVersionExtractor
   Arguments:
